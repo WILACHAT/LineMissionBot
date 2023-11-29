@@ -4,6 +4,7 @@ const webhookRouter = require('./routes/webhook');
 const lineBotService = require('./services/lineBotService'); 
 const path = require('path'); 
 const line = require('@line/bot-sdk'); 
+const db = require('./db');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 });
 
 // Middleware to check if the request is from LINE
+
 function checkIfRequestFromLine(req, res, next) {
     const userAgent = req.headers['user-agent'];
 
@@ -44,6 +46,12 @@ app.get('/', (req, res) => {
 app.get('/progress', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/progress.html'));
 });
+
+const missionRoutes = require('./routes/missionRoutes');
+
+// Use the data routes for the root path
+app.use('/', missionRoutes);
+
 
 app.use('/webhook', webhookRouter);
 

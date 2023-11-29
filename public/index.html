@@ -1,9 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Hello World</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Form</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <h2>Missions of the Week - Please Fill in Your Mission</h2>
+    <p>Today's Date: <span id="todaysDate"></span></p>
+    <p>Mission End Date: <span id="missionEndDate"></span></p>
+
+
+    <form id="dataForm">
+        <input type="text" id="input1" placeholder="Enter data 1" required><br>
+        <textarea id="input3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+
+        <input type="text" id="input2" placeholder="Enter data 2" required><br>
+        <textarea id="input3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+
+        <input type="text" id="input3" placeholder="Enter data 3" required><br>
+        <textarea id="input3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+
+        <input type="text" id="input4" placeholder="Enter data 4" required><br>
+        <textarea id="input3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+
+        <input type="text" id="input5" placeholder="Enter data 5" required><br>
+        <textarea id="input3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="submitData.js"></script>
 </body>
 </html>
