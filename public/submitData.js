@@ -13,7 +13,7 @@ window.onload = function() {
     };
 
     var formattedToday = today.toLocaleDateString(undefined, options) 
-    var formattedEndDate = endDate.toLocaleDateString(undefined, options) 
+    var formattedEndDate = endDate.toLocaleDateString(undefined, options) + ' ' + endDate.toLocaleTimeString(undefined, options);
 
     document.getElementById('todaysDate').textContent = formattedToday;
     document.getElementById('missionEndDate').textContent = formattedEndDate;
@@ -25,14 +25,26 @@ document.addEventListener('DOMContentLoaded', function() {
     form.onsubmit = function(e) {
         console.log("submitteddddd")
         e.preventDefault();
+        var today = new Date();
+        var endDate = new Date();
+        endDate.setDate(today.getDate() + 7);
 
         // Get values from form
         const data = {
-            input1: document.getElementById('input1').value,
-            input2: document.getElementById('input2').value,
-            input3: document.getElementById('input3').value,
-            input4: document.getElementById('input4').value,
-            input5: document.getElementById('input5').value,
+            missiontitle1: document.getElementById('missiontitle1').value,
+            missiontitle2: document.getElementById('missiontitle2').value,
+            missiontitle3: document.getElementById('missiontitle3').value,
+            missiontitle4: document.getElementById('missiontitle4').value,
+            missiontitle5: document.getElementById('missiontitle5').value,
+            missiondes1: document.getElementById('missiondes1').value,
+            missiondes2: document.getElementById('missiondes2').value,
+            missiondes3: document.getElementById('missiondes3').value,
+            missiondes4: document.getElementById('missiondes4').value,
+            missiondes5: document.getElementById('missiondes5').value,
+            todaysDate: today,
+            missionEndDate: endDate,
+
+
         };
 
         // Send data to the server at the root endpoint '/'
@@ -43,13 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(data),
         })
-        .then(response => {
-            console.log('Response received:', response); // Debugging line
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
+    
+        .then(response => response.json()) // Convert the response to JSON
         .then(data => {
             console.log('Success:', data);
             // Handle success
@@ -58,5 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             // Handle errors
         });
+        
     };
 });

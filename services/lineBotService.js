@@ -78,9 +78,9 @@ async function createRichMenu() {
               "height": 1686
             },
             "action": {
-              "type": "uri",
-              "uri": "https://waan.ngrok.app"
-            }
+              "type": "postback",
+              "data": "action=redirect"
+          }
           }
         ]
       };

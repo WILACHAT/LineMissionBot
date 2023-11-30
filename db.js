@@ -9,11 +9,15 @@ const pool = new Pool({
   port: 5432,
 });
 
-async function checkUserExists(lineId) {
+async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
-  
   const result = await pool.query(query, [lineId]);
-  return result.rows.length > 0;
+
+  if (result.rows.length > 0) {
+    return result.rows[0]; // Return the first row (user data)
+  } else {
+    return null; // Return null if user does not exist
+  }
 }
 
 async function saveNewUser(lineId) {
@@ -22,9 +26,16 @@ async function saveNewUser(lineId) {
   return result.rows[0];
 }
 
+async function saveTokenForUser(lineId, token) {
+  const query = 'INSERT INTO "LineSchemas"."UserTokens" ("Token", "LineID", "ExpiresAt") VALUES ($1, $2, NOW() + INTERVAL \'1 hour\') RETURNING *';
+  const result = await pool.query(query, [token, lineId]);
+  return result.rows[0];
+}
+
 
 module.exports = {
   pool, 
-  checkUserExists,
+  getUserByLineId,
   saveNewUser,
+  saveTokenForUser,
 };
