@@ -1,3 +1,4 @@
+
 const fs = require('fs');
 const path = require('path');
 const { replyToUser } = require('../services/lineBotService');
@@ -14,7 +15,8 @@ exports.handleWebhook = async (req, res) => {
     logToFile('Received webhook event');
 
     for (const event of req.body.events) {
-        if (event.type === 'message') {
+        if (event.type === 'message' && event.message.type === 'text') {
+           
             const lineId = event.source.userId; // Retrieve the lineId from the event source
             logToFile(`Processing event for line ID: ${lineId}`);
 
@@ -33,34 +35,39 @@ exports.handleWebhook = async (req, res) => {
                     return;
                 }
             }
+            const userMessage = event.message.text;
+            let url;
+            switch (userMessage) {
+                case 'button1_command':
+                url = 'https://waan.ngrok.app/progress';
+                break;
+                case 'button2_command':
+                url = 'https://waan.ngrok.app/progress';
+                break;
+                case 'button2_command':
+                url = 'https://waan.ngrok.app/';
+                break;
+                // Add cases for other rich menu buttons
+                default:
+                url = 'https://waan.ngrok.app';
+            }
+
 
             // Store the userId in the session
-            req.session.userId = user.id;
-            logToFile(`User ID set in session: ${req.session.userId}`);
+           
                         
             // Reply to the user if it's a message event
+            try {
+                req.session.userId = user.UserID;
+                logToFile(`Session user ID set: ${req.session.userId}`);
+            } catch (error) {
+                logToFile(`Error setting session user ID: ${error.message}`);
+            }
+            
             const replyToken = event.replyToken;
-            await replyToUser(replyToken);
+            await replyToUser(replyToken, url);
         } 
-        else if (event.type === 'postback' && event.postback.data === 'action=redirect') {
-          const userId = event.source.userId;
-          logToFile(`Handling postback for user: ${userId}`);
-
-          // Generate a secure, temporary token for this user
-          const token = generateSecureToken(userId);
-
-          // Store this token and userId in a database for later retrieval
-          // Assuming you have a function saveTokenForUser in your db module
-          try {
-            await db.saveTokenForUser(userId, token);
-            logToFile(`Token saved for user: ${userId}`);
-        } catch (error) {
-            logToFile(`Error saving token: ${error.message}`);
-            res.status(500).json({ error: error.message });
-            return;
-        }
-        }
-        
+       
         else {
             // Handle other event types as necessary
             logToFile(`Unhandled event type: ${event.type}`);

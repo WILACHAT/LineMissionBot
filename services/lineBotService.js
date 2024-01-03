@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const { channelAccessToken } = require('../config');
 
-async function replyToUser(replyToken) {
+async function replyToUser(replyToken, url) {
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${channelAccessToken}`
@@ -18,7 +18,7 @@ async function replyToUser(replyToken) {
             },
             {
                 type: 'text',
-                text: 'May I help you?'
+                text: `${url}`
             }
         ]
     };
@@ -54,8 +54,8 @@ async function createRichMenu() {
               "height": 1686
             },
             "action": {
-              "type": "uri",
-              "uri": "https://waan.ngrok.app/progress.html"
+              "type": "message",
+              "text": "button1_command"
             }
           },
           {
@@ -67,7 +67,7 @@ async function createRichMenu() {
             },
             "action": {
               "type": "message",
-              "text": "https://waan.ngrok.app"
+              "text": "button2_command"
             }
           },
           {
@@ -78,9 +78,9 @@ async function createRichMenu() {
               "height": 1686
             },
             "action": {
-              "type": "postback",
-              "data": "action=redirect"
-          }
+              "type": "message",
+              "text": "button3_command"
+            }
           }
         ]
       };
