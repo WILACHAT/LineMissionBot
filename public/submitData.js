@@ -1,18 +1,19 @@
+function setInitialDates() {
+   // const today = new Date();
+
+    // Allow past dates for testing
+  //  document.getElementById('startDateInput').setAttribute('min', formatDate(today));
+   // document.getElementById('endDateInput').setAttribute('min', formatDate(today));
+
+    // Optional: Set a maximum date if needed
+    // const oneYearLater = new Date(today);
+    // oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+    // document.getElementById('endDateInput').setAttribute('max', formatDate(oneYearLater));
+}
+
 window.onload = function() {
     setInitialDates();
 };
-
-function setInitialDates() {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const oneMonthLater = new Date(tomorrow);
-    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-
-    document.getElementById('startDateInput').setAttribute('min', formatDate(tomorrow));
-    document.getElementById('endDateInput').setAttribute('min', formatDate(tomorrow));
-    document.getElementById('endDateInput').setAttribute('max', formatDate(oneMonthLater));
-}
 
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'

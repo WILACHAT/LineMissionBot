@@ -1,18 +1,40 @@
-const cron = require('node-cron');
-const db = require('./db'); // Adjust the path to where your db.js is located
+// In your scheduledTask.js or wherever you're implementing the cron job
 
-function scheduleTasks() {
-  cron.schedule('* * * * *', async () => {
-    console.log('Checking for expired missions...');
-    // Implement the logic to check for expired missions
-    const expiredMissions = await db.findExpiredMissions();
-    for (let mission of expiredMissions) {
-      // Send notification (email, push, SMS, etc.)
-      // Update the 'NotificationSent' status in the database
-    }
-  });
+const cron = require('node-cron');
+const db = require('./db');
+const { sendLineNotification } = require('./services/lineBotService');
+
+
+function scheduleTask() {
+    cron.schedule('*/1 * * * *', async () => {
+        console.log('Checking for expired missions at:', new Date().toLocaleString());
+        const expiredMissions = await db.findExpiredMissions();
+        console.log("expiredMissions", expiredMissions)
+
+
+        if (expiredMissions.length > 0) {
+            console.log("inside first if")
+
+            for (let mission of expiredMissions) {
+                await db.completeMissionSession(mission.SessionID);
+
+                const user = await db.getUserLineIdByUserId(mission.UserID);
+                console.log("user user user", user)
+
+                if (user) {
+                    console.log("inside useer if")
+                    const messageText = `Your mission with ID: ${mission.SessionID} has expired!`;
+                    console.log("user id is correct?", user)
+                    await sendLineNotification(user, messageText, mission.UserID);
+                    await db.markNotificationAsSent(mission.SessionID); // Mark the notification as sent
+                }
+            }
+        } else {
+            console.log('No expired missions found at this time.');
+        }
+    });
 }
 
 module.exports = {
-  scheduleTasks
+    scheduleTask
 };

@@ -1,7 +1,38 @@
 const axios = require('axios');
 const fs = require('fs');
+const line = require('@line/bot-sdk');
+
 
 const { channelAccessToken } = require('../config');
+
+const lineConfig = {
+  channelAccessToken: channelAccessToken // Set in your .env file
+};
+
+const client = new line.Client(lineConfig);
+
+async function sendLineNotification(lineUserId, messageText, UserID) {
+const baseUrl = "https://waan.ngrok.app/completed";
+const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
+
+const messages = [
+    {
+        type: 'text',
+        text: 'สวัสดีครับลูกพี่'
+    },
+    {
+        type: 'text',
+        text: `${linkUrl}`
+    }
+]
+  console.log("lineUserId print", lineUserId, messages)
+  try {
+      await client.pushMessage(lineUserId, messages);
+      console.log('Notification sent to LINE user:', lineUserId);
+  } catch (error) {
+      console.error('Failed to send LINE notification:', error);
+  }
+}
 
 async function replyToUser(replyToken, url) {
     const headers = {
@@ -129,5 +160,7 @@ module.exports = {
   replyToUser,
   createRichMenu,
   uploadRichMenuImage,
-  setDefaultRichMenu 
+  setDefaultRichMenu,
+  sendLineNotification,
+
 };

@@ -7,10 +7,15 @@ const path = require('path');
 const db = require('./db');
 const missionRoutes = require('./routes/missionRoutes');
 const progressRoutes = require('./routes/progressRoutes');
+const completedRoutes = require('./routes/completedRoutes');
+const historyRoutes = require('./routes/historyRoutes');
+
+
 
 const { verifyToken } = require('./utils/tokenUtils'); // Make sure you have this function
 
-const { scheduleTasks } = require('./scheduledTasks');
+const { scheduleTask } = require('./scheduledTask');
+
 const app = express();
 
 // Configure session middleware
@@ -27,7 +32,7 @@ app.use(express.json({
   }
 }));
 
-scheduleTasks();
+scheduleTask();
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -52,6 +57,11 @@ app.use('/', missionRoutes);
 app.use('/progress', progressRoutes);
 
 app.use('/webhook', webhookRouter);
+
+app.use('/completed', completedRoutes);
+app.use('/history', historyRoutes);
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
@@ -61,17 +71,14 @@ app.get('/', (req, res) => {
 app.get('/progress', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/progress.html'));
 });
-app.get('/resolveToken', async (req, res) => {
-  const token = req.query.token;
-
-  const userId = verifyToken(token);
-  if (userId) {
-      // Here, you can perform additional logic based on the userId if needed
-      res.json({ url: 'https://waan.ngrok.app' });
-  } else {
-      res.status(400).json({ error: 'Invalid token' });
-  }
+app.get('/completed', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'completed.html'));
 });
+
+app.get('/history', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'history.html'));
+});
+
 app.post('/', async (req, res) => {
   try {
     const { userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate } = req.body;

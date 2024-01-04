@@ -20,6 +20,17 @@ async function getUserByLineId(lineId) {
     return null; // Return null if user does not exist
   }
 }
+async function getUserLineIdByUserId(userId) {
+  const query = 'SELECT "LineID" FROM "LineSchemas"."Users" WHERE "UserID" = $1';
+  const result = await pool.query(query, [userId]);
+
+  if (result.rows.length > 0) {
+    return result.rows[0].LineID; // Return the LineID of the user
+  } else {
+    return null; // Return null if the user does not exist
+  }
+}
+
 
 async function saveNewUser(lineId) {
   const query = 'INSERT INTO "LineSchemas"."Users" ("LineID", "CreatedAt") VALUES ($1, NOW()) RETURNING *';
@@ -79,15 +90,102 @@ async function updateMissionStatus(missionId, completed) {
   const query = 'UPDATE "LineSchemas"."Missions" SET "Complete" = $1 WHERE "Misson_ID" = $2';
   await pool.query(query, [completed, missionId]);
 }
+async function completeMissionSession(sessionId) {
+  const query = 'UPDATE "LineSchemas"."MissionSessions" SET "Complete" = TRUE WHERE "SessionID" = $1';
+  await pool.query(query, [sessionId]);
+}
 
 async function findExpiredMissions() {
   const query = `
       SELECT * FROM "LineSchemas"."MissionSessions"
-      WHERE "EndDate" < NOW() AND "Notify" = FALSE;
+      WHERE "EndDate" < NOW() AND "Notify" = false;
   `;
   const result = await pool.query(query);
   return result.rows; // Rows containing missions with expired end dates
 }
+async function markNotificationAsSent(missionId) {
+  const query = 'UPDATE "LineSchemas"."MissionSessions" SET "Notify" = TRUE WHERE "SessionID" = $1';
+  await pool.query(query, [missionId]);
+}
+async function getCompletedMissionsForUser(userId) {
+  // First, find the latest completed session for the user
+  const latestSessionQuery = `
+    SELECT "SessionID"
+    FROM "LineSchemas"."MissionSessions"
+    WHERE "UserID" = $1 AND "Complete" = true
+    ORDER BY "SessionID" DESC
+    LIMIT 1;
+  `;
+  console.log("latestSessionQuery1", latestSessionQuery)
+  const sessionResult = await pool.query(latestSessionQuery, [userId]);
+  console.log("sessionResult", sessionResult)
+  if (sessionResult.rows.length === 0) {
+    // No completed sessions found
+    return [];
+  }
+  const latestSessionId = sessionResult.rows[0].SessionID;
+  console.log("latestSessionId", latestSessionId)
+
+
+  // Now, find all missions for the latest completed session
+  const missionsQuery = `
+    SELECT * FROM "LineSchemas"."Missions"
+    WHERE "SessionID" = $1;
+  `;
+  const missionsResult = await pool.query(missionsQuery, [latestSessionId]);
+  return missionsResult.rows; // Rows containing the missions for the latest completed session
+}
+
+async function saveUserReflection(userId, reflection) {
+  // First, find the latest completed session for the user
+  const latestSessionQuery = `
+    SELECT "SessionID"
+    FROM "LineSchemas"."MissionSessions"
+    WHERE "UserID" = $1 AND "Complete" = TRUE
+    ORDER BY "SessionID" DESC
+    LIMIT 1;
+  `;
+  const sessionResult = await pool.query(latestSessionQuery, [userId]);
+  
+  // If there's no completed session, we can't update anything
+  if (sessionResult.rows.length === 0) {
+    return;
+  }
+
+  const latestSessionId = sessionResult.rows[0].SessionID;
+
+  // Now, update the reflection for the latest completed session
+  const updateReflectionQuery = `
+    UPDATE "LineSchemas"."MissionSessions"
+    SET "Reflection" = $1
+    WHERE "SessionID" = $2;
+  `;
+  await pool.query(updateReflectionQuery, [reflection, latestSessionId]);
+}
+  async function getCompletedSessionsForUser(userId) {
+    const query = `
+        SELECT "SessionID", "StartDate", "EndDate", "Rating", "Complete", "Reflection"
+        FROM "LineSchemas"."MissionSessions"
+        WHERE "UserID" = $1 AND "Complete" = TRUE
+        ORDER BY "SessionID" DESC;
+    `;
+    const result = await pool.query(query, [userId]);
+    return result.rows.map(session => ({
+      ...session,
+      StartDate: session.StartDate.toISOString().substring(0, 10), // Format date as 'YYYY-MM-DD'
+      EndDate: session.EndDate.toISOString().substring(0, 10), // Format date as 'YYYY-MM-DD'
+    }));
+  }
+  async function getMissionsBySessionId(sessionId) {
+    const query = 'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1';
+    const result = await pool.query(query, [sessionId]);
+    return result.rows;
+}
+  
+
+
+
+
 
 // Add a function to send notifications and update the 'NotificationSent' status
 module.exports = {
@@ -98,5 +196,13 @@ module.exports = {
   saveFormData,
   getLatestIncompleteSessionByUserId,
   updateMissionStatus,
-  findExpiredMissions
+  findExpiredMissions,
+  getUserLineIdByUserId,
+  markNotificationAsSent,
+  getCompletedMissionsForUser,
+  saveUserReflection,
+  completeMissionSession,
+  getCompletedSessionsForUser,
+  getMissionsBySessionId
+
 };
