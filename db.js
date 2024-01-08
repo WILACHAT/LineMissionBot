@@ -70,9 +70,9 @@ async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3,
 }
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
-    SELECT "SessionID", "EndDate" 
+    SELECT "SessionID", "EndDate" , "Complete"
     FROM "LineSchemas"."MissionSessions" 
-    WHERE "UserID" = $1 AND "Complete" = FALSE 
+    WHERE "UserID" = $1 
     ORDER BY "SessionID" DESC 
     LIMIT 1;
   `;
@@ -181,6 +181,26 @@ async function saveUserReflection(userId, reflection) {
     const result = await pool.query(query, [sessionId]);
     return result.rows;
 }
+async function getLatestSessionByUserId(userId) {
+  const query = `
+      SELECT "SessionID", "EndDate", "Complete"
+      FROM "LineSchemas"."MissionSessions"
+      WHERE "UserID" = $1
+      ORDER BY "SessionID" DESC
+      LIMIT 1;
+  `;
+  const result = await pool.query(query, [userId]);
+  if (result.rows.length > 0) {
+      return result.rows[0]; // Return the latest session
+  } else {
+      return null; // Return null if no session exists
+  }
+}
+async function deleteSessionById(sessionId) {
+  const deleteQuery = 'DELETE FROM "LineSchemas"."MissionSessions" WHERE "SessionID" = $1';
+  await pool.query(deleteQuery, [sessionId]);
+}
+
   
 
 
@@ -203,6 +223,8 @@ module.exports = {
   saveUserReflection,
   completeMissionSession,
   getCompletedSessionsForUser,
-  getMissionsBySessionId
+  getMissionsBySessionId,
+  getLatestSessionByUserId,
+  deleteSessionById
 
 };

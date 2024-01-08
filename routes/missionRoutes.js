@@ -21,12 +21,43 @@ router.post('/', async (req, res) => {
 
       console.log(`Data saved successfully`);
       res.json({ message: 'Data saved successfully', savedData });
+
   } catch (error) {
       console.error('Error saving form data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
   }
   
   });
+  
+  router.get('/checkLatestSession', async (req, res) => {
+    const userId = req.query.userId; // Obtain userId from query parameter
+
+    try {
+        const latestSession = await db.getLatestSessionByUserId(userId);
+        res.json(latestSession);
+    } catch (error) {
+        console.error('Error checking latest session:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+router.delete('/deleteCurrentSession', async (req, res) => {
+    const userId = req.query.userId; // Obtain userId from query parameter
+
+    try {
+        const latestSession = await db.getLatestSessionByUserId(userId);
+        if (latestSession && !latestSession.Complete) {
+            // Delete the session here
+            await db.deleteSessionById(latestSession.SessionID);
+            res.json({ message: 'Session deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'No active session to delete' });
+        }
+    } catch (error) {
+        console.error('Error deleting session:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
   
 
 module.exports = router;

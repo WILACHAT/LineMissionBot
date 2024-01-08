@@ -6,29 +6,41 @@
     <title>Submit Form</title>
 </head>
 <body>
-    <h2>Missions of the Week - Please Fill in Your Mission</h2>
-    <p>Start Date (Tomorrow or Later): <input type="date" id="startDateInput" required></p>
-    <p>End Date (Within One Month from Start Date): <input type="date" id="endDateInput" required></p>
+    <div id="ongoingSessionMessage" style="display: none;">
+        <h1>Ongoing Session</h1>
+        <p>You currently have an ongoing session. Please complete it before starting a new one.</p>
+        <a href="/progress">View Your Current Progress</a>
+        <button id="deleteSessionButton">Delete Current Session</button>
 
+    </div>
 
-    <form id="dataForm">
-        <input type="text" id="missiontitle1" placeholder="Enter data 1" required><br>
-        <textarea id="missiondes1" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+    <div id="missionForm" style="display: none;">
+        <h2>Missions of the Week - Please Fill in Your Mission</h2>
+        <p>Start Date (Tomorrow or Later): <input type="date" id="startDateInput" required></p>
+        <p>End Date (Within One Month from Start Date): <input type="date" id="endDateInput" required></p>
+    
+    
+        <form id="dataForm">
+            <input type="text" id="missiontitle1" placeholder="Enter data 1" required><br>
+            <textarea id="missiondes1" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+    
+            <input type="text" id="missiontitle2" placeholder="Enter data 2" required><br>
+            <textarea id="missiondes2" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+    
+            <input type="text" id="missiontitle3" placeholder="Enter data 3" required><br>
+            <textarea id="missiondes3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+    
+            <input type="text" id="missiontitle4" placeholder="Enter data 4" required><br>
+            <textarea id="missiondes4" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+    
+            <input type="text" id="missiontitle5" placeholder="Enter data 5" required><br>
+            <textarea id="missiondes5" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
+    
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    
 
-        <input type="text" id="missiontitle2" placeholder="Enter data 2" required><br>
-        <textarea id="missiondes2" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-
-        <input type="text" id="missiontitle3" placeholder="Enter data 3" required><br>
-        <textarea id="missiondes3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-
-        <input type="text" id="missiontitle4" placeholder="Enter data 4" required><br>
-        <textarea id="missiondes4" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-
-        <input type="text" id="missiontitle5" placeholder="Enter data 5" required><br>
-        <textarea id="missiondes5" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-
-        <button type="submit">Submit</button>
-    </form>
 
     <script src="submitData.js"></script>
 </body>

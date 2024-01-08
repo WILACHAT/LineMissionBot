@@ -87,7 +87,11 @@ function displaySessionMissions(missions, detailsDiv) {
     const missionsList = document.createElement('ul');
     missions.forEach(mission => {
         const missionItem = document.createElement('li');
-        missionItem.textContent = `Mission: ${mission.Title} - Status: ${mission.Complete ? 'Completed' : 'Not Completed'}`;
+        missionItem.innerHTML = `
+            <strong>Mission:</strong> ${mission.Title}<br>
+            <strong>Description:</strong> ${mission.Description}<br>
+            <strong>Status:</strong> ${mission.Complete ? 'Completed' : 'Not Completed'}
+        `;
         missionsList.appendChild(missionItem);
     });
     detailsDiv.appendChild(missionsList);

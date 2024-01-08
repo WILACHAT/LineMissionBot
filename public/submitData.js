@@ -1,45 +1,97 @@
 function setInitialDates() {
-   // const today = new Date();
-
-    // Allow past dates for testing
-  //  document.getElementById('startDateInput').setAttribute('min', formatDate(today));
-   // document.getElementById('endDateInput').setAttribute('min', formatDate(today));
+    const today = new Date();
+    document.getElementById('startDateInput').setAttribute('min', formatDate(today));
+    document.getElementById('endDateInput').setAttribute('min', formatDate(today));
 
     // Optional: Set a maximum date if needed
-    // const oneYearLater = new Date(today);
-    // oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
-    // document.getElementById('endDateInput').setAttribute('max', formatDate(oneYearLater));
+    const oneMonthLater = new Date(today);
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+    document.getElementById('endDateInput').setAttribute('max', formatDate(oneMonthLater));
 }
 
-window.onload = function() {
-    setInitialDates();
-};
+async function getLatestSession(userId) {
+    try {
+        const response = await fetch(`/checkLatestSession?userId=${userId}`);
+        if (!response.ok) {
+            throw new Error('Session not found or an error occurred.');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+}
 
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
 }
 
+window.onload = async function() {
+    //const userId = req.session.userId;
+    const userId = 4; // Replace with actual user ID
+    await checkAndDisplaySession(userId);
+
+};
+async function checkAndDisplaySession(userId) {
+    const latestSessionData = await getLatestSession(userId);
+    const missionForm = document.getElementById('missionForm');
+    const ongoingSessionMessage = document.getElementById('ongoingSessionMessage');
+
+    if (latestSessionData && !latestSessionData.Complete) {
+        ongoingSessionMessage.style.display = 'block';
+        missionForm.style.display = 'none';
+        setupDeleteSessionButton(userId);
+    } else {
+        ongoingSessionMessage.style.display = 'none';
+        missionForm.style.display = 'block';
+        setInitialDates();
+    }
+}
+
+function setupDeleteSessionButton(userId) {
+    const deleteSessionButton = document.getElementById('deleteSessionButton');
+    if (deleteSessionButton) {
+        deleteSessionButton.addEventListener('click', async function() {
+            // Confirmation dialog
+            const confirmDelete = confirm("Are you sure you want to delete your current mission? It will not be saved in history.");
+            
+            if (confirmDelete) {
+                try {
+                    const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        console.log('Session deleted successfully');
+                        // Hide ongoing session message and show form
+                        document.getElementById('ongoingSessionMessage').style.display = 'none';
+                        document.getElementById('missionForm').style.display = 'block';
+                        setInitialDates();
+                    } else {
+                        throw new Error('Failed to delete session');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            } else {
+                console.log('Session deletion cancelled.');
+            }
+        });
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('dataForm');
-    form.onsubmit = function(e) {
+    form.onsubmit = async function(e) {
         e.preventDefault();
-        console.log("submiteddddddddddd")
-
+        console.log("Form Submitted");
 
         const startDate = document.getElementById('startDateInput').value;
         const endDate = document.getElementById('endDateInput').value;
 
-        // Validation if needed
         if (new Date(startDate) >= new Date(endDate)) {
             console.error('Error: End date must be after start date.');
             return;
         }
 
-        // Assuming `userId` is available in your session or similar
-        //const userId = req.session.userId;
-        const userId = 4;
-
+        const userId = 4; // Assuming `userId` is available in your session or similar
 
         const data = {
             userId: userId,
@@ -57,21 +109,24 @@ document.addEventListener('DOMContentLoaded', function() {
             missionEndDate: endDate
         };
 
-        fetch('/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
+        try {
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const responseData = await response.json();
+            if (response.ok) {
+                console.log('Success:', responseData);
+                window.location.href = '/progress'; // Redirect to progress page
+            } else {
+                throw new Error(responseData.message || 'Submission failed');
+            }
+        } catch (error) {
             console.error('Error:', error);
-        });
+        }
     };
 });
-
-

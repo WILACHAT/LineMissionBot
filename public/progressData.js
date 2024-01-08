@@ -109,18 +109,59 @@ function displayLoading(show) {
     loadingIndicator.style.display = show ? 'block' : 'none';
 }
 
+// Inside the window.onload function
 window.onload = async function() {
-    const userId = 4;
+    const userId = 4; // Replace with actual user ID
     displayLoading(true);
+    const what = document.getElementById("whatisgoingon")
+    const what2 = document.getElementById("whatisgoingon")
+
 
     try {
         const data = await fetchLatestIncompleteSession(userId);
-        populateMissions(data.missions);
-        console.log("in loadd", data.missions)
-        startCountdown(new Date(data.endDate));
+        if (data.session) {
+            if (!data.session.Complete) {
+                // If session is ongoing (Complete = False)
+                populateMissions(data.missions);
+                startCountdown(new Date(data.endDate));
+                setupDeleteSessionButton(userId);
+                what.style.display = 'block';
+
+            } else {
+                // If session is not ongoing (Complete = True)
+                document.getElementById('missions').innerHTML = '<p>No active session. You can start a new mission.</p>';
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('deleteSessionButton').style.display = 'none';
+                what2.style.display = 'block';
+
+            }
+        }
     } catch (error) {
         console.error('Error:', error);
     } finally {
         displayLoading(false);
     }
 };
+
+
+function setupDeleteSessionButton(userId) {
+    const deleteSessionButton = document.getElementById('deleteSessionButton');
+    if (deleteSessionButton) {
+        deleteSessionButton.addEventListener('click', async function() {
+            const confirmDelete = confirm("Are you sure you want to delete your current session? This cannot be undone.");
+            if (confirmDelete) {
+                try {
+                    const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        alert('Current session has been deleted.');
+                        window.location.reload(); // Reload the page
+                    } else {
+                        throw new Error('Failed to delete session');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
+    }
+}
