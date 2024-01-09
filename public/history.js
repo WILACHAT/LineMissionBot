@@ -46,8 +46,7 @@ function displaySessionHistory(sessions) {
         sessionDiv.innerHTML = `
             <div onclick="toggleSessionDetails(this, ${session.SessionID})">
                 <h2>Session: ${formattedStartDate} - ${formattedEndDate}</h2>
-                <p>Rating: ${session.Rating || 'Not rated'}</p>
-                <div>Status: ${session.Complete ? 'Completed' : 'Not Completed'}</div>
+                <p>Rating: ${session.Rating} / 5</p>
             </div>
             <div class="session-details" style="display: none;">
                 <p>Reflection: ${session.Reflection || 'No reflection submitted'}</p>
@@ -85,7 +84,8 @@ function loadSessionMissions(sessionId, detailsDiv) {
 
 function displaySessionMissions(missions, detailsDiv) {
     const missionsList = document.createElement('ul');
-    missions.forEach(mission => {
+    missionsList.classList.add('custom-ul');
+        missions.forEach(mission => {
         const missionItem = document.createElement('li');
         missionItem.innerHTML = `
             <strong>Mission:</strong> ${mission.Title}<br>

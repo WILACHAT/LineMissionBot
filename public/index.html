@@ -4,6 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #FDD771;
+        }
+        #missionForm {
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.19);
+        }
+        .input-group-title {
+                font-size: 16px;
+                font-weight: bold;
+                margin-bottom: 8px;
+                color: #333; /* A dark color for the title */
+            }
+        .input-group {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #FFFFFF; /* Set a white background */
+            border-radius: 8px; /* Rounded corners for the input group */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .input-group input, .input-group textarea {
+            width: calc(100% - 20px); /* Adjust width to account for padding */
+            margin-top: 8px;
+            margin-bottom: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #5A5A5A;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background: transparent; /* Make input background transparent */
+            box-shadow: none;
+        }
+        .input-group textarea {
+            resize: vertical;
+            height: 80px; /* Adjust the height to match the design */
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: #FDD771;
+            border-radius: 44px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: Arial, sans-serif; /* Added this to ensure the font is consistent */
+        }
+        button[type="submit"]:hover {
+            background: #e5c065;
+        }
+        .date-input-group {
+    display: flex;
+    flex-direction: column; /* Stack the label and input vertically */
+    margin-bottom: 20px;
+}
+
+/* Style for the label inside the date input group */
+.date-input-group label {
+    font-size: 12px;
+    font-family: Sarabun, Arial, sans-serif;
+    font-weight: 600;
+    margin-bottom: 4px; /* Space between label and input */
+}
+
+/* Style for the input inside the date input group */
+.date-input-group input {
+    width: 100%; /* Take up all available width */
+    height: 24.80px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #B0B0B0; /* Lightened border color */
+    font-family: Arial, sans-serif;
+}
+
+/* Style for the image next to the date inputs */
+.date-image {
+    max-width: 50px; /* Set a maximum width for the image */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Ensure the container of the date input groups is a flex container */
+.date-input-container {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space out the date inputs and the image */
+    gap: 20px; /* Add some space between the elements */
+}
+#ongoingSessionMessage {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center elements horizontally */
+    justify-content: center; /* Center content vertically */
+    background: white; /* Choose a background color */
+    padding: 20px; /* Add some padding */
+    border-radius: 8px; /* Round the corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    margin: 20px; /* Add some margin around */
+    text-align: center; /* Ensure text is centered */
+}
+
+#ongoingSessionMessage h1 {
+    color: #333; /* Dark grey color for the heading */
+    margin-bottom: 16px; /* Space below the heading */
+}
+
+#ongoingSessionMessage p {
+    color: #666; /* Lighter grey for the paragraph */
+    margin-bottom: 24px; /* Space below the paragraph */
+}
+
+#ongoingSessionMessage a {
+    color: #1a73e8; /* Blue color for links */
+    text-decoration: none; /* Remove underline from links */
+    margin-bottom: 24px; /* Space below the link */
+}
+
+#ongoingSessionMessage button {
+    padding: 10px 20px; /* Padding inside the button */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Slightly rounded corners for the button */
+    background-color: #f44336; /* Red color for the delete button */
+    color: white; /* Text color for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for button text */
+    margin-bottom: 24px; /* Space below the button */
+}
+
+#ongoingSessionMessage button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+#ongoingSessionMessage img {
+    max-width: 100px; /* Set the image width */
+    height: auto; /* Maintain the image aspect ratio */
+    margin-bottom: 24px; /* Space below the image */
+}
+
+/* Responsive design adjustments */
+@media (max-width: 600px) {
+    #ongoingSessionMessage {
+        margin: 10px; /* Less margin on smaller screens */
+        padding: 15px; /* Less padding on smaller screens */
+    }
+}
+
+/* Existing styles for other elements remain the same */
+
+/* Media query for smaller screens */
+@media (max-width: 600px) {
+    .date-input-container {
+        flex-direction: column; /* Stack the items vertically on small screens */
+        align-items: flex-start; /* Align items to the start of the container */
+    }
+
+    .date-input-group {
+        width: 100%; /* Full width for the date inputs */
+    }
+
+    .date-image {
+        order: -1; /* Place the image above the date inputs */
+        width: 100%; /* Full width for the image */
+        max-width: 100px; /* Adjust max-width as necessary for smaller screens */
+    }
+}
+    </style>
 </head>
 <body>
     <div id="ongoingSessionMessage" style="display: none;">
@@ -11,37 +182,54 @@
         <p>You currently have an ongoing session. Please complete it before starting a new one.</p>
         <a href="/progress">View Your Current Progress</a>
         <button id="deleteSessionButton">Delete Current Session</button>
-
     </div>
 
     <div id="missionForm" style="display: none;">
         <h2>Missions of the Week - Please Fill in Your Mission</h2>
-        <p>Start Date (Tomorrow or Later): <input type="date" id="startDateInput" required></p>
-        <p>End Date (Within One Month from Start Date): <input type="date" id="endDateInput" required></p>
-    
-    
         <form id="dataForm">
-            <input type="text" id="missiontitle1" placeholder="Enter data 1" required><br>
-            <textarea id="missiondes1" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-    
-            <input type="text" id="missiontitle2" placeholder="Enter data 2" required><br>
-            <textarea id="missiondes2" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-    
-            <input type="text" id="missiontitle3" placeholder="Enter data 3" required><br>
-            <textarea id="missiondes3" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-    
-            <input type="text" id="missiontitle4" placeholder="Enter data 4" required><br>
-            <textarea id="missiondes4" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-    
-            <input type="text" id="missiontitle5" placeholder="Enter data 5" required><br>
-            <textarea id="missiondes5" placeholder="Enter detailed mission description" required rows="4"></textarea><br>
-    
-            <button type="submit">Submit</button>
+            <div class="date-input-container">
+                <div class="date-input-group">
+                    <label for="startDateInput">Start Date</label>
+                    <input id="startDateInput" type="date">
+                </div>
+                <div class="date-input-group">
+                    <label for="endDateInput">End Date</label>
+                    <input id="endDateInput" type="date">
+                </div>
+                <img class="date-image" src="meerkat_hello.png" alt="Meerkat Hello">
+            </div>
+            
+            <!-- Repeat for each mission input -->
+            <div class="input-group">
+                <label class="input-group-title">Mission #1</label>
+                <input id="missiontitle1" type="text" placeholder="Enter mission title">
+                <textarea id="missiondes1" placeholder="Description of your mission"></textarea>
+            </div>
+            <div class="input-group">
+                <label class="input-group-title">Mission #2</label>
+                <input id="missiontitle2" type="text" placeholder="Enter mission title">
+                <textarea id="missiondes2" placeholder="Description of your mission"></textarea>
+            </div>
+            <div class="input-group">
+                <label class="input-group-title">Mission #3</label>
+                <input id="missiontitle3" type="text" placeholder="Enter mission title">
+                <textarea id="missiondes3" placeholder="Description of your mission"></textarea>
+            </div>
+            <div class="input-group">
+                <label class="input-group-title">Mission #4</label>
+                <input id="missiontitle4" type="text" placeholder="Enter mission title">
+                <textarea id="missiondes4" placeholder="Description of your mission"></textarea>
+            </div>
+            <div class="input-group">
+                <label class="input-group-title">Mission #5</label>
+                <input id="missiontitle5" type="text" placeholder="Enter mission title">
+                <textarea id="missiondes5" placeholder="Description of your mission"></textarea>
+            </div>
+            <!-- Repeat for other missions if needed -->
+            <button type="submit">เสร็จสิ้น</button>
         </form>
     </div>
-    
-
-
     <script src="submitData.js"></script>
+
 </body>
 </html>

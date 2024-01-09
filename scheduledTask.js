@@ -11,12 +11,21 @@ function scheduleTask() {
         const expiredMissions = await db.findExpiredMissions();
         console.log("expiredMissions", expiredMissions)
 
-
         if (expiredMissions.length > 0) {
             console.log("inside first if")
 
             for (let mission of expiredMissions) {
                 await db.completeMissionSession(mission.SessionID);
+                const what = await db.getCompletedMissionsForUser(mission.UserID)
+
+                console.log("this is the what", what)
+                console.log("this is the what", what.length)
+
+                const completedMissions= what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0);
+
+                console.log("completedmissions", completedMissions)
+                await db.updateMissionSessionRating(mission.SessionID, completedMissions);
+
 
                 const user = await db.getUserLineIdByUserId(mission.UserID);
                 console.log("user user user", user)

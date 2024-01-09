@@ -69,53 +69,65 @@ async function createRichMenu() {
     };
 
     const richMenuData = {
-        "size": {
-          "width": 2500,
-          "height": 1686
-        },
-        "selected": false,
-        "name": "Example Rich Menu",
-        "chatBarText": "Open this",
-        "areas": [
-          {
-            "bounds": {
-              "x": 0,
-              "y": 0,
-              "width": 833,
-              "height": 1686
-            },
-            "action": {
-              "type": "message",
-              "text": "button1_command"
-            }
+      "size": {
+        "width": 2500,
+        "height": 1686
+      },
+      "selected": false,
+      "name": "Example Rich Menu",
+      "chatBarText": "Open this",
+      "areas": [
+        {
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 2500,
+            "height": 843
           },
-          {
-            "bounds": {
-              "x": 833,
-              "y": 0,
-              "width": 834,
-              "height": 1686
-            },
-            "action": {
-              "type": "message",
-              "text": "button2_command"
-            }
-          },
-          {
-            "bounds": {
-              "x": 1667,
-              "y": 0,
-              "width": 833,
-              "height": 1686
-            },
-            "action": {
-              "type": "message",
-              "text": "button3_command"
-            }
+          "action": {
+            "type": "message",
+            "text": "button1_command"
           }
-        ]
-      };
-      
+        },
+        {
+          "bounds": {
+            "x": 0,
+            "y": 843,
+            "width": 833,
+            "height": 843
+          },
+          "action": {
+            "type": "message",
+            "text": "button2_command"
+          }
+        },
+        {
+          "bounds": {
+            "x": 833,
+            "y": 843,
+            "width": 834,
+            "height": 843
+          },
+          "action": {
+            "type": "message",
+            "text": "button3_command"
+          }
+        },
+        {
+          "bounds": {
+            "x": 1667,
+            "y": 843,
+            "width": 833,
+            "height": 843
+          },
+          "action": {
+            "type": "message",
+            "text": "button4_command" // Assuming you have a fourth button
+          }
+        }
+      ]
+    };
+    
 
     try {
         const response = await axios.post('https://api.line.me/v2/bot/richmenu', richMenuData, { headers });

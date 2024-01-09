@@ -106,7 +106,7 @@ async function setupRichMenu(imagePath) {
   }
 }
 
-setupRichMenu('/Users/wilachat16/linebot/line waan-min.jpg');
+setupRichMenu('/Users/wilachat16/linebot/menu final.JPG');
 
 const PORT = process.env.PORT || 4040;
 app.listen(PORT, () => {

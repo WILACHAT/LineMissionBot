@@ -1,4 +1,5 @@
 function setInitialDates() {
+   /*
     const today = new Date();
     document.getElementById('startDateInput').setAttribute('min', formatDate(today));
     document.getElementById('endDateInput').setAttribute('min', formatDate(today));
@@ -7,6 +8,7 @@ function setInitialDates() {
     const oneMonthLater = new Date(today);
     oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
     document.getElementById('endDateInput').setAttribute('max', formatDate(oneMonthLater));
+*/
 }
 
 async function getLatestSession(userId) {

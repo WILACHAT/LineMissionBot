@@ -15,32 +15,44 @@ function populateMissions(missions) {
     missions.forEach(mission => {
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
-        const buttonLabel = mission.Complete ? 'Not Complete' : 'Complete';
-        const backgroundColor = mission.Complete ? 'green' : 'initial';
 
-        missionDiv.innerHTML = `
-            <h2 class="mission-title">${mission.Title}</h2>
-            <p class="mission-description">${mission.Description}</p>
-            <button class="complete-mission" data-mission-id="${mission.Misson_ID}" data-completed="${mission.Complete}">${buttonLabel}</button>
-        `;
-        missionsContainer.appendChild(missionDiv);
+        const missionTitle = document.createElement('div');
+        missionTitle.classList.add('mission-title');
+        missionTitle.innerText = mission.Title;
 
-        const completeButton = missionDiv.querySelector('.complete-mission');
+        const missionDesc = document.createElement('div');
+        missionDesc.classList.add('mission-description');
+        missionDesc.innerText = mission.Description;
+
+        const completeButton = document.createElement('button');
+        completeButton.classList.add('complete-mission');
+        completeButton.setAttribute('data-mission-id', mission.Misson_ID);
+        completeButton.setAttribute('data-completed', mission.Complete);
+        completeButton.innerText = mission.Complete ? 'Not Complete' : 'Complete';
+
+        missionDiv.appendChild(missionTitle);
+        missionDiv.appendChild(missionDesc);
+        missionDiv.appendChild(completeButton);
+
         completeButton.addEventListener('click', function() {
             const completed = this.getAttribute('data-completed') === 'true';
             updateMissionStatus(mission.Misson_ID, !completed);
             this.setAttribute('data-completed', !completed);
             this.textContent = !completed ? 'Not Complete' : 'Complete';
-            missionDiv.style.backgroundColor = !completed ? 'green' : 'initial';
+            missionDiv.style.backgroundColor = !completed ? '#77dd77' : 'white';
         });
 
+        missionsContainer.appendChild(missionDiv);
+
         // Apply the initial background color
-        missionDiv.style.backgroundColor = backgroundColor;
+        missionDiv.style.backgroundColor = mission.Complete ? '#77dd77' : 'white';
     });
 
     missionsLoaded = true;
-    checkAndDisplayContent();
+    //checkAndDisplayContent();
 }
+
+
 
 
 async function updateMissionStatus(missionId, completed) {
@@ -68,38 +80,51 @@ async function updateMissionStatus(missionId, completed) {
 
 function startCountdown(endDate) {
     var countdownContainer = document.getElementById('countdown');
-    countdownContainer.innerHTML = 'Loading countdown...';
+    // Make sure we don't overwrite our countdown structure
+    var daysElem = document.getElementById('days-number');
+    var hoursElem = document.getElementById('hours-number');
+    var minutesElem = document.getElementById('minutes-number');
+    var secondsElem = document.getElementById('seconds-number');
 
     var countdown = setInterval(function() {
         var now = new Date().getTime();
-        var distance = endDate.getTime() - now;
+        var distance = endDate - now;
 
         if (distance < 0) {
             clearInterval(countdown);
-            document.getElementById('countdown').innerHTML = 'EXPIRED';
+            daysElem.innerText = '00';
+            hoursElem.innerText = '00';
+            minutesElem.innerText = '00';
+            secondsElem.innerText = '00';
+            countdownContainer.innerHTML += 'EXPIRED';
         } else {
             var days = Math.floor(distance / (1000 * 60 * 60 * 24));
             var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('countdown').innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            daysElem.innerText = days.toString().padStart(2, '0');
+            hoursElem.innerText = hours.toString().padStart(2, '0');
+            minutesElem.innerText = minutes.toString().padStart(2, '0');
+            secondsElem.innerText = seconds.toString().padStart(2, '0');
         }
     }, 1000);
     countdownLoaded = true;
-    checkAndDisplayContent();
+   // checkAndDisplayContent();
 }
 
 
 
 
 
-function checkAndDisplayContent() {
+/*function checkAndDisplayContent() {
     if (countdownLoaded && missionsLoaded) {
         displayLoading(false);
     }
 }
+*/
 
+/*
 function displayLoading(show) {
     const loadingIndicator = document.getElementById('loading-indicator');
     if (!loadingIndicator) {
@@ -108,11 +133,12 @@ function displayLoading(show) {
     }
     loadingIndicator.style.display = show ? 'block' : 'none';
 }
+*/
 
 // Inside the window.onload function
 window.onload = async function() {
     const userId = 4; // Replace with actual user ID
-    displayLoading(true);
+   // displayLoading(true);
     const what = document.getElementById("whatisgoingon")
     const what2 = document.getElementById("whatisgoingon")
 
@@ -129,17 +155,21 @@ window.onload = async function() {
 
             } else {
                 // If session is not ongoing (Complete = True)
-                document.getElementById('missions').innerHTML = '<p>No active session. You can start a new mission.</p>';
-                document.getElementById('countdown').style.display = 'none';
-                document.getElementById('deleteSessionButton').style.display = 'none';
-                what2.style.display = 'block';
+                document.getElementById('missions').innerHTML = `
+                <div class="no-session">
+                    <p>No active session. You can start a new mission.</p>
+                    <a href="index.html" class="start-new-mission">Start New Mission</a>
+                </div>`;
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('deleteSessionButton').style.display = 'none';
+            what2.style.display = 'block';
 
             }
         }
     } catch (error) {
         console.error('Error:', error);
     } finally {
-        displayLoading(false);
+       // displayLoading(false);
     }
 };
 

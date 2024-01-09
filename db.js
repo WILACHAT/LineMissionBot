@@ -201,6 +201,11 @@ async function deleteSessionById(sessionId) {
   await pool.query(deleteQuery, [sessionId]);
 }
 
+async function updateMissionSessionRating(sessionId, rating) {
+  const query = 'UPDATE "LineSchemas"."MissionSessions" SET "Rating" = $1 WHERE "SessionID" = $2';
+  await pool.query(query, [rating, sessionId]);
+}
+
   
 
 
@@ -225,6 +230,8 @@ module.exports = {
   getCompletedSessionsForUser,
   getMissionsBySessionId,
   getLatestSessionByUserId,
-  deleteSessionById
+  deleteSessionById,
+  updateMissionSessionRating
+
 
 };

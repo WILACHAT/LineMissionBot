@@ -42,11 +42,15 @@ exports.handleWebhook = async (req, res) => {
                 url = 'https://waan.ngrok.app/progress';
                 break;
                 case 'button2_command':
-                url = 'https://waan.ngrok.app/progress';
+                url = 'https://waan.ngrok.app';
                 break;
-                case 'button2_command':
-                url = 'https://waan.ngrok.app/';
+                case 'button3_command':
+                url = 'https://waan.ngrok.app';
                 break;
+                case 'button4_command':
+                url = 'https://waan.ngrok.app/history';
+                break;
+
                 // Add cases for other rich menu buttons
                 default:
                 url = 'https://waan.ngrok.app';

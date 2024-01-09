@@ -30,14 +30,19 @@ function displayMissions(missions) {
     missions.forEach(mission => {
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
+
+        const statusText = mission.Complete ? 'Completed' : 'Not Completed';
+        const statusClass = mission.Complete ? 'status-completed' : 'status-not-completed';
+
         missionDiv.innerHTML = `
             <h2 class="mission-title">${mission.Title}</h2>
             <p class="mission-description">${mission.Description}</p>
-            <div>Status: ${mission.Complete ? 'Completed' : 'Not Completed'}</div>
+            <div class="${statusClass}">Status: ${statusText}</div>
         `;
         missionsContainer.appendChild(missionDiv);
     });
 }
+
 
 function displayCompletionStatus(missions) {
     const totalMissions = missions.length;
@@ -54,7 +59,7 @@ function displayCompletionStatus(missions) {
     }
 
     const missionsContainer = document.getElementById('missions-container');
-    missionsContainer.appendChild(completionText);
+    missionsContainer.appendChild(completionText)
 }
 
 function submitReflection() {
@@ -74,4 +79,8 @@ function submitReflection() {
         }
     })
     .catch(error => console.error('Error submitting reflection:', error));
+}
+
+function goToIndex() {
+    window.location.href = '/'; // Redirects to the index page
 }
