@@ -34,7 +34,10 @@ const messages = [
   }
 }
 
-async function replyToUser(replyToken, url) {
+async function replyToUser(replyToken, url, userId) {
+  const customizedUrl = `${url}?userId=${encodeURIComponent(userId)}`;
+  console.log("i am here", customizedUrl)
+
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${channelAccessToken}`
@@ -49,7 +52,7 @@ async function replyToUser(replyToken, url) {
             },
             {
                 type: 'text',
-                text: `${url}`
+                text: customizedUrl
             }
         ]
     };

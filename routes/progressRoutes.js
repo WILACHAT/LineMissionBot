@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.get('/getLatestIncompleteSession', async (req, res) => {
     console.log("pls not here")
+    console.log("lol", req)
     const userId = req.query.userId;
+    console.log("yee", userId)
   try {
     let latestSession = await db.getLatestIncompleteSessionByUserId(userId);
     if (latestSession) {

@@ -53,6 +53,7 @@ function checkIfRequestFromLine(req, res, next) {
 app.use(checkIfRequestFromLine);
 */
 
+
 app.use('/', missionRoutes);
 app.use('/progress', progressRoutes);
 
@@ -65,6 +66,7 @@ app.use('/history', historyRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
+     console.log("we win", req.session)
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
@@ -78,6 +80,25 @@ app.get('/completed', (req, res) => {
 app.get('/history', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'history.html'));
 });
+
+console.log("server console.log")
+app.get('/session-data', (req, res) => {
+  console.log("this is in app.get? fak off", req)
+
+  console.log("this is in app.get? fak off", req.session)
+  console.log("this is in app.get? fak off", req.session.userId)
+
+
+  if (req.session.userId) {
+    console.log("this is in app.get?")
+      res.json({ userId: req.session.userId });
+  } else {
+      res.status(404).send('Session not found');
+  }
+});
+
+
+
 
 app.post('/', async (req, res) => {
   try {

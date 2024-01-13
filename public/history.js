@@ -1,6 +1,7 @@
 // history.js
 
-let userId = 4;
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('userId'); 
 
 document.addEventListener('DOMContentLoaded', function() {
     // Extract userId from URL query parameter

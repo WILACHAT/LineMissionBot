@@ -2,12 +2,11 @@
 const express = require('express');
 const db = require('../db'); // Adjust the path according to your project structure
 const router = express.Router();
-router.post('/', async (req, res) => {
+router.post('/submit', async (req, res) => {
     console.log('Received data:', req.body); // Debugging line
   
     // Access userId from the session
-    const userId = 4;
-    console.log('UserID from session:', userId);
+    //const userId
     try {
       const savedData = await db.saveFormData(
           req.body.userId,
@@ -30,7 +29,7 @@ router.post('/', async (req, res) => {
   });
   
   router.get('/checkLatestSession', async (req, res) => {
-    const userId = req.query.userId; // Obtain userId from query parameter
+    const userId = req.query.userId // Obtain userId from query parameter
 
     try {
         const latestSession = await db.getLatestSessionByUserId(userId);
@@ -42,7 +41,7 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/deleteCurrentSession', async (req, res) => {
-    const userId = req.query.userId; // Obtain userId from query parameter
+    const userId =  req.query.userId // Obtain userId from query parameter
 
     try {
         const latestSession = await db.getLatestSessionByUserId(userId);

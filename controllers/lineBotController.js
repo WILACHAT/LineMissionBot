@@ -21,6 +21,7 @@ exports.handleWebhook = async (req, res) => {
             logToFile(`Processing event for line ID: ${lineId}`);
 
             let user = await db.getUserByLineId(lineId);
+            console.log("fucker user", user)
             logToFile(`Retrieved user: ${JSON.stringify(user)}`);
 
 
@@ -28,6 +29,8 @@ exports.handleWebhook = async (req, res) => {
                 logToFile(`Line ID ${lineId} not found in database. Inserting.`);
                 try {
                     user = await db.saveNewUser(lineId);
+                    console.log("fucker save user", user)
+
                     logToFile(`New user inserted: ${JSON.stringify(user)}`);
                 } catch (error) {
                     logToFile(`Error inserting user: ${error.message}`);
@@ -56,20 +59,23 @@ exports.handleWebhook = async (req, res) => {
                 url = 'https://waan.ngrok.app';
             }
 
-
             // Store the userId in the session
            
-                        
+        
             // Reply to the user if it's a message event
             try {
                 req.session.userId = user.UserID;
+               // req.session.userId = 4;
+                console.log("user req session", user.UserID)
                 logToFile(`Session user ID set: ${req.session.userId}`);
+                console.log("correct", req.session.userId)
             } catch (error) {
                 logToFile(`Error setting session user ID: ${error.message}`);
             }
+            console.log("work mhai nia", req.session.userId)
             
             const replyToken = event.replyToken;
-            await replyToUser(replyToken, url);
+            await replyToUser(replyToken, url, req.session.userId);
         } 
        
         else {

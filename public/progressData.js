@@ -137,13 +137,18 @@ function displayLoading(show) {
 
 // Inside the window.onload function
 window.onload = async function() {
-    const userId = 4; // Replace with actual user ID
+    
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('userId'); 
+
    // displayLoading(true);
     const what = document.getElementById("whatisgoingon")
     const what2 = document.getElementById("whatisgoingon")
 
 
     try {
+         const params = new URLSearchParams(window.location.search);
+        const userId = params.get('userId'); 
         const data = await fetchLatestIncompleteSession(userId);
         if (data.session) {
             if (!data.session.Complete) {
@@ -155,14 +160,15 @@ window.onload = async function() {
 
             } else {
                 // If session is not ongoing (Complete = True)
+                const startNewMissionLink = `<a href="index.html?userId=${userId}" class="start-new-mission">Start New Mission</a>`;
                 document.getElementById('missions').innerHTML = `
-                <div class="no-session">
-                    <p>No active session. You can start a new mission.</p>
-                    <a href="index.html" class="start-new-mission">Start New Mission</a>
-                </div>`;
-            document.getElementById('countdown').style.display = 'none';
-            document.getElementById('deleteSessionButton').style.display = 'none';
-            what2.style.display = 'block';
+                    <div class="no-session">
+                        <p>No active session. You can start a new mission.</p>
+                        ${startNewMissionLink}
+                    </div>`;
+                document.getElementById('countdown').style.display = 'none';
+                document.getElementById('deleteSessionButton').style.display = 'none';
+                what2.style.display = 'block';
 
             }
         }
