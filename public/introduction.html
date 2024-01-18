@@ -237,12 +237,11 @@ button[type="submit"]:hover {
 
 <body>
     <div id="ongoingSessionMessage" style="display: none;">
-        <h1>มีเซสชันที่กำลังดำเนินอยู่</h1>
-        <p>ขณะนี้คุณมีเซสชันที่กำลังดำเนินอยู่ โปรดทำให้เสร็จสิ้นก่อนที่จะเริ่มใหม่</p>
-        <a href="/progress">ดูความคืบหน้าปัจจุบันของคุณ</a>
-        <button id="deleteSessionButton">ลบเซสชันปัจจุบัน</button>
+        <h1>Ongoing Session</h1>
+        <p>You currently have an ongoing session. Please complete it before starting a new one.</p>
+        <a href="/progress">View Your Current Progress</a>
+        <button id="deleteSessionButton">Delete Current Session</button>
     </div>
-    
 
 <div id="missionForm">
     <div id="block-btw-mission">
@@ -265,40 +264,37 @@ button[type="submit"]:hover {
         <!-- Individual Mission Divs -->
         <div class="mission-input-group">
             <label class="input-group-title">เป้าหมายที่ 1</label>
-            <input id="missiontitle1" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes1" placeholder="คำอธิบายเป้าหมาย"></textarea>
+            <input type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea placeholder="คำอธิบายเป้าหมาย"></textarea>
         </div>
         
         <div class="mission-input-group">
             <label class="input-group-title">เป้าหมายที่ 2</label>
-            <input id="missiontitle2" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes2" placeholder="คำอธิบายเป้าหมาย"></textarea>
+            <input type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea placeholder="คำอธิบายเป้าหมาย"></textarea>
         </div>
 
         <div class="mission-input-group">
             <label class="input-group-title">เป้าหมายที่ 3</label>
-            <input id="missiontitle3" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes3" placeholder="คำอธิบายเป้าหมาย"></textarea>
+            <input type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea placeholder="คำอธิบายเป้าหมาย"></textarea>
         </div>
 
         <div class="mission-input-group">
             <label class="input-group-title">เป้าหมายที่ 4</label>
-            <input id="missiontitle4" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes4" placeholder="คำอธิบายเป้าหมาย"></textarea>
+            <input type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea placeholder="คำอธิบายเป้าหมาย"></textarea>
         </div>
 
         <div class="mission-input-group">
             <label class="input-group-title">เป้าหมายที่ 5</label>
-            <input id="missiontitle5" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes5"placeholder="คำอธิบายเป้าหมาย"></textarea>
+            <input type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea placeholder="คำอธิบายเป้าหมาย"></textarea>
         </div>
-        <!-- Repeat for each mission -->
-        <!-- ... other mission divs ... -->
+       
         
         <button type="submit">เสร็จสิ้น</button>
     </form>
 </div>
-<script src="submitData.js"></script>
-
 </body>
 </html>

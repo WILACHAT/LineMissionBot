@@ -3,10 +3,12 @@
 const params = new URLSearchParams(window.location.search);
 const userId = params.get('userId'); 
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Extract userId from URL query parameter
-   // const params = new URLSearchParams(window.location.search);
-    //userId = params.get('userId');
+    const params = new URLSearchParams(window.location.search);
+    userId = params.get('userId');
 
     if (userId) {
         loadSessionHistory(userId);
@@ -21,6 +23,7 @@ function formatDate(dateStr) {
 }
 
 function loadSessionHistory(userId) {
+
     fetch(`/history/getSessionHistory`, {
         method: 'GET',
         headers: {
@@ -29,6 +32,7 @@ function loadSessionHistory(userId) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("1105 result", data)
         displaySessionHistory(data.sessions);
     })
     .catch(error => console.error('Error loading session history:', error));

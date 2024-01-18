@@ -89,7 +89,7 @@ async function createRichMenu() {
           },
           "action": {
             "type": "message",
-            "text": "button1_command"
+            "text": "ดูความคืบหน้า"
           }
         },
         {
@@ -101,7 +101,7 @@ async function createRichMenu() {
           },
           "action": {
             "type": "message",
-            "text": "button2_command"
+            "text": "สร้างเซสชันภารกิจ"
           }
         },
         {
@@ -113,7 +113,7 @@ async function createRichMenu() {
           },
           "action": {
             "type": "message",
-            "text": "button3_command"
+            "text": "ดูวิธีใช้"
           }
         },
         {
@@ -125,7 +125,7 @@ async function createRichMenu() {
           },
           "action": {
             "type": "message",
-            "text": "button4_command" // Assuming you have a fourth button
+            "text": "ดูประวัติ" // Assuming you have a fourth button
           }
         }
       ]

@@ -41,16 +41,16 @@ exports.handleWebhook = async (req, res) => {
             const userMessage = event.message.text;
             let url;
             switch (userMessage) {
-                case 'button1_command':
+                case 'ดูความคืบหน้า':
                 url = 'https://waan.ngrok.app/progress';
                 break;
-                case 'button2_command':
+                case 'สร้างเซสชันภารกิจ':
                 url = 'https://waan.ngrok.app';
                 break;
-                case 'button3_command':
+                case 'ดูวิธีใช้':
                 url = 'https://waan.ngrok.app';
                 break;
-                case 'button4_command':
+                case 'ดูประวัติ':
                 url = 'https://waan.ngrok.app/history';
                 break;
 

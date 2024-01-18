@@ -4,9 +4,11 @@ const db = require('../db');
 const router = express.Router();
 
 router.get('/getSessionHistory', async (req, res) => {
-    const userId = req.session.userId; // Assuming you're storing userId in session
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('userId');  
+    console.log("1104")   
     try {
-        const sessions = await db.getCompletedSessionsForUser(4);
+        const sessions = await db.getCompletedSessionsForUser(userId);
         console.log("sessions ork ma", sessions)
         res.json({ sessions });
     } catch (error) {

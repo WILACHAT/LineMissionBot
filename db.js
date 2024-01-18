@@ -23,6 +23,9 @@ async function getUserByLineId(lineId) {
 async function getUserLineIdByUserId(userId) {
   const query = 'SELECT "LineID" FROM "LineSchemas"."Users" WHERE "UserID" = $1';
   const result = await pool.query(query, [userId]);
+  console.log("this is the result from user id", userId)
+
+  console.log("this is the result from line id", result)
 
   if (result.rows.length > 0) {
     return result.rows[0].LineID; // Return the LineID of the user
@@ -163,6 +166,8 @@ async function saveUserReflection(userId, reflection) {
   await pool.query(updateReflectionQuery, [reflection, latestSessionId]);
 }
   async function getCompletedSessionsForUser(userId) {
+    console.log("this is more important", userId)
+    
     const query = `
         SELECT "SessionID", "StartDate", "EndDate", "Rating", "Complete", "Reflection"
         FROM "LineSchemas"."MissionSessions"
