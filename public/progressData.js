@@ -161,10 +161,10 @@ window.onload = async function() {
                 // If session is not ongoing (Complete = True)
                 const startNewMissionLink = `<a href="index.html?userId=${userId}" class="start-new-mission">Start New Mission</a>`;
                 document.getElementById('missions').innerHTML = `
-                    <div class="no-session">
-                        <p>No active session. You can start a new mission.</p>
-                        ${startNewMissionLink}
-                    </div>`;
+                <div class="no-session">
+                    <p>ไม่มีการประชุมที่ใช้งานอยู่ คุณสามารถเริ่มภารกิจใหม่ได้</p>
+                    ${startNewMissionLink}
+                </div>`;
                 document.getElementById('countdown').style.display = 'none';
                 document.getElementById('deleteSessionButton').style.display = 'none';
                 what2.style.display = 'block';
