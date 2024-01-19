@@ -2,17 +2,12 @@ require('dotenv').config();
 const { Pool } = require('pg');
 
 
+const connectionString = 'postgresql://doadmin:AVNS_4O6u8-mIxRjwxpVhxNZ@app-27772301-be85-4c7c-8d79-d74c4c9022ab-do-user-8313236-0.c.db.ondigitalocean.com:25060/defaultdb?sslmode=require';
+
 const pool = new Pool({
-  user: 'doadmin',
-  host: 'app-27772301-be85-4c7c-8d79-d74c4c9022ab-do-user-8313236-0.c.db.ondigitalocean.com',
-  database: 'defaultdb',
-  password: process.env.DB_PASSWORD,
-  port: 25060,
-  ssl: {
-    rejectUnauthorized: false, // This is necessary if the server uses a self-signed certificate
-    require: true
-  }
+  connectionString
 });
+
 
 async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
