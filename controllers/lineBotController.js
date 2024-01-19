@@ -42,21 +42,21 @@ exports.handleWebhook = async (req, res) => {
             let url;
             switch (userMessage) {
                 case 'ดูความคืบหน้า':
-                url = 'https://waan.ngrok.app/progress';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app/progress';
                 break;
                 case 'สร้างเซสชันภารกิจ':
-                url = 'https://waan.ngrok.app';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app';
                 break;
                 case 'ดูวิธีใช้':
-                url = 'https://waan.ngrok.app';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app';
                 break;
                 case 'ดูประวัติ':
-                url = 'https://waan.ngrok.app/history';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app/history';
                 break;
 
                 // Add cases for other rich menu buttons
                 default:
-                url = 'https://waan.ngrok.app';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app';
             }
 
             // Store the userId in the session

@@ -12,7 +12,7 @@ const lineConfig = {
 const client = new line.Client(lineConfig);
 
 async function sendLineNotification(lineUserId, messageText, UserID) {
-const baseUrl = "https://waan.ngrok.app/completed";
+const baseUrl = "https://octopus-app-sys7a.ondigitalocean.app/completed";
 const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
 
 const messages = [
