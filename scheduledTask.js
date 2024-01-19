@@ -6,7 +6,7 @@ const { sendLineNotification } = require('./services/lineBotService');
 
 
 function scheduleTask() {
-    cron.schedule('*/1 * * * *', async () => {
+    cron.schedule('*/9 * * * *', async () => {
         console.log('Checking for expired missions at:', new Date().toLocaleString());
         const expiredMissions = await db.findExpiredMissions();
         console.log("expiredMissions", expiredMissions)

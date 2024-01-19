@@ -41,16 +41,16 @@ exports.handleWebhook = async (req, res) => {
             const userMessage = event.message.text;
             let url;
             switch (userMessage) {
-                case 'ดูความคืบหน้า':
+                case 'one':
                 url = 'https://octopus-app-sys7a.ondigitalocean.app/progress';
                 break;
-                case 'สร้างเซสชันภารกิจ':
+                case 'two':
                 url = 'https://octopus-app-sys7a.ondigitalocean.app';
                 break;
-                case 'ดูวิธีใช้':
+                case 'three':
                 url = 'https://octopus-app-sys7a.ondigitalocean.app';
                 break;
-                case 'ดูประวัติ':
+                case 'four':
                 url = 'https://octopus-app-sys7a.ondigitalocean.app/history';
                 break;
 
