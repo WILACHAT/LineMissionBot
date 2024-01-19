@@ -6,8 +6,8 @@ router.post('/submit', async (req, res) => {
     console.log('Received data:', req.body); // Debugging line
   
     // Access userId from the session
-    //const userId
-    try {
+   
+        try {
       const savedData = await db.saveFormData(
           req.body.userId,
           req.body.missiontitle1, req.body.missiontitle2, 

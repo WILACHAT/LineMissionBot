@@ -57,7 +57,7 @@ app.use(checkIfRequestFromLine);
 app.use('/', missionRoutes);
 app.use('/progress', progressRoutes);
 
-app.use('/webhook', webhookRouter);
+app.use(webhookRouter);
 
 app.use('/completed', completedRoutes);
 app.use('/history', historyRoutes);
