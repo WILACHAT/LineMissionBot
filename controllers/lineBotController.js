@@ -45,10 +45,10 @@ exports.handleWebhook = async (req, res) => {
                 url = 'https://octopus-app-sys7a.ondigitalocean.app/progress';
                 break;
                 case 'สร้างเซสชันภารกิจ':
-                url = 'https://octopus-app-sys7a.ondigitalocean.app/';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app';
                 break;
                 case 'ดูวิธีใช้':
-                url = 'https://octopus-app-sys7a.ondigitalocean.app/';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app';
                 break;
                 case 'ดูประวัติ':
                 url = 'https://octopus-app-sys7a.ondigitalocean.app/history';
@@ -56,7 +56,7 @@ exports.handleWebhook = async (req, res) => {
 
                 // Add cases for other rich menu buttons
                 default:
-                url = 'https://octopus-app-sys7a.ondigitalocean.app/';
+                url = 'https://octopus-app-sys7a.ondigitalocean.app';
             }
 
             // Store the userId in the session
