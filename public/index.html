@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+
+    <title>Submit Form</title>
+    <style>
+
+body {
+    font-family: 'Sarabun', sans-serif;
+    padding: 20px;
+    background: #FDD771;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Full viewport height */
+    margin: 0; /* Reset default margin */
+}
+
+#missionForm {
+    width: 80%; /* Responsive width */
+    max-width: 700px; /* Maximum width */
+    background: #FDD771;
+    padding: 20px;
+    border-radius: 25px;
+  /*  box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.19);*/
+    margin-bottom: 20px; /* Space below form */
+}
+
+
+.input-group-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    margin-top: 10px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    margin-bottom: 30px;
+    padding: 10px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.2);
+}
+
+.input-group input, .input-group textarea {
+    width: 100%; /* Full width of parent */
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 9.2px;
+    border: 1px solid #5A5A5A;
+    box-sizing: border-box; /* Include padding and border in the width */
+    font-family: Arial, sans-serif;
+    background: transparent;
+    box-shadow: none;
+}
+.input-group input:focus, .input-group textarea:focus {
+    border-color: #FDD771; /* Changes the border color to yellow */
+    /* Optionally, add other styles to enhance the focus state */
+    outline: none; /* Removes the default focus outline */
+    border-width: 2.5px;
+}
+
+
+.input-group textarea {
+    resize: vertical;
+    height: 80px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background: white;
+    border-radius: 44px;
+    border: none;
+    color: #3C3A37;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    width: 100%;
+    padding: 15px;
+    background: white;
+    border-radius: 44px;
+    border: 2.5px solid #B0B0B0;
+    color: #3C3A37;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.date-input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.date-input-group label {
+    font-size: 12px;
+    margin-bottom: 4px;
+}
+
+.date-input-group input {
+    height: 24.80px;
+    background: white;
+    border-radius: 7px;
+    padding-left:7.5px;
+    border: 1px solid #B0B0B0;
+}
+
+.date-image {
+    max-width: 50px;
+    height: auto;
+    margin-top: 10px; /* Space above the image */
+}
+
+
+.date-input-container {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space out the date inputs and the image */
+    gap: 20px; /* Add some space between the elements */
+}
+
+.date-input-group {
+    width: 75%; /* Allow date input groups to grow and fill space */
+}
+
+.date-image {
+    max-width: 50px; /* Set a maximum width for the image */
+    height: auto; /* Maintain aspect ratio */
+    margin-left: 20px; /* Add space to the left of the image */
+}
+
+#ongoingSessionMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 80%; /* Responsive width */
+    max-width: 700px; /* Maximum width */
+}
+
+#ongoingSessionMessage h1, #ongoingSessionMessage p, #ongoingSessionMessage a {
+    margin-bottom: 16px;
+}
+
+#ongoingSessionMessage button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    background-color: #f44336;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#ongoingSessionMessage button:hover {
+    background-color: #d32f2f;
+}
+
+#block-btw-mission{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 17.8px;
+    background: white;
+    padding: 28px;
+    border-radius: 17px;
+    /*box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.19);*/
+    border: 0.3px solid #dddddd;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .date-input-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .date-image {
+        order: -1;
+        width: 100%;
+        max-width: 100px;
+    }
+
+    #missionForm, #ongoingSessionMessage {
+        width: 100%;
+    }
+}
+
+.mission-input-group {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 17.8px; /* Adjust this to control spacing between missions */
+    padding: 20px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    border: 0.3px solid #dddddd;
+    /*box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.2);*/
+}
+
+/* For the input and textarea within each mission */
+.mission-input-group input, .mission-input-group textarea {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 9.2px;
+    border: 1px solid #5A5A5A;
+    box-sizing: border-box;
+    background: transparent;
+    box-shadow: none;
+}
+
+.mission-input-group input:focus, .mission-input-group textarea:focus {
+    border-color: #a5a5a5;
+    outline: none;
+    border-width: 2.5px;
+}
+
+
+
+</style>
+
+<body>
+    <div id="ongoingSessionMessage" style="display: none;">
+        <h1>มีเซสชันที่กำลังดำเนินอยู่</h1>
+        <p>ขณะนี้คุณมีเซสชันที่กำลังดำเนินอยู่ โปรดทำให้เสร็จสิ้นก่อนที่จะเริ่มใหม่</p>
+        <a href="/progress">ดูความคืบหน้าปัจจุบันของคุณ</a>
+        <button id="deleteSessionButton">ลบเซสชันปัจจุบัน</button>
+    </div>
+    
+
+<div id="missionForm">
+    <div id="block-btw-mission">
+    <h2>สร้างเป้าหมายของฉัน</h2>
+    <form id="dataForm">
+        <div class="date-input-container">
+             <div class="date-input-group">
+                    <label for="startDateInput">วันที่เริ่มต้น</label>
+                    <input id="startDateInput" type="date">
+                </div>
+                <div class="date-input-group">
+                    <label for="endDateInput">วันที่สิ้นสุด</label>
+                    <input id="endDateInput" type="date">
+                </div>
+            
+                <img class="date-image" src="meerkat_hello.png" alt="Meerkat Hello">
+            </div>
+        </div>
+
+        <div class="mission-input-group">
+            <label class="input-group-title">เป้าหมายที่ 1</label>
+            <input id="missiontitle1" type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea id="missiondes1" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        </div>
+        
+        <div class="mission-input-group">
+            <label class="input-group-title">เป้าหมายที่ 2</label>
+            <input id="missiontitle2" type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea id="missiondes2" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        </div>
+
+        <div class="mission-input-group">
+            <label class="input-group-title">เป้าหมายที่ 3</label>
+            <input id="missiontitle3" type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea id="missiondes3" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        </div>
+
+        <div class="mission-input-group">
+            <label class="input-group-title">เป้าหมายที่ 4</label>
+            <input id="missiontitle4" type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea id="missiondes4" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        </div>
+
+        <div class="mission-input-group">
+            <label class="input-group-title">เป้าหมายที่ 5</label>
+            <input id="missiontitle5" type="text" placeholder="ใส่ชื่อเป้าหมาย">
+            <textarea id="missiondes5"placeholder="คำอธิบายเป้าหมาย"></textarea>
+        </div>
+        
+        <button type="submit">เสร็จสิ้น</button>
+    </form>
+</div>
+<script src="submitData.js"></script>
+
+</body>
+</html>

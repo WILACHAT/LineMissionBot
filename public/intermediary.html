@@ -1,0 +1,27 @@
+<!-- In 'public/intermediary.html' -->
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token'); // Extract the token from URL
+
+        fetch(`/resolveToken?token=${token}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.url) {
+                    window.location.href = data.url; // Redirect to the final URL
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Optionally, handle errors, like showing an error message
+            });
+    };
+    </script>
+</head>
+<body>
+    Redirecting...
+</body>
+</html>

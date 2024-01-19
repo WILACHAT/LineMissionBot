@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>New Page</title>
+    <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #FDD771;
+        }
+        .mission {
+    width: 94%;
+    margin: 10px auto; /* Center the mission horizontally */
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+}
+            #missions {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the missions in the div */
+    width: 100%; /* Ensure the container takes full width */
+    box-sizing: border-box; /* Include padding and border */
+    padding: 0;
+    margin: 0;
+}
+
+
+.mission-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333; /* A dark color for the title */
+}
+
+.mission-description {
+    margin-bottom: 8px; /* Space between description and button */
+    font-size: 14px; /* Adjust font size as needed */
+    color: #333; /* Match color with title */
+}
+
+.complete-mission {
+    width: calc(100% - 20px); /* Full width accounting for padding */
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #FDD771; /* Button background color */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.complete-mission:hover {
+    background: #e5c065; /* Lighter shade on hover */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .mission {
+        width: 90%; /* Adjusting width for smaller screens */
+        margin: 10px 5%;
+    }
+}
+
+
+#countdown-background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #F7F7F7;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+    border-radius: 17px;
+}
+
+#days-box, #hours-box, #minutes-box, #seconds-box {
+    width: 47.27px;
+    height: 50.69px;
+    position: absolute;
+    background: #FFD12E;
+    border-radius: 7px;
+}
+
+#days-box { left: 16.88px; top: 15.77px; }
+#hours-box { left: 79.91px; top: 15.77px; }
+#minutes-box { left: 142.94px; top: 15.77px; }
+#seconds-box { left: 205.97px; top: 15.77px; }
+
+#days-label, #hours-label, #minutes-label, #seconds-label {
+    position: absolute;
+    color: #5A5A5A;
+    font-size: 9px;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+#days-label { width: 21.38px; height: 13.52px; left: 29.26px; top: 66.46px; }
+#hours-label { width: 25.89px; height: 13.52px; left: 90.04px; top: 66.46px; }
+#minutes-label { width: 36.02px; height: 13.52px; left: 148.57px; top: 66.46px; }
+#seconds-label { width: 37.14px; height: 13.52px; left: 210.47px; top: 66.46px; }
+
+#days-number, #hours-number, #minutes-number, #seconds-number {
+    position: absolute;
+    color: white;
+    font-size: 29px;
+    font-weight: 800;
+    word-wrap: break-word;
+}
+
+#days-number { width: 38.27px; height: 42.80px; left: 21.38px; top: 20.28px; }
+#hours-number { width: 38.27px; height: 42.80px; left: 84.41px; top: 20.28px; }
+#minutes-number { width: 38.27px; height: 42.80px; left: 147.44px; top: 20.28px; }
+#seconds-number { width: 38.27px; height: 42.80px; left: 211px; top: 17px; }
+
+/* Additional small decorative divs styles */
+.countdownpls
+{
+    justify-content: center;
+    align-items: center;
+}
+.thai-text-label {
+    color: rgba(34.32, 33.94, 33.94, 0.89);
+    font-size: 25px;
+    font-family: 'Sarabun', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    word-wrap: break-word;
+    width: 100%; /* Full width to center the text */
+    text-align: center;
+
+}
+h1{
+    text-align: center; /* This will center the text of the H2 */
+    width: 100%;
+    font-family: Arial, sans-serif;
+
+}
+#whatisgoingon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* Use the full width */
+}
+.countdownclass
+{
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center;
+    align-items: center;
+    width: 269px;
+    height: 98px;
+    position: relative;
+    font-family: Sarabun, Arial, sans-serif;
+    margin: 0 auto; /* Center countdownclass */
+    margin-top: 10px;
+    margin-top: 10px;
+
+
+}
+.abovedeletebtn {
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Full width */
+    margin-bottom: 24px; /* Space below this div */
+}
+
+.deletebtn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f44336;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+.deletebtn button:hover{
+    background-color: #d32f2f;
+}
+.no-session {
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.no-session p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.start-new-mission {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50; /* Change as needed */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+
+}
+
+.start-new-mission:hover {
+    background-color: #45a049; /* Darker shade for hover */
+}
+
+
+
+    </style>
+</head>
+<body>
+    
+    <h1>ความคืบหน้า</h1>
+   
+
+  
+    <div id="whatisgoingon" style="display: none;" style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-center; align-items: center; gap: 28px; display: inline-flex">
+        <div class="thai-text-label">เป้าหมายของคุณ</div>
+        <div id="countdown" class="countdownclass">
+            <div id="countdown-background"></div>
+            <div id="days-box"></div>
+            <div id="hours-box"></div>
+            <div id="minutes-box"></div>
+            <div id="seconds-box"></div>
+            <div id="days-label">วัน</div>
+            <div id="hours-label">ชั่วโมง</div>
+            <div id="minutes-label">นาที</div>
+            <div id="seconds-label">วินาที</div>
+            <div id="days-number">00</div>
+            <div id="hours-number">00</div>
+            <div id="minutes-number">00</div>
+            <div id="seconds-number">00</div>
+        </div>
+        
+        <div id="missions" style="flex-direction: column; justify-content: flex-center; align-items: flex-center; gap: 34px; display: flex">
+            <div style="width: 351px; height: 100px; position: relative">
+                <div style="width: 351px; height: 100px; left: 0px; top: 0px; position: absolute; background: white; box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17); border-radius: 14px"></div>
+                <div style="width: 129px; height: 20px; left: 74px; top: 17px; position: absolute; color: black; font-size: 19px; font-family: Sarabun; font-weight: 600; word-wrap: break-word">ชื่อภารกิจ</div>
+                <div style="width: 268px; height: 40.91px; left: 74px; top: 42px; position: absolute; color: black; font-size: 14.80px; font-family: Sarabun; font-weight: 400; word-wrap: break-word">Description hello my name is earth ayo wassup</div>
+                <div style="width: 29px; height: 32.95px; left: 23px; top: 32.95px; position: absolute; background: white; border-radius: 6px; border: 1.80px #FFD12E solid"></div>
+            </div>
+        </div>
+        <div class="abovedeletebtn">
+            <button id="deleteSessionButton" class="deletebtn">ลบเซสชันปัจจุบัน</button>
+        </div>
+    </div>
+      <div id="whatisgoingon2" style="display: none;">
+        <h1>hello</h1>
+    </div>
+
+
+    <script src="progressData.js"></script>
+</body>
+</html>

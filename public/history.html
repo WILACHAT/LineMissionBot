@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session History</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #FDD771;
+}
+
+h1 {
+    text-align: center;
+}
+
+#sessions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.session {
+    width: 94%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 10px 0;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.session h2 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.session p {
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.session-details {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f7f7f7;
+    border-radius: 4px;
+}
+
+.session-details ul {
+    list-style-type: none;
+    padding: 10px; /* Add padding */
+    margin-top: 10px; /* Top margin */
+    margin-bottom: 10px; /* Bottom margin */
+    background: #fff; /* Background color, optional */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.session-details .custom-ul {
+    list-style-type: none;
+    padding: 10px; /* Add padding */
+    margin-top: 10px; /* Top margin */
+    margin-bottom: 10px; /* Bottom margin */
+    background: #fff; /* Background color, optional */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.session-details li {
+    margin-bottom: 10px;
+    padding: 5px;
+    background: #eaeaea;
+    border-radius: 4px;
+}
+
+hr {
+    margin-top: 15px;
+}
+
+    </style>
+</head>
+<body>
+    <h1>ประวัติ</h1>
+    <div id="sessions-container">
+        <!-- Completed sessions will be displayed here -->
+    </div>
+
+    <script src="history.js"></script>
+
+</body>
+</html>
