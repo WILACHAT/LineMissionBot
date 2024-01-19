@@ -3,11 +3,15 @@ const { Pool } = require('pg');
 
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres', 
-  password: process.env.DB_PASSWORD, 
-  port: 5432,
+  user: 'doadmin',
+  host: 'app-27772301-be85-4c7c-8d79-d74c4c9022ab-do-user-8313236-0.c.db.ondigitalocean.com',
+  database: 'defaultdb',
+  password: process.env.DB_PASSWORD,
+  port: 25060,
+  ssl: {
+    rejectUnauthorized: false, // This is necessary if the server uses a self-signed certificate
+    require: true
+  }
 });
 
 async function getUserByLineId(lineId) {
