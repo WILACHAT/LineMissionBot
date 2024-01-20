@@ -3,12 +3,11 @@ const { Pool } = require('pg');
 
 
 const pool = new Pool({
-  user: 'doadmin',
-  host: 'app-27772301-be85-4c7c-8d79-d74c4c9022ab-do-user-8313236-0.c.db.ondigitalocean.com',
-  database: 'defaultdb',
-  password: process.env.DB_PASSWORD,
-  port: 25060,
-  sslmode: require
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres', 
+  password: process.env.DB_PASSWORD, 
+  port: 5432,
 });
 
 async function getUserByLineId(lineId) {
@@ -46,7 +45,6 @@ async function saveTokenForUser(lineId, token) {
 }
 async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate) {
   console.log("in saveFormData")
-  console.log("userId",z)
   
 
   // Step 1: Insert into MissionSessions and get SessionID

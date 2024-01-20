@@ -12,7 +12,7 @@ const lineConfig = {
 const client = new line.Client(lineConfig);
 
 async function sendLineNotification(lineUserId, messageText, UserID) {
-const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/completed";
+const baseUrl = "https://waan.ngrok.app/completed";
 const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
 
 const messages = [
