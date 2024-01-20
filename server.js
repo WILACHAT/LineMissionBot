@@ -97,6 +97,18 @@ app.get('/session-data', (req, res) => {
   }
 });
 
+app.post('/webhook', async (req, res) => {
+  console.log("Webhook hit"); // Log to console when the webhook is triggered
+  try {
+    // Respond with a simple text message (for testing purposes)
+    const replyToken = req.body.events[0].replyToken;
+    await lineBotService.replyToUser(replyToken, "Hello, this is a test response");
+    res.status(200).end(); // End the response
+  } catch (error) {
+    console.error('Error in webhook:', error);
+    res.status(500).end(); // End with error status
+  }
+});
 
 
 /*
