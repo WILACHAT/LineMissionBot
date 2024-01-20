@@ -8,9 +8,9 @@ const pool = new Pool({
   database: 'defaultdb',
   password: process.env.DB_PASSWORD,
   port: 25060,
-  ssl: {
-    require: true
-  }
+  sslmode: require
+
+
 });
 
 async function getUserByLineId(lineId) {
