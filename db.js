@@ -9,7 +9,6 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: 25060,
   ssl: {
-    rejectUnauthorized: false, // This is necessary if the server uses a self-signed certificate
     require: true
   }
 });
