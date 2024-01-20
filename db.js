@@ -9,16 +9,11 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: 25060,
   sslmode: require
-
-
 });
 
 async function getUserByLineId(lineId) {
-  console.log("get user by line id")
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
   const result = await pool.query(query, [lineId]);
-  console.log("get user by line id", result)
-
 
   if (result.rows.length > 0) {
     return result.rows[0]; // Return the first row (user data)
@@ -51,7 +46,7 @@ async function saveTokenForUser(lineId, token) {
 }
 async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate) {
   console.log("in saveFormData")
-  console.log("userId", userId)
+  console.log("userId",z)
   
 
   // Step 1: Insert into MissionSessions and get SessionID
