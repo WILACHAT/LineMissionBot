@@ -12,16 +12,17 @@ function logToFile(message) {
 }
 
 exports.handleWebhook = async (req, res) => {
-    logToFile('Received webhook event');
+    console.log("what is going on")
 
     for (const event of req.body.events) {
         if (event.type === 'message' && event.message.type === 'text') {
+            console.log("inside the event")
+
            
             const lineId = event.source.userId; // Retrieve the lineId from the event source
             logToFile(`Processing event for line ID: ${lineId}`);
 
             let user = await db.getUserByLineId(lineId);
-            console.log("fucker user", user)
             logToFile(`Retrieved user: ${JSON.stringify(user)}`);
 
 

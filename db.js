@@ -15,8 +15,11 @@ const pool = new Pool({
 });
 
 async function getUserByLineId(lineId) {
+  console.log("get user by line id")
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
   const result = await pool.query(query, [lineId]);
+  console.log("get user by line id", result)
+
 
   if (result.rows.length > 0) {
     return result.rows[0]; // Return the first row (user data)
