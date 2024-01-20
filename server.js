@@ -57,7 +57,7 @@ app.use(checkIfRequestFromLine);
 app.use('/', missionRoutes);
 app.use('/progress', progressRoutes);
 
-app.use(webhookRouter);
+app.use('/webhook', webhookRouter);
 
 app.use('/completed', completedRoutes);
 app.use('/history', historyRoutes);
@@ -98,10 +98,9 @@ app.get('/session-data', (req, res) => {
 });
 
 
-
+/*
 
 app.post('/', async (req, res) => {
-  console.log("why is it in here?")
   try {
     const { userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate } = req.body;
 
@@ -119,7 +118,7 @@ app.post('/', async (req, res) => {
 });
 
 
-
+*/
 async function setupRichMenu(imagePath) {
   const richMenuId = await lineBotService.createRichMenu();
   if (richMenuId) {

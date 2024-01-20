@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { validateSignature } = require('../middlewares/signatureValidation');
-const lineBotController = require('../controllers/lineBotController');
+const { handleWebhook } = require('../middlewares/signatureValidation');
 
-router.post('/webhook', validateSignature, lineBotController.handleWebhook);
+
+router.post('/webhook', validateSignature, handleWebhook);
 
 module.exports = router;
