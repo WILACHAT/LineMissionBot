@@ -75,7 +75,7 @@ exports.handleWebhook = async (req, res) => {
             console.log("work mhai nia", req.session.userId)
             
             const replyToken = event.replyToken;
-            await replyToUser(replyToken);
+            await replyToUser(replyToken, url, req.session.userId);
         } 
        
         else {

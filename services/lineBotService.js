@@ -34,7 +34,7 @@ const messages = [
   }
 }
 
-async function replyToUser(replyToken) {
+async function replyToUser(replyToken, url, userId) {
   const customizedUrl = `${url}?userId=${encodeURIComponent(userId)}`;
   console.log("i am here", customizedUrl)
 
@@ -49,8 +49,11 @@ async function replyToUser(replyToken) {
             {
                 type: 'text',
                 text: 'สวัสดีครับลูกพี่'
+            },
+            {
+                type: 'text',
+                text: customizedUrl
             }
-           
         ]
     };
 
