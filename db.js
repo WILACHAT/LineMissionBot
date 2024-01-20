@@ -49,6 +49,7 @@ async function saveTokenForUser(lineId, token) {
 }
 async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate) {
   console.log("in saveFormData")
+  console.log("userId", userId)
   
 
   // Step 1: Insert into MissionSessions and get SessionID
