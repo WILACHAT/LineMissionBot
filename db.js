@@ -4,7 +4,7 @@ const { Pool } = require('pg');
 
 const pool = new Pool({
   user: 'doadmin',
-  host: 'app-27772301-be85-4c7c-8d79-d74c4c9022ab-do-user-8313236-0.c.db.ondigitalocean.com',
+  host: 'db-postgresql-sgp1-70402-do-user-8313236-0.c.db.ondigitalocean.com',
   database: 'defaultdb',
   password: process.env.DB_PASSWORD,
   port: 25060,
