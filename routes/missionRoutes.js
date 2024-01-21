@@ -8,6 +8,9 @@ router.post('/submit', async (req, res) => {
   
     // Access userId from the session
     //const userId
+    console.log("missionRoutes start", req.body.startDate)
+    console.log("missionRoutes end", req.body.missionEndDate)
+
     
     try {
       const savedData = await db.saveFormData(
@@ -22,6 +25,7 @@ router.post('/submit', async (req, res) => {
 
       console.log(`Data saved successfully`);
       res.json({ message: 'Data saved successfully', savedData });
+      alert("stop")
 
   } catch (error) {
       console.error('Error saving form data:', error);
