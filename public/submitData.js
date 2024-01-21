@@ -1,3 +1,4 @@
+let userId; 
 
 function setInitialDates() {
    
@@ -43,9 +44,12 @@ function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
 }
 
-window.onload = async function() {
+window.onload = async function(req) {
     const params = new URLSearchParams(window.location.search);
-    const userId = params.get('userId'); 
+    userId = params.get('userId');  // Obtain userId from query parameter
+    console.log("wtf is the userId", userId)
+    //const params = new URLSearchParams(window.location.search);
+   // userId = params.get('userId'); 
     //const userId = 4; // Replace with actual user ID
     await checkAndDisplaySession(userId);
 
@@ -101,58 +105,39 @@ function setupDeleteSessionButton(userId) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function(req) {
+    const form = document.getElementById('dataForm');
 
     form.onsubmit = async function(e) {
         e.preventDefault();
-    
-        // User-selected dates from the form
+        console.log("check for req", req)
         const startDateInput = document.getElementById('startDateInput').value;
         const endDateInput = document.getElementById('endDateInput').value;
-    
-        // Create date objects from the form values
+        const today = new Date().toISOString().split('T')[0];
+
+        
+        // Convert input values to Date objects
         const startDate = new Date(startDateInput);
         const endDate = new Date(endDateInput);
-    
-        // Set the start date to the beginning of the day and the end date to the end of the day
-        startDate.setHours(0, 0, 0, 0);
-        endDate.setHours(23, 59, 59, 999);
-    
-        // Get the current date and reset it to the beginning of the day
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        
+        // Create a new date object for 'tomorrow' based on startDate
+
+        console.log("end fucking date", endDate)
+        console.log("start fucking date", startDate)
+
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (startDate.getTime() === today.getTime() && endDate > startDate) {
-            console.log("what is this 2", document.getElementById('endDateInput').value)
-
-            console.log("what is this", document.getElementById('startDateInput').value)
-    
-    
-            // Current Date and Time for Start Date
-            const now = new Date();
-            const startDate = now.toISOString();
-    
-    
-            // User-selected Date, Current Time for End Date
-            const selectedEndDate = document.getElementById('endDateInput').value; // YYYY-MM-DD format
-            const endDate = new Date(selectedEndDate);
-            endDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+        if (endDate.getTime() >= startDate.getTime() && startDateInput === today) {
+            const formattedStartDate = startDate.toISOString();
             const formattedEndDate = endDate.toISOString();
-            console.log("what is this 3", startDate)
-            console.log("what is this 4", formattedEndDate)
-            const params = new URLSearchParams(window.location.search);
-            const userId = params.get('userId'); 
-                //const userId = 4; // Replace with actual user ID
-    
-    
-            // Validate that the end date is after the start date
-            if (endDate <= now) {
-                console.error('Error: End date must be after the current date and time.');
-                return;
-            }
+        
+            console.log("check startdate", formattedStartDate)
+            console.log("check enddate", formattedEndDate)
+
+       
     
             // Assuming `userId` is available in your session or similar
+            console.log("what is this what is this", userId)
     
             const data = {
                 userId: userId,
@@ -166,9 +151,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 missiondes3: document.getElementById('missiondes3').value,
                 missiondes4: document.getElementById('missiondes4').value,
                 missiondes5: document.getElementById('missiondes5').value,
-                startDate: startDate,
+                startDate: formattedStartDate,
                 missionEndDate: formattedEndDate
             };
+
     
             try {
                 const response = await fetch('/submit', {
@@ -182,8 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const responseData = await response.json();
                 if (response.ok) {
                     console.log('Success:', responseData);
-                    const params = new URLSearchParams(window.location.search);
-                    const userId = params.get('userId'); 
+                   // const params = new URLSearchParams(window.location.search);
+                    //const userId = params.get('userId'); 
+                    console.log("check for userId in submit2", userId)
+
                     window.location.href = `progress?userId=${userId}`; 
                 } else {
                     throw new Error(responseData.message || 'Submission failed');
