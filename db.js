@@ -8,8 +8,11 @@ const pool = new Pool({
   database: 'defaultdb',
   password: process.env.DB_PASSWORD,
   port: 25060,
-  sslmode: require
-});
+  ssl: {
+    rejectUnauthorized: false,
+    ca: fs.readFileSync('ca-certificate.crt').toString(),
+  }
+  });
 
 async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
