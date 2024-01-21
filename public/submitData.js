@@ -1,33 +1,4 @@
-function validateDate() {
-    const startDateInput = document.getElementById('startDateInput');
-    const endDateInput = document.getElementById('endDateInput');
-    
-    const startDate = new Date(startDateInput.value);
-    const endDate = new Date(endDateInput.value);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Ignore the time part
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const formattedTomorrow = formatDate(tomorrow); 
-
-    const oneMonthLater = new Date(today);
-    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-
-    console.log("endDate", endDate)
-    console.log("tomorrow", tomorrow)
-    console.log("oneMonthLater", oneMonthLater)
-
-
-
-    // Check if the end date is within the valid range (tomorrow to one month from today)
-    if (endDate < tomorrow || endDate > oneMonthLater) {
-        return false;
-    }
-
-    return true; // If both dates are valid
-}
 function setInitialDates() {
    
     const today = new Date();
@@ -131,83 +102,100 @@ function setupDeleteSessionButton(userId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('dataForm');
+
     form.onsubmit = async function(e) {
         e.preventDefault();
-        if (validateDate()) {
+    
+        // User-selected dates from the form
+        const startDateInput = document.getElementById('startDateInput').value;
+        const endDateInput = document.getElementById('endDateInput').value;
+    
+        // Create date objects from the form values
+        const startDate = new Date(startDateInput);
+        const endDate = new Date(endDateInput);
+    
+        // Set the start date to the beginning of the day and the end date to the end of the day
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+    
+        // Get the current date and reset it to the beginning of the day
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+    
+        // Validate that the start date is today and the end date is no earlier than the day after
+        if (startDate.getTime() === today.getTime() && endDate > startDate) {
+            console.log("what is this 2", document.getElementById('endDateInput').value)
 
-        console.log("what is this 2", document.getElementById('endDateInput').value)
-
-        console.log("what is this", document.getElementById('startDateInput').value)
-
-
-        // Current Date and Time for Start Date
-        const now = new Date();
-        const startDate = now.toISOString();
-
-
-        // User-selected Date, Current Time for End Date
-        const selectedEndDate = document.getElementById('endDateInput').value; // YYYY-MM-DD format
-        const endDate = new Date(selectedEndDate);
-        endDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
-        const formattedEndDate = endDate.toISOString();
-        console.log("what is this 3", startDate)
-        console.log("what is this 4", formattedEndDate)
-        const params = new URLSearchParams(window.location.search);
-        const userId = params.get('userId'); 
-            //const userId = 4; // Replace with actual user ID
-
-
-        // Validate that the end date is after the start date
-        if (endDate <= now) {
-            console.error('Error: End date must be after the current date and time.');
+            console.log("what is this", document.getElementById('startDateInput').value)
+    
+    
+            // Current Date and Time for Start Date
+            const now = new Date();
+            const startDate = now.toISOString();
+    
+    
+            // User-selected Date, Current Time for End Date
+            const selectedEndDate = document.getElementById('endDateInput').value; // YYYY-MM-DD format
+            const endDate = new Date(selectedEndDate);
+            endDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+            const formattedEndDate = endDate.toISOString();
+            console.log("what is this 3", startDate)
+            console.log("what is this 4", formattedEndDate)
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('userId'); 
+                //const userId = 4; // Replace with actual user ID
+    
+    
+            // Validate that the end date is after the start date
+            if (endDate <= now) {
+                console.error('Error: End date must be after the current date and time.');
+                return;
+            }
+    
+            // Assuming `userId` is available in your session or similar
+    
+            const data = {
+                userId: userId,
+                missiontitle1: document.getElementById('missiontitle1').value,
+                missiontitle2: document.getElementById('missiontitle2').value,
+                missiontitle3: document.getElementById('missiontitle3').value,
+                missiontitle4: document.getElementById('missiontitle4').value,
+                missiontitle5: document.getElementById('missiontitle5').value,
+                missiondes1: document.getElementById('missiondes1').value,
+                missiondes2: document.getElementById('missiondes2').value,
+                missiondes3: document.getElementById('missiondes3').value,
+                missiondes4: document.getElementById('missiondes4').value,
+                missiondes5: document.getElementById('missiondes5').value,
+                startDate: startDate,
+                missionEndDate: formattedEndDate
+            };
+    
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                const responseData = await response.json();
+                if (response.ok) {
+                    console.log('Success:', responseData);
+                    const params = new URLSearchParams(window.location.search);
+                    const userId = params.get('userId'); 
+                    window.location.href = `progress?userId=${userId}`; 
+                } else {
+                    throw new Error(responseData.message || 'Submission failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else {
+            // If dates are invalid, show an alert and stop form submission
+            alert("Invalid date selected. Please select a valid date.");
             return;
         }
-
-        // Assuming `userId` is available in your session or similar
-
-        const data = {
-            userId: userId,
-            missiontitle1: document.getElementById('missiontitle1').value,
-            missiontitle2: document.getElementById('missiontitle2').value,
-            missiontitle3: document.getElementById('missiontitle3').value,
-            missiontitle4: document.getElementById('missiontitle4').value,
-            missiontitle5: document.getElementById('missiontitle5').value,
-            missiondes1: document.getElementById('missiondes1').value,
-            missiondes2: document.getElementById('missiondes2').value,
-            missiondes3: document.getElementById('missiondes3').value,
-            missiondes4: document.getElementById('missiondes4').value,
-            missiondes5: document.getElementById('missiondes5').value,
-            startDate: startDate,
-            missionEndDate: formattedEndDate
-        };
-
-        try {
-            const response = await fetch('/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-
-            const responseData = await response.json();
-            if (response.ok) {
-                console.log('Success:', responseData);
-                const params = new URLSearchParams(window.location.search);
-                const userId = params.get('userId'); 
-                window.location.href = `progress?userId=${userId}`; 
-            } else {
-                throw new Error(responseData.message || 'Submission failed');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-    else
-    {
-        alert("Invalid date selected. Please select a valid date.");
-
-    }
-}
+    };
+    
 });
