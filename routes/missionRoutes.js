@@ -4,9 +4,11 @@ const db = require('../db'); // Adjust the path according to your project struct
 const router = express.Router();
 router.post('/submit', async (req, res) => {
     console.log('Received data:', req.body); // Debugging line
+
   
     // Access userId from the session
     //const userId
+    
     try {
       const savedData = await db.saveFormData(
           req.body.userId,
