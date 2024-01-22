@@ -108,35 +108,35 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const endDateInput = document.getElementById('endDateInput').value;
         const today = new Date().toISOString().split('T')[0];
 
-        const currentTime = new Date().toTimeString().split(' ')[0]; // Gets current time
 
         // Combine the date and time for both start and end dates
-        const formattedStartDate = `${startDateInput}T${currentTime}`;
-        const formattedEndDate = `${endDateInput}T${currentTime}`;
+       
 
         let startDate = new Date(startDateInput);
         let endDate = new Date(endDateInput);
-        
-    
-        // Create formatted date strings for comparison
-  
-        // Create Date objects for time comparison
+        const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
+        // Combine the date and time for start date (in UTC)
+        const formattedStartDate = new Date(startDateInput + 'T' + currentTime).toISOString();
 
+        // Combine the date and user-selected end date with the current time (in UTC)
+        const formattedEndDate = new Date(endDateInput + 'T' + currentTime).toISOString();
         
-        // Create a new date object for 'tomorrow' based on startDate
 
        
         console.log("formattedStartDate", formattedStartDate)
         console.log("formattedEndDate", formattedEndDate)
+        console.log("currentTime", currentTime)
+
         console.log("today", today)
 
 
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() > startDate.getTime() && startDateInput === today) {
+        if (endDate.getTime() >= startDate.getTime() && startDateInput === today) {
            
+          
            
             console.log("check startdate", formattedStartDate)
             console.log("check enddate", formattedEndDate)
