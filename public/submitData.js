@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() > startDate.getTime() && startDate === today) {
+        if (endDate.getTime() > startDate.getTime() && startDateInput === today) {
            
            
             console.log("check startdate", formattedStartDate)
