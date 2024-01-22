@@ -1,29 +1,22 @@
 let userId; 
 
 function setInitialDates() {
-   
     const today = new Date();
+    const formattedToday = today.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' format
+
+    // Create a 'tomorrow' date based on today and format it
     const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1); // Set 'tomorrow' to the next day
-    
-    // Format the dates to 'YYYY-MM-DD'
-    const formattedToday = formatDate(today);
-    const formattedTomorrow = formatDate(tomorrow);
-    
-    // Set 'startDateInput' to only allow today's date to be selected
-    document.getElementById('startDateInput').setAttribute('min', formattedToday);
-    document.getElementById('startDateInput').setAttribute('max', formattedToday);
-    document.getElementById('startDateInput').setAttribute('value', formattedToday);
-    
-    // Set 'endDateInput' to not allow today's date to be selected
-    document.getElementById('endDateInput').setAttribute('min', formattedTomorrow);
-    
-    // Set a maximum date for 'endDateInput' if needed, for example one month from today
-    const oneMonthLater = new Date(today);
-    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-    const formattedOneMonthLater = formatDate(oneMonthLater);
-    document.getElementById('endDateInput').setAttribute('max', formattedOneMonthLater);    
-    
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedTomorrow = tomorrow.toLocaleDateString('en-CA');
+
+    // Set the startDateInput to today's date and make it read-only
+    const startDateInput = document.getElementById('startDateInput');
+    startDateInput.value = formattedToday;
+    startDateInput.readOnly = true;
+
+    // Set the endDateInput to allow dates from tomorrow onwards
+    const endDateInput = document.getElementById('endDateInput');
+    endDateInput.setAttribute('min', formattedTomorrow);
 }
 
 async function getLatestSession(userId) {
@@ -115,25 +108,40 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const endDateInput = document.getElementById('endDateInput').value;
         const today = new Date().toISOString().split('T')[0];
 
+        const currentTime = new Date().toTimeString().split(' ')[0]; // Gets current time
+
+        // Combine the date and time for both start and end dates
+        const formattedStartDate = `${startDateInput}T${currentTime}`;
+        const formattedEndDate = `${endDateInput}T${currentTime}`;
+
+        let startDate = new Date(startDateInput);
+        let endDate = new Date(endDateInput);
         
-        // Convert input values to Date objects
-        const startDate = new Date(startDateInput);
-        const endDate = new Date(endDateInput);
+    
+        // Create formatted date strings for comparison
+  
+        // Create Date objects for time comparison
+
+
         
         // Create a new date object for 'tomorrow' based on startDate
 
-        console.log("end fucking date", endDate)
-        console.log("start fucking date", startDate)
+       
+        console.log("formattedStartDate", formattedStartDate)
+        console.log("formattedEndDate", formattedEndDate)
+        console.log("today", today)
+
+
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
         if (endDate.getTime() >= startDate.getTime() && startDateInput === today) {
-            const formattedStartDate = startDate.toISOString();
-            const formattedEndDate = endDate.toISOString();
-        
+           
+          
+           
             console.log("check startdate", formattedStartDate)
             console.log("check enddate", formattedEndDate)
-            alert("stop")
+
 
        
     
@@ -155,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 startDate: formattedStartDate,
                 missionEndDate: formattedEndDate
             };
-            alert("fuck off", userId);
 
     
             try {
@@ -172,15 +179,16 @@ document.addEventListener('DOMContentLoaded', function(req) {
                     console.log('Success:', responseData);
                    // const params = new URLSearchParams(window.location.search);
                     //const userId = params.get('userId'); 
-                    alert("what is this", userId)
                     console.log("check for userId in submit2", userId)
 
                     window.location.href = `progress?userId=${userId}`; 
                 } else {
                     throw new Error(responseData.message || 'Submission failed');
                 }
+
+                
             } catch (error) {
-                console.error('Error:', error);
+                console.log("hehe")
             }
         } else {
             // If dates are invalid, show an alert and stop form submission

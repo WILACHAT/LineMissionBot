@@ -25,7 +25,6 @@ router.post('/submit', async (req, res) => {
 
       console.log(`Data saved successfully`);
       res.json({ message: 'Data saved successfully', savedData });
-      alert("stop")
 
   } catch (error) {
       console.error('Error saving form data:', error);

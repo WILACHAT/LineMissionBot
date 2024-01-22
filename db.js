@@ -172,8 +172,8 @@ async function saveUserReflection(userId, reflection) {
     const result = await pool.query(query, [userId]);
     return result.rows.map(session => ({
       ...session,
-      StartDate: session.StartDate.toISOString().substring(0, 10), // Format date as 'YYYY-MM-DD'
-      EndDate: session.EndDate.toISOString().substring(0, 10), // Format date as 'YYYY-MM-DD'
+      StartDate: session.StartDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' }).substring(0, 10), // Format date as 'YYYY-MM-DD'
+      EndDate: session.EndDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' }).substring(0, 10), // Format date as 'YYYY-MM-DD'
     }));
   }
   async function getMissionsBySessionId(sessionId) {
