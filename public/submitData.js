@@ -97,24 +97,7 @@ function setupDeleteSessionButton(userId) {
         });
     }
 }
-function createDateAsUTC(dateInput, timeInput) {
-    return new Date(dateInput + 'T' + timeInput + 'Z');
-}
 
-// Function to convert date to UTC if in Indochina Time Zone
-function convertToUTCForTimeZone(date, timeZone) {
-    const ictOffsetHours = 7; // Indochina Time is UTC+7
-
-    if (timeZone === 'ICT' || timeZone === 'Indochina Time') {
-        console.log("Original Date (ICT):", date);
-        const utcDate = new Date(date.getTime() - (ictOffsetHours * 60 * 60000));
-        console.log("Converted to UTC:", utcDate);
-        return utcDate.toISOString().split('T')[0]; // Returns only the date part
-    } else {
-        // Return as is for other time zones (like EST)
-        return date.toISOString().split('T')[0];
-    }
-}
 
 
 document.addEventListener('DOMContentLoaded', function(req) {
@@ -129,6 +112,24 @@ document.addEventListener('DOMContentLoaded', function(req) {
         console.log("startDateInput", startDateInput)
         console.log("endDateInput", endDateInput)
         console.log("today", today)
+        function createDateAsUTC(dateInput, timeInput) {
+            return new Date(dateInput + 'T' + timeInput + 'Z');
+        }
+        
+        // Function to convert date to UTC if in Indochina Time Zone
+        function convertToUTCForTimeZone(date, timeZone) {
+            const ictOffsetHours = 7; // Indochina Time is UTC+7
+        
+            if (timeZone === 'ICT' || timeZone === 'Indochina Time') {
+                console.log("Original Date (ICT):", date);
+                const utcDate = new Date(date.getTime() - (ictOffsetHours * 60 * 60000));
+                console.log("Converted to UTC:", utcDate);
+                return utcDate.toISOString().split('T')[0]; // Returns only the date part
+            } else {
+                // Return as is for other time zones (like EST)
+                return date.toISOString().split('T')[0];
+            }
+        }
 
 
 
