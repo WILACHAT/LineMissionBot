@@ -78,7 +78,7 @@ async function updateMissionStatus(missionId, completed) {
     }
 }
 
-function startCountdown(endDate, startDate) {
+function startCountdown(endDate) {
     var countdownContainer = document.getElementById('countdown');
     // Make sure we don't overwrite our countdown structure
     var daysElem = document.getElementById('days-number');
@@ -88,10 +88,7 @@ function startCountdown(endDate, startDate) {
 
     var countdown = setInterval(function() {
         var now = new Date().getTime();
-        console.log("endDate", endDate)
-        console.log("startDate", startDate)
-
-        var distance = endDate - startDate;
+        var distance = endDate - now;
 
         if (distance < 0) {
             clearInterval(countdown);
@@ -154,20 +151,9 @@ window.onload = async function() {
         const data = await fetchLatestIncompleteSession(userId);
         if (data.session) {
             if (!data.session.Complete) {
-
-                console.log("fakfakfakfak start date", data.startDate)
-                console.log("fakfakfakfak end date", data.endDate)
-
-                console.log("fakfakfakfak newdate", new Date(data.endDate, data.startDate))
-
-
-
-
-
-
                 // If session is ongoing (Complete = False)
                 populateMissions(data.missions);
-                startCountdown(new Date(data.endDate, data.startDate));
+                startCountdown(new Date(data.endDate));
                 setupDeleteSessionButton(userId);
                 what.style.display = 'block';
 
