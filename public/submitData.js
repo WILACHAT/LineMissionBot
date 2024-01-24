@@ -142,12 +142,11 @@ document.addEventListener('DOMContentLoaded', function(req) {
         }
     
         // Extract the time zone abbreviation
-        //const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
-        //const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
-        const timeZone = startDatee.toString().match(/\(([^)]+)\)$/)[1]; // Extract time zone
-
-        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZone).split('T')[0] + 'T' + currentTime;
-        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZone).split('T')[0] + 'T' + currentTime;
+        const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
+        const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
+    
+        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart).split('T')[0] + 'T' + currentTime;
+        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd).split('T')[0] + 'T' + currentTime;
     
        // const formattedStartDate = toUTCDate(startDatee);
         //const formattedEndDate = toUTCDate(endDatee);
