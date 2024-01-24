@@ -131,8 +131,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const ictOffsetHours = 7; // Indochina Time is UTC+7
     
             if (timeZone === 'ICT' || 'Indochina Time') {
+                console.log("in here")
+                const utcDate = new Date(date.getTime() - (ictOffsetHours * 60 * 60000));
+                return utcDate.toISOString().split('T')[0]; // Returns only the date part
                 // Convert ICT to UTC
-                return new Date(date.getTime() - ictOffsetHours * 60 * 60000).toISOString();
             } else {
                 // Return as is for other time zones (like EST)
                 return date.toISOString();
@@ -140,11 +142,12 @@ document.addEventListener('DOMContentLoaded', function(req) {
         }
     
         // Extract the time zone abbreviation
-        const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
-        const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
-    
-        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart).split('T')[0] + 'T' + currentTime;
-        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd).split('T')[0] + 'T' + currentTime;
+        //const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
+        //const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
+        const timeZone = startDatee.toString().match(/\(([^)]+)\)$/)[1]; // Extract time zone
+
+        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZone).split('T')[0] + 'T' + currentTime;
+        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZone).split('T')[0] + 'T' + currentTime;
     
        // const formattedStartDate = toUTCDate(startDatee);
         //const formattedEndDate = toUTCDate(endDatee);
