@@ -154,6 +154,17 @@ window.onload = async function() {
         const data = await fetchLatestIncompleteSession(userId);
         if (data.session) {
             if (!data.session.Complete) {
+
+                console.log("fakfakfakfak start date", data.startDate)
+                console.log("fakfakfakfak end date", data.endDate)
+
+                console.log("fakfakfakfak newdate", new Date(data.endDate, data.startDate))
+
+
+
+
+
+
                 // If session is ongoing (Complete = False)
                 populateMissions(data.missions);
                 startCountdown(new Date(data.endDate, data.startDate));
