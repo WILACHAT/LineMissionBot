@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
             // Conversion factors
             const ictOffsetHours = 7; // Indochina Time is UTC+7
     
-            if (timeZone === 'ICT') {
+            if (timeZone === 'ICT' || 'Indochina Time') {
                 // Convert ICT to UTC
                 return new Date(date.getTime() - ictOffsetHours * 60 * 60000).toISOString();
             } else {
