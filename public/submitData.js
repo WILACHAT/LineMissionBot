@@ -129,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         // Combine the date and time for start date (in UTC)
      
-        console.log("localStartDate", localStartDate)
-        console.log("localEndDate", localEndDate)
+        //console.log("localStartDate", localStartDate)
+        //console.log("localEndDate", localEndDate)
 
         console.log("formattedStartDate", formattedStartDate)
         console.log("formattedEndDate", formattedEndDate)
