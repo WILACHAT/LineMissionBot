@@ -88,6 +88,9 @@ function startCountdown(endDate, startDate) {
 
     var countdown = setInterval(function() {
         var now = new Date().getTime();
+        console.log("endDate", endDate)
+        console.log("startDate", startDate)
+
         var distance = endDate - startDate;
 
         if (distance < 0) {
