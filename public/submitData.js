@@ -111,19 +111,19 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         // Combine the date and time for both start and end dates
        
+        let startDate = new Date(startDateInput + 'T' + currentTime);
+        let endDate = new Date(endDateInput + 'T' + currentTime);
 
-        let startDate = new Date(startDateInput);
-        let endDate = new Date(endDateInput);
+        // Convert to UTC
+        let utcStartDate = new Date(startDate.getTime() - (startDate.getTimezoneOffset() * 60000));
+        let utcEndDate = new Date(endDate.getTime() - (endDate.getTimezoneOffset() * 60000));
+
+        const formattedStartDate = utcStartDate.toISOString();
+        const formattedEndDate = utcEndDate.toISOString();
         const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
         // Combine the date and time for start date (in UTC)
-        const formattedStartDate = new Date(startDateInput + 'T' + currentTime).toISOString();
-
-        // Combine the date and user-selected end date with the current time (in UTC)
-        const formattedEndDate = new Date(endDateInput + 'T' + currentTime).toISOString();
-        
-
-       
+     
         console.log("formattedStartDate", formattedStartDate)
         console.log("formattedEndDate", formattedEndDate)
         console.log("currentTime", currentTime)
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() >= startDate.getTime()) {
+        if (endDate.getTime() > startDate.getTime()) {
            
           
            
