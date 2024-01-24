@@ -128,18 +128,13 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
 
         // Manually calculate UTC date-time
-        function toUTCDate(date) {
-           // var utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-            //console.log("utcDate", utcDate)
-            //var utcDateString = utcDate.toISOString(); // 'YYYY-MM-DDTHH:mm:ss.sssZ'
-           // var utcTime = utcDateString.split('T')[1]; // Extracts 'HH:mm:ss.sssZ'
-           // console.log("FOR TESTING", date.toISOString().split('T')[0] + 'T' + currentTime)
+        
+        const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime
+        const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime
 
-            return date.toISOString().split('T')[0] + 'T' + currentTime; // Combines user's date with UTC time
-        }
 
-        const formattedStartDate = toUTCDate(startDatee);
-        const formattedEndDate = toUTCDate(endDatee);
+       // const formattedStartDate = toUTCDate(startDatee);
+        //const formattedEndDate = toUTCDate(endDatee);
 
         const now = new Date();
       //  const currentTimeUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000).toISOString().split('T')[1];
