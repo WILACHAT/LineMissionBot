@@ -43,9 +43,8 @@ async function saveTokenForUser(lineId, token) {
   const result = await pool.query(query, [token, lineId]);
   return result.rows[0];
 }
-async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate) {
-  console.log("in saveFormData")
-  
+async function saveFormData(userId, missions, startDate, missionEndDate) {
+  console.log("in saveFormData");
 
   // Step 1: Insert into MissionSessions and get SessionID
   let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID") VALUES ($1, $2, $3) RETURNING "SessionID"';
@@ -53,21 +52,14 @@ async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3,
   let sessionId = sessionResult.rows[0].SessionID;
 
   // Step 2: Insert missions into Missions table
-  let missions = [
-      { title: missiontitle1, description: missiondes1 },
-      { title: missiontitle2, description: missiondes2 },
-      { title: missiontitle3, description: missiondes3 },
-      { title: missiontitle4, description: missiondes4 },
-      { title: missiontitle5, description: missiondes5 }
-  ];
-
   for (let mission of missions) {
       if (mission.title && mission.description) { // Insert only if title and description are provided
           let missionInsertQuery = 'INSERT INTO "LineSchemas"."Missions" ("Title", "Description", "SessionID") VALUES ($1, $2, $3)';
           await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId]);
       }
   }
-}
+};
+
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
     SELECT "SessionID", "EndDate" , "Complete"
@@ -77,6 +69,7 @@ async function getLatestIncompleteSessionByUserId(userId) {
     LIMIT 1;
   `;
   const result = await pool.query(query, [userId]);
+  console.log("this is the result from getLatestIncomplete", result)
 
   if (result.rows.length > 0) {
     return result.rows[0]; // Return the latest incomplete session

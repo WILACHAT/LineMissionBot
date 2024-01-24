@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
 
-    <title>Submit Form</title>
+    <title>Meerkat</title>
     <style>
 
 body {
@@ -37,6 +37,8 @@ body {
     margin-bottom: 8px;
     color: #333;
     margin-top: 10px;
+    text-align: center; /* Centers text inside the title */
+
 }
 
 .input-group {
@@ -123,14 +125,14 @@ button[type="submit"]:hover {
 
 
 .date-input-container {
-    display: flex;
     align-items: center; /* Align items vertically */
-    justify-content: space-between; /* Space out the date inputs and the image */
+    flex-direction: column; /* Stack the elements vertically */
     gap: 20px; /* Add some space between the elements */
 }
 
 .date-input-group {
-    width: 75%; /* Allow date input groups to grow and fill space */
+    width: 60%; /* Make date inputs smaller */
+    margin-bottom: 10px; /* Reduce space below date inputs */
 }
 
 .date-image {
@@ -202,19 +204,60 @@ button[type="submit"]:hover {
 .mission-input-group {
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 17.8px; /* Adjust this to control spacing between missions */
+    text-align: center; /* Center align all text within the mission group */
+
+    /* Adjust this to control spacing between missions */
     padding: 20px;
     background: #FFFFFF;
     border-radius: 8px;
     border: 0.3px solid #dddddd;
-    /*box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.2);*/
+    margin-top: 20px;
+    height: 325px;
+    position: relative;
+    margin: 10px auto; /* Centers the div and gives 10px margin from top and bottom */
+    width: 90%; 
+
+    opacity: 0; /* Start with the mission invisible */
+    transform: translateX(-100%); /* Start off-screen to the left */
+    transition: opacity 0.5s ease, transform 0.5s ease; 
+    
+
+}
+#addMissionButton {
+    display: block; /* Make button a block element to fill width */
+    margin: 20px auto; /* Center button with automatic margins */
+    padding: 15px 30px; /* Increase padding for a larger button */
+    font-size: 1rem; /* Increase font size */
+    background-color: #D4B17C; /* Use your theme color */
+    color: #333; /* Dark text for contrast */
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+#addMissionButton:hover {
+    background-color: #e5c45f; /* Slightly darker on hover */
 }
 
+#missionNavigation {
+    justify-content: space-around; /* Spread out the buttons */
+    margin: 10px 0; /* Adjust spacing as needed */
+}
+
+#missionNavigation button {
+    flex: 1; /* Buttons take up equal space */
+    margin: 0 5px; /* Add space between buttons */
+}
+
+/* Adjust the mission navigation button sizes for mobile */
+@media (max-width: 600px) {
+    #missionNavigation button {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+}
 /* For the input and textarea within each mission */
 .mission-input-group input, .mission-input-group textarea {
     width: 100%;
+    height: 70px;    
     margin-top: 8px;
     margin-bottom: 8px;
     padding: 10px;
@@ -223,6 +266,16 @@ button[type="submit"]:hover {
     box-sizing: border-box;
     background: transparent;
     box-shadow: none;
+    font-size: 1.25rem;
+
+    
+}
+.mission-input-group input {
+    margin-top:15px;
+}
+.mission-input-group textarea {
+    height: 140px; 
+    font-size: 1.25rem;   
 }
 
 .mission-input-group input:focus, .mission-input-group textarea:focus {
@@ -232,6 +285,53 @@ button[type="submit"]:hover {
 }
 
 
+#missionNavigation {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+#missionNavigation button {
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#missionNavigation button:hover {
+    background-color: #d32f2f;
+}
+/* Delete Mission Button */
+.delete-mission-button {
+    display: block; /* Changes the display to block for centering */
+    width: max-content; /* Width according to the content size */
+    padding: 8px 16px;
+    margin: 10px auto; /* Auto margins for horizontal centering */
+    background-color: #ff4d4f; 
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Optional: adds a small shadow for depth */
+    transition: background-color 0.3s ease;
+}
+
+.delete-mission-button:hover {
+    background-color: #ff7875; /* Lighter red on hover */
+}
+
+.delete-mission-button:active {
+    background-color: #d9363e; /* Darker red when the button is clicked */
+}
+
+.delete-mission-button:focus {
+    outline: none; /* Removes the outline to keep the styling clean */
+}
+
 
 </style>
 
@@ -239,7 +339,7 @@ button[type="submit"]:hover {
     <div id="ongoingSessionMessage" style="display: none;">
         <h1>มีเซสชันที่กำลังดำเนินอยู่</h1>
         <p>ขณะนี้คุณมีเซสชันที่กำลังดำเนินอยู่ โปรดทำให้เสร็จสิ้นก่อนที่จะเริ่มใหม่</p>
-        <a href="/progress">ดูความคืบหน้าปัจจุบันของคุณ</a>
+        <a id="viewOngoingProgressLink" href="#">ดูความคืบหน้าปัจจุบันของคุณ</a>
         <button id="deleteSessionButton">ลบเซสชันปัจจุบัน</button>
     </div>
     
@@ -249,10 +349,10 @@ button[type="submit"]:hover {
     <h2>สร้างเป้าหมายของฉัน</h2>
     <form id="dataForm">
         <div class="date-input-container">
-             <div class="date-input-group">
-                    <label for="startDateInput">วันที่เริ่มต้น</label>
-                    <input id="startDateInput" type="date">
-                </div>
+            <div class="date-input-group">
+                <label for="startDateInput">วันที่เริ่มต้น</label>
+                <input id="startDateInput" type="text" readonly>
+            </div>
                 <div class="date-input-group">
                     <label for="endDateInput">วันที่สิ้นสุด</label>
                     <input id="endDateInput" type="date">
@@ -261,36 +361,16 @@ button[type="submit"]:hover {
                 <img class="date-image" src="meerkat_hello.png" alt="Meerkat Hello">
             </div>
         </div>
-
-        <div class="mission-input-group">
-            <label class="input-group-title">เป้าหมายที่ 1</label>
-            <input id="missiontitle1" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes1" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        <div id="missionsContainer">
+            <!-- Missions will be added here dynamically -->
         </div>
-        
-        <div class="mission-input-group">
-            <label class="input-group-title">เป้าหมายที่ 2</label>
-            <input id="missiontitle2" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes2" placeholder="คำอธิบายเป้าหมาย"></textarea>
+       
+        <button type="button" id="addMissionButton">เพิ่มเป้าหมาย</button>
+        <div id="missionNavigation">
+            <button id="navigateLeft" type="button" onclick="navigateMission('left')">&lt; Prev</button>
+            <button id="navigateRight" type="button" onclick="navigateMission('right')">Next &gt;</button>
         </div>
-
-        <div class="mission-input-group">
-            <label class="input-group-title">เป้าหมายที่ 3</label>
-            <input id="missiontitle3" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes3" placeholder="คำอธิบายเป้าหมาย"></textarea>
-        </div>
-
-        <div class="mission-input-group">
-            <label class="input-group-title">เป้าหมายที่ 4</label>
-            <input id="missiontitle4" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes4" placeholder="คำอธิบายเป้าหมาย"></textarea>
-        </div>
-
-        <div class="mission-input-group">
-            <label class="input-group-title">เป้าหมายที่ 5</label>
-            <input id="missiontitle5" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-            <textarea id="missiondes5"placeholder="คำอธิบายเป้าหมาย"></textarea>
-        </div>
+      
         
         <button type="submit">เสร็จสิ้น</button>
     </form>

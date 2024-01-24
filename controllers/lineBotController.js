@@ -48,7 +48,7 @@ exports.handleWebhook = async (req, res) => {
                 url = 'https://waan.ngrok.app';
                 break;
                 case 'ดูวิธีใช้':
-                url = 'https://waan.ngrok.app';
+                url = '/Users/waan/Desktop/LineMa/LineBotNewMac/IMG_3146.JPG';
                 break;
                 case 'ดูประวัติ':
                 url = 'https://waan.ngrok.app/history';

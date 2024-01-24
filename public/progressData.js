@@ -52,9 +52,6 @@ function populateMissions(missions) {
     //checkAndDisplayContent();
 }
 
-
-
-
 async function updateMissionStatus(missionId, completed) {
     console.log("in update mission")
     console.log("in update mission", missionId)
@@ -149,6 +146,7 @@ window.onload = async function() {
          const params = new URLSearchParams(window.location.search);
         const userId = params.get('userId'); 
         const data = await fetchLatestIncompleteSession(userId);
+        console.log("data recived after fetch", data)
         if (data.session) {
             if (!data.session.Complete) {
                 // If session is ongoing (Complete = False)

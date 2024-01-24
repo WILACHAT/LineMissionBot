@@ -15,11 +15,8 @@ router.post('/submit', async (req, res) => {
     try {
       const savedData = await db.saveFormData(
           req.body.userId,
-          req.body.missiontitle1, req.body.missiontitle2, 
-          req.body.missiontitle3, req.body.missiontitle4, 
-          req.body.missiontitle5, req.body.missiondes1, 
-          req.body.missiondes2,  req.body.missiondes3,
-          req.body.missiondes4, req.body.missiondes5,
+          req.body.missions, 
+
           req.body.startDate, req.body.missionEndDate
       );
 

@@ -1,4 +1,119 @@
 let userId; 
+let missionCount = 0;
+let currentMissionIndex = 1;
+
+
+function createMissionInputGroup(missionNumber) {
+    const missionInputGroup = document.createElement('div');
+    missionInputGroup.className = 'mission-input-group';
+    missionInputGroup.id = `missionGroup${missionNumber}`;
+    missionInputGroup.style.display = missionNumber === 1 ? 'block' : 'none'; // Show only the first mission initially
+
+
+    let deleteButtonHTML = missionNumber === 1 ? '' : 
+        `<button class="delete-mission-button" type="button" onclick="deleteMission(${missionNumber})">ลบเป้าหมายนี้</button>`;
+
+    missionInputGroup.innerHTML = `
+        <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
+        <input id="missiontitle${missionNumber}" type="text" placeholder="ใส่ชื่อเป้าหมาย">
+        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        ${deleteButtonHTML}
+    `;
+
+    return missionInputGroup;
+}
+
+function addMission() {
+    missionCount++;
+    const missionsContainer = document.getElementById('missionsContainer');
+    const newMission = createMissionInputGroup(missionCount);
+
+    // Set the initial state for the new mission
+    newMission.style.transform = 'translateX(100%)'; // Start offscreen to the right
+    missionsContainer.appendChild(newMission);
+
+    // Slide in the new mission
+    setTimeout(() => {
+        switchMission(missionCount, true); // Slide in the new mission
+    }, 100); // Small delay for DOM update
+}
+
+function deleteMission(missionNumber) {
+    const missionToDelete = document.getElementById(`missionGroup${missionNumber}`);
+    if (missionToDelete) {
+        missionToDelete.remove();
+        missionCount--;
+        updateMissionNumbers();
+        switchToPreviousMission(missionNumber);
+    }
+}
+
+function switchToPreviousMission(deletedMissionNumber) {
+    if (deletedMissionNumber === currentMissionIndex && currentMissionIndex > missionCount) {
+        currentMissionIndex = missionCount;
+    } else if (deletedMissionNumber < currentMissionIndex) {
+        currentMissionIndex--;
+    }
+    switchMission(currentMissionIndex);
+}
+
+function updateMissionNumbers() {
+    const missionsContainer = document.getElementById('missionsContainer');
+    let missionIndex = 1;
+    Array.from(missionsContainer.children).forEach(missionGroup => {
+        missionGroup.id = `missionGroup${missionIndex}`;
+        missionGroup.querySelector('.input-group-title').innerText = `เป้าหมายที่ ${missionIndex}`;
+        missionGroup.querySelector('input').id = `missiontitle${missionIndex}`;
+        missionGroup.querySelector('textarea').id = `missiondes${missionIndex}`;
+
+        const deleteButton = missionGroup.querySelector('button');
+        if (deleteButton) {
+            deleteButton.setAttribute('onclick', `deleteMission(${missionIndex})`);
+        }
+        
+        missionIndex++;
+    });
+}
+
+function updateNavigationButtons() {
+    const leftButton = document.getElementById('navigateLeft');
+    const rightButton = document.getElementById('navigateRight');
+
+    // Hide left button on the first mission
+    leftButton.style.display = currentMissionIndex > 1 ? 'block' : 'none';
+
+    // Hide right button if there's only one mission or on the last mission
+    rightButton.style.display = (missionCount > 1 && currentMissionIndex < missionCount) ? 'block' : 'none';
+}
+
+function switchMission(missionNumber, direction) {
+    for (let i = 1; i <= missionCount; i++) {
+        const mission = document.getElementById(`missionGroup${i}`);
+        if (mission) {
+            if (i === missionNumber) {
+                mission.style.display = 'block';
+                mission.style.opacity = 1;
+                mission.style.transform = 'translateX(0)';
+            } else {
+                mission.style.opacity = 0;
+                mission.style.transform = direction === 'left' ? 'translateX(100%)' : 'translateX(-100%)';
+                setTimeout(() => { mission.style.display = 'none'; }, 500); // Hide after animation
+            }
+        }
+    }
+    currentMissionIndex = missionNumber;
+    updateNavigationButtons();
+}
+
+function navigateMission(direction) {
+    if (direction === 'left' && currentMissionIndex > 1) {
+        switchMission(currentMissionIndex - 1, 'left');
+    } else if (direction === 'right' && currentMissionIndex < missionCount) {
+        switchMission(currentMissionIndex + 1, 'right');
+    }
+}
+
+
 
 function setInitialDates() {
     const today = new Date();
@@ -51,6 +166,11 @@ window.onload = async function(req) {
     if (userId && viewProgressLink) {
         viewProgressLink.href = `/progress?userId=${userId}`;
     }
+
+    const viewOngoingProgressLink = document.getElementById('viewOngoingProgressLink');
+    if (userId && viewOngoingProgressLink) {
+        viewOngoingProgressLink.href = `/progress?userId=${userId}`;
+    }
 };
 
 async function checkAndDisplaySession(userId) {
@@ -101,6 +221,13 @@ function setupDeleteSessionButton(userId) {
 document.addEventListener('DOMContentLoaded', function(req) {
     const form = document.getElementById('dataForm');
 
+    const addMissionButton = document.getElementById('addMissionButton');
+    addMissionButton.addEventListener('click', addMission);
+
+    // Initially add the first mission
+    addMission();
+    updateNavigationButtons();
+
     form.onsubmit = async function(e) {
         e.preventDefault();
         console.log("check for req", req)
@@ -121,20 +248,12 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         // Combine the date and user-selected end date with the current time (in UTC)
         const formattedEndDate = new Date(endDateInput + 'T' + currentTime).toISOString();
-        
-
-       
-        console.log("formattedStartDate", formattedStartDate)
-        console.log("formattedEndDate", formattedEndDate)
-        console.log("currentTime", currentTime)
-
-        console.log("today", today)
 
 
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() >= startDate.getTime() && startDateInput === today) {
+        if (endDate.getTime() >= startDate.getTime()) {
            
           
            
@@ -142,23 +261,18 @@ document.addEventListener('DOMContentLoaded', function(req) {
             console.log("check enddate", formattedEndDate)
 
 
-       
-    
-            // Assuming `userId` is available in your session or similar
             console.log("what is this what is this", userId)
+
+            const missionData = [];
+            for (let i = 1; i <= missionCount; i++) {
+                const title = document.getElementById(`missiontitle${i}`).value;
+                const description = document.getElementById(`missiondes${i}`).value;
+                missionData.push({ title, description });
+    }
     
             const data = {
                 userId: userId,
-                missiontitle1: document.getElementById('missiontitle1').value,
-                missiontitle2: document.getElementById('missiontitle2').value,
-                missiontitle3: document.getElementById('missiontitle3').value,
-                missiontitle4: document.getElementById('missiontitle4').value,
-                missiontitle5: document.getElementById('missiontitle5').value,
-                missiondes1: document.getElementById('missiondes1').value,
-                missiondes2: document.getElementById('missiondes2').value,
-                missiondes3: document.getElementById('missiondes3').value,
-                missiondes4: document.getElementById('missiondes4').value,
-                missiondes5: document.getElementById('missiondes5').value,
+                missions: missionData,
                 startDate: formattedStartDate,
                 missionEndDate: formattedEndDate
             };

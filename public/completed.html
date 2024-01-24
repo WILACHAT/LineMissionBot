@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Completed Missions</title>
+    <title>Meerkat</title>
     <style>
         /* Add your styling here */
         body {
@@ -95,6 +95,11 @@ button:last-of-type:hover {
         <textarea id="reflection" rows="4" cols="50"></textarea>
     </div>
     <button onclick="submitReflection()">Submit</button>
+
+    <button id="shareLineButton">Share on LINE</button>
+   <script>
+document.getElementById('shareLineButton').addEventListener('click', shareOnLine);
+</script>
 
     <button onclick="goToIndex()">Back to Home</button>
 
