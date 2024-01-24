@@ -131,8 +131,11 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const ictOffsetHours = 7; // Indochina Time is UTC+7
     
             if (timeZone === 'ICT' || 'Indochina Time') {
-                console.log("in here")
+                console.log("in here", timeZone)
                 const utcDate = new Date(date.getTime() - (ictOffsetHours * 60 * 60000));
+                console.log("in here2", utcDate)
+                console.log("in here3", utcDate.toISOString().split('T')[0])
+
                 return utcDate.toISOString().split('T')[0]; // Returns only the date part
                 // Convert ICT to UTC
             } else {
