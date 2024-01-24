@@ -8,8 +8,8 @@ router.post('/submit', async (req, res) => {
   
     // Access userId from the session
     //const userId
-    console.log("missionRoutes start", req.body.startDate)
-    console.log("missionRoutes end", req.body.missionEndDate)
+   // console.log("missionRoutes start", req.body.startDate)
+  //  console.log("missionRoutes end", req.body.missionEndDate)
 
     
     try {
