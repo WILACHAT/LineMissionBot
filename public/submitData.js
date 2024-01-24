@@ -129,7 +129,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
         console.log("startDateInput", startDateInput)
         console.log("endDateInput", endDateInput)
         console.log("today", today)
+        console.log("walouch", new Date())
 
+        const currentDateUTC = new Date().toISOString().split('T')[0];
+        console.log("Current UTC Date:", currentDateUTC);
 
 
 
@@ -139,41 +142,23 @@ document.addEventListener('DOMContentLoaded', function(req) {
        
         let startDate = new Date(startDateInput + 'T' + currentTime);
         let endDate = new Date(endDateInput + 'T' + currentTime);
-
-        let startDatee = new Date(startDateInput + ' ' + currentTime);
-        let endDatee = new Date(endDateInput + ' ' + currentTime);
-        console.log("startDateeeee", startDatee)
-        console.log("endDateeeeeee", endDatee)
-
-        function convertToUTCForTimeZone(date, timeZone) {
-            // Conversion factors
-            const ictOffsetHours = 7; // Indochina Time is UTC+7
-    
-            if (timeZone === 'ICT' || 'Indochina Time') {
-                console.log("in here", timeZone)
-                const utcDate = new Date(date.getTime() - (ictOffsetHours * 60 * 60000));
-                console.log("in here2", utcDate)
-                console.log("in here3", utcDate.toISOString().split('T')[0])
-
-                return utcDate.toISOString().split('T')[0]; // Returns only the date part
-                // Convert ICT to UTC
-            } else {
-                // Return as is for other time zones (like EST)
-                return date.toISOString();
-            }
-        }
-    
-        // Extract the time zone abbreviation
-        const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
-        const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
-
-        console.log("timezonestart",timeZoneStart )
-        console.log("timeZoneEnd",timeZoneEnd )
-
-    
-        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart).split('T')[0] + 'T' + currentTime;
-        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd).split('T')[0] + 'T' + currentTime;
-    
+        const inputStartDate = new Date(startDateInput);
+        const inputEndDate = new Date(endDateInput);
+        
+        // Calculate the difference in days
+        const timeDiff = inputEndDate - inputStartDate;
+        const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+        
+        // Create UTC start date
+        let startDatee = new Date(currentDateUTC + 'T' + currentTime);
+        
+        // Create UTC end date by adding the difference in days
+        let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
+        
+        // Format start and end dates to ISO strings
+        const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
+        const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
+        
        // const formattedStartDate = toUTCDate(startDatee);
         //const formattedEndDate = toUTCDate(endDatee);
 
