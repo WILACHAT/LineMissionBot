@@ -116,20 +116,18 @@ document.addEventListener('DOMContentLoaded', function(req) {
             return new Date(dateInput + 'T' + timeInput + 'Z');
         }
         
-        // Function to convert date to UTC if in Indochina Time Zone
         function convertToUTCForTimeZone(date, timeZone) {
             const ictOffsetHours = 7; // Indochina Time is UTC+7
         
             if (timeZone === 'ICT' || timeZone === 'Indochina Time') {
-                console.log("Original Date (ICT):", date);
                 const utcDate = new Date(date.getTime() - (ictOffsetHours * 60 * 60000));
-                console.log("Converted to UTC:", utcDate);
                 return utcDate.toISOString().split('T')[0]; // Returns only the date part
             } else {
                 // Return as is for other time zones (like EST)
                 return date.toISOString().split('T')[0];
             }
         }
+        
 
 
 
@@ -144,15 +142,26 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         let startDatee = createDateAsUTC(startDateInput, currentTime);
         let endDatee = createDateAsUTC(endDateInput, currentTime);
-        console.log("startDateeeee", startDatee)
-        console.log("endDateeeeeee", endDatee)
-    
-        // Extract the time zone abbreviation
-        const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
-        const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
         
-        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart) + 'T' + currentTime;
-        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd) + 'T' + currentTime;
+        // Function to safely extract time zone abbreviation
+        function extractTimeZone(dateObj) {
+            const match = dateObj.toString().match(/\(([^)]+)\)$/);
+            return match ? match[1] : null; // Return null if no match found
+        }
+        
+        const timeZoneStart = extractTimeZone(startDatee);
+        const timeZoneEnd = extractTimeZone(endDatee);
+        
+        if (!timeZoneStart || !timeZoneEnd) {
+            console.error("Time zone extraction failed.");
+            // Handle the error appropriately
+            // For example, you might want to set a default time zone or alert the user
+        } else {
+            const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart) + 'T' + currentTime;
+            const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd) + 'T' + currentTime;
+            console.log("Formatted Start Date:", formattedStartDate);
+            console.log("Formatted End Date:", formattedEndDate);
+        }
     
        // const formattedStartDate = toUTCDate(startDatee);
         //const formattedEndDate = toUTCDate(endDatee);
