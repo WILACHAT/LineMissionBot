@@ -17,7 +17,7 @@ router.get('/getLatestIncompleteSession', async (req, res) => {
         'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 ORDER BY "Misson_ID" ASC',
         [sessionId]
       );
-      res.json({ session: latestSession, missions: missionsResult.rows, endDate: latestSession.EndDate });
+      res.json({ session: latestSession, missions: missionsResult.rows, endDate: latestSession.EndDate, startDate:  latestSession.StartDate});
     } else { 
       res.status(404).json({ message: 'No incomplete session found for the user.' });
     }
