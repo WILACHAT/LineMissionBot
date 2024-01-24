@@ -116,16 +116,28 @@ document.addEventListener('DOMContentLoaded', function(req) {
         let startDate = new Date(startDateInput + 'T' + currentTime);
         let endDate = new Date(endDateInput + 'T' + currentTime);
 
+        let startDatee = new Date(startDateInput + ' ' + currentTime);
+        let endDatee = new Date(endDateInput + ' ' + currentTime);
+
+        // Manually calculate UTC date-time
+        function toUTCDate(date) {
+            var utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            return utcDate.toISOString().replace('T', ' ').slice(0, -5) + '+00';
+        }
+
+        const formattedStartDate = toUTCDate(startDatee);
+        const formattedEndDate = toUTCDate(endDatee);
+
         const now = new Date();
-        const currentTimeUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000).toISOString().split('T')[1];
+      //  const currentTimeUTC = new Date(now.getTime() + now.getTimezoneOffset() * 60000).toISOString().split('T')[1];
 
         // Combine the local date inputs with the UTC time
-        const startDateTimeUTC = new Date(startDateInput + 'T' + currentTimeUTC);
-        const endDateTimeUTC = new Date(endDateInput + 'T' + currentTimeUTC);
+       // const startDateTimeUTC = new Date(startDateInput + 'T' + currentTimeUTC);
+       // const endDateTimeUTC = new Date(endDateInput + 'T' + currentTimeUTC);
 
         // Format dates to ISO strings (in UTC)
-        const formattedStartDate = startDateTimeUTC.toISOString();
-        const formattedEndDate = endDateTimeUTC.toISOString();
+       // const formattedStartDate = startDateTimeUTC.toISOString();
+        //const formattedEndDate = endDateTimeUTC.toISOString();
 
         // Combine the date and time for start date (in UTC)
      
