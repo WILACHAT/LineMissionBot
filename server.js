@@ -26,7 +26,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true } // Set to false if not using https
 }));
-*.
+*/
 
 app.use(express.json({
   verify: (req, res, buf) => {
