@@ -107,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const startDateInput = document.getElementById('startDateInput').value;
         const endDateInput = document.getElementById('endDateInput').value;
         const today = new Date().toISOString().split('T')[0];
+        console.log("startDateInput", startDateInput)
+        console.log("endDateInput", endDateInput)
+        console.log("today", today)
+
+
 
 
         // Combine the date and time for both start and end dates
@@ -118,10 +123,14 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         let startDatee = new Date(startDateInput + ' ' + currentTime);
         let endDatee = new Date(endDateInput + ' ' + currentTime);
+        console.log("startDateeeee", startDatee)
+        console.log("endDateeeeeee", endDatee)
+
 
         // Manually calculate UTC date-time
         function toUTCDate(date) {
             var utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            console.log(utcDate, utcDate)
             return utcDate.toISOString().replace('T', ' ').slice(0, -5) + '+00';
         }
 
@@ -149,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
         console.log("currentTime", currentTime)
 
         console.log("today", today)
-
+        alert("check console")
 
 
     
