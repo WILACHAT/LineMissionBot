@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
         function toUTCDate(date) {
             var utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
             console.log(utcDate, utcDate)
-            return utcDate.toISOString().replace('T', ' ').slice(0, -5) + '+00';
+            return utcDate.toISOString();
         }
 
         const formattedStartDate = toUTCDate(startDatee);
