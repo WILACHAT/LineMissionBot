@@ -110,6 +110,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
 
         // Combine the date and time for both start and end dates
+        const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
+
        
         let startDate = new Date(startDateInput + 'T' + currentTime);
         let endDate = new Date(endDateInput + 'T' + currentTime);
@@ -120,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         const formattedStartDate = utcStartDate.toISOString();
         const formattedEndDate = utcEndDate.toISOString();
-        const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
         // Combine the date and time for start date (in UTC)
      
