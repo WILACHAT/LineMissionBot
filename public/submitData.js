@@ -126,13 +126,26 @@ document.addEventListener('DOMContentLoaded', function(req) {
         console.log("startDateeeee", startDatee)
         console.log("endDateeeeeee", endDatee)
 
-
-        // Manually calculate UTC date-time
-        
-        const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime
-        const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime
-
-
+        function convertToUTCForTimeZone(date, timeZone) {
+            // Conversion factors
+            const ictOffsetHours = 7; // Indochina Time is UTC+7
+    
+            if (timeZone === 'ICT') {
+                // Convert ICT to UTC
+                return new Date(date.getTime() - ictOffsetHours * 60 * 60000).toISOString();
+            } else {
+                // Return as is for other time zones (like EST)
+                return date.toISOString();
+            }
+        }
+    
+        // Extract the time zone abbreviation
+        const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
+        const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
+    
+        const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart).split('T')[0] + 'T' + currentTime;
+        const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd).split('T')[0] + 'T' + currentTime;
+    
        // const formattedStartDate = toUTCDate(startDatee);
         //const formattedEndDate = toUTCDate(endDatee);
 
@@ -160,18 +173,12 @@ document.addEventListener('DOMContentLoaded', function(req) {
         alert("check console")
 
 
-    
         // Validate that the start date is today and the end date is no earlier than the day after
         if (endDate.getTime() > startDate.getTime()) {
-           
-          
            
             console.log("check startdate", formattedStartDate)
             console.log("check enddate", formattedEndDate)
 
-
-       
-    
             // Assuming `userId` is available in your session or similar
             console.log("what is this what is this", userId)
     
