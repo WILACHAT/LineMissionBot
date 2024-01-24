@@ -63,6 +63,7 @@ exports.handleWebhook = async (req, res) => {
            
         
             // Reply to the user if it's a message event
+            /*
             try {
                 req.session.userId = user.UserID;
                // req.session.userId = 4;
@@ -73,9 +74,10 @@ exports.handleWebhook = async (req, res) => {
                 logToFile(`Error setting session user ID: ${error.message}`);
             }
             console.log("work mhai nia", req.session.userId)
+            */
             
             const replyToken = event.replyToken;
-            await replyToUser(replyToken, url, req.session.userId);
+            await replyToUser(replyToken, url, user.UserID);
         } 
        
         else {

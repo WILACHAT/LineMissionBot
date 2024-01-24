@@ -19,12 +19,14 @@ const { scheduleTask } = require('./scheduledTask');
 const app = express();
 
 // Configure session middleware
+/*
 app.use(session({
   secret: process.env.SESSION_SECRET, // Make sure SESSION_SECRET is set in your .env file
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true } // Set to false if not using https
 }));
+*.
 
 app.use(express.json({
   verify: (req, res, buf) => {
@@ -66,7 +68,7 @@ app.use('/history', historyRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-     console.log("we win", req.session)
+     //console.log("we win", req.session)
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
@@ -82,11 +84,12 @@ app.get('/history', (req, res) => {
 });
 
 console.log("server console.log")
+/*
 app.get('/session-data', (req, res) => {
   console.log("this is in app.get? fak off", req)
 
-  console.log("this is in app.get? fak off", req.session)
-  console.log("this is in app.get? fak off", req.session.userId)
+ // console.log("this is in app.get? fak off", req.session)
+  //console.log("this is in app.get? fak off", req.session.userId)
 
 
   if (req.session.userId) {
@@ -96,6 +99,7 @@ app.get('/session-data', (req, res) => {
       res.status(404).send('Session not found');
   }
 });
+*/
 
 
 
