@@ -130,8 +130,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
         // Manually calculate UTC date-time
         function toUTCDate(date) {
             var utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            console.log("utcDate", utcDate)
             var utcDateString = utcDate.toISOString(); // 'YYYY-MM-DDTHH:mm:ss.sssZ'
             var utcTime = utcDateString.split('T')[1]; // Extracts 'HH:mm:ss.sssZ'
+            console.log("FOR TESTING", date.toISOString().split('T')[0] + 'T' + currentTime)
 
             return date.toISOString().split('T')[0] + 'T' + utcTime; // Combines user's date with UTC time
         }
