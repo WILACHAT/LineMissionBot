@@ -166,6 +166,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
         // Extract the time zone abbreviation
         const timeZoneStart = startDatee.toString().match(/\(([^)]+)\)$/)[1];
         const timeZoneEnd = endDatee.toString().match(/\(([^)]+)\)$/)[1];
+
+        console.log("timezonestart",timeZoneStart )
+        console.log("timeZoneEnd",timeZoneEnd )
+
     
         const formattedStartDate = convertToUTCForTimeZone(startDatee, timeZoneStart).split('T')[0] + 'T' + currentTime;
         const formattedEndDate = convertToUTCForTimeZone(endDatee, timeZoneEnd).split('T')[0] + 'T' + currentTime;
