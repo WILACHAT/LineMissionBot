@@ -76,7 +76,7 @@ async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3,
 }
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
-    SELECT "SessionID", "EndDate" , "Complete"
+    SELECT "SessionID", "EndDate" , "Complete", "StartDate"
     FROM "LineSchemas"."MissionSessions" 
     WHERE "UserID" = $1 
     ORDER BY "SessionID" DESC 
