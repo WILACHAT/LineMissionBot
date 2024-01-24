@@ -120,9 +120,15 @@ document.addEventListener('DOMContentLoaded', function(req) {
         let localStartDate = new Date(startDateInput + 'T' + currentTime);
         let localEndDate = new Date(endDateInput + 'T' + currentTime);
 
+        // Function to convert to UTC
+        function convertToUTC(date) {
+            var utc = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            return utc.toISOString().split('T')[0];
+        }
+
         // Convert to UTC and Format
-        const formattedStartDate = localStartDate.toISOString();
-        const formattedEndDate = localEndDate.toISOString();
+        const formattedStartDate = convertToUTC(localStartDate);
+        const formattedEndDate = convertToUTC(localEndDate);
 
         // Combine the date and time for start date (in UTC)
      
