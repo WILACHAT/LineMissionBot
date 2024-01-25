@@ -234,21 +234,45 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const startDateInput = document.getElementById('startDateInput').value;
         const endDateInput = document.getElementById('endDateInput').value;
         const today = new Date().toISOString().split('T')[0];
+        console.log("startDateInput", startDateInput)
+        console.log("endDateInput", endDateInput)
+        console.log("today", today)
+        console.log("walouch", new Date())
+
+        const currentDateUTC = new Date().toISOString().split('T')[0];
+        console.log("Current UTC Date:", currentDateUTC);
+
 
 
         // Combine the date and time for both start and end dates
-       
-
-        let startDate = new Date(startDateInput);
-        let endDate = new Date(endDateInput);
         const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
-        // Combine the date and time for start date (in UTC)
-        const formattedStartDate = new Date(startDateInput + 'T' + currentTime).toISOString();
+       
+        let startDate = new Date(startDateInput + 'T' + currentTime);
+        let endDate = new Date(endDateInput + 'T' + currentTime);
+        const inputStartDate = new Date(startDateInput);
+        const inputEndDate = new Date(endDateInput);
+        
+        // Calculate the difference in days
+        const timeDiff = inputEndDate - inputStartDate;
+        const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+        
+        // Create UTC start date
+        let startDatee = new Date(currentDateUTC + 'T' + currentTime);
+        
+        // Create UTC end date by adding the difference in days
+        let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
+        
+        // Format start and end dates to ISO strings
+        const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
+        const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
+     
 
-        // Combine the date and user-selected end date with the current time (in UTC)
-        const formattedEndDate = new Date(endDateInput + 'T' + currentTime).toISOString();
+        console.log("formattedStartDate", formattedStartDate)
+        console.log("formattedEndDate", formattedEndDate)
+        console.log("currentTime", currentTime)
 
+        console.log("today", today)
 
 
     
