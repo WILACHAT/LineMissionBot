@@ -8,18 +8,15 @@ router.post('/submit', async (req, res) => {
   
     // Access userId from the session
     //const userId
-   // console.log("missionRoutes start", req.body.startDate)
-  //  console.log("missionRoutes end", req.body.missionEndDate)
+    console.log("missionRoutes start", req.body.startDate)
+    console.log("missionRoutes end", req.body.missionEndDate)
 
     
     try {
       const savedData = await db.saveFormData(
           req.body.userId,
-          req.body.missiontitle1, req.body.missiontitle2, 
-          req.body.missiontitle3, req.body.missiontitle4, 
-          req.body.missiontitle5, req.body.missiondes1, 
-          req.body.missiondes2,  req.body.missiondes3,
-          req.body.missiondes4, req.body.missiondes5,
+          req.body.missions, 
+
           req.body.startDate, req.body.missionEndDate
       );
 

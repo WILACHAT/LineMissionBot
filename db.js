@@ -1,20 +1,14 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const fs = require('fs');
-
 
 
 const pool = new Pool({
-  user: 'doadmin',
-  host: 'db-postgresql-sgp1-70402-do-user-8313236-0.c.db.ondigitalocean.com',
-  database: 'defaultdb',
-  password: process.env.DB_PASSWORD,
-  port: 25060,
-  ssl: {
-    rejectUnauthorized: false,
-    ca: fs.readFileSync('ca-certificate.crt').toString(),
-  }
-  });
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres', 
+  password: process.env.DB_PASSWORD, 
+  port: 5432,
+});
 
 async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
@@ -49,9 +43,8 @@ async function saveTokenForUser(lineId, token) {
   const result = await pool.query(query, [token, lineId]);
   return result.rows[0];
 }
-async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate) {
-  console.log("in saveFormData")
-  
+async function saveFormData(userId, missions, startDate, missionEndDate) {
+  console.log("in saveFormData");
 
   // Step 1: Insert into MissionSessions and get SessionID
   let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID") VALUES ($1, $2, $3) RETURNING "SessionID"';
@@ -59,30 +52,24 @@ async function saveFormData(userId, missiontitle1, missiontitle2, missiontitle3,
   let sessionId = sessionResult.rows[0].SessionID;
 
   // Step 2: Insert missions into Missions table
-  let missions = [
-      { title: missiontitle1, description: missiondes1 },
-      { title: missiontitle2, description: missiondes2 },
-      { title: missiontitle3, description: missiondes3 },
-      { title: missiontitle4, description: missiondes4 },
-      { title: missiontitle5, description: missiondes5 }
-  ];
-
   for (let mission of missions) {
       if (mission.title && mission.description) { // Insert only if title and description are provided
           let missionInsertQuery = 'INSERT INTO "LineSchemas"."Missions" ("Title", "Description", "SessionID") VALUES ($1, $2, $3)';
           await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId]);
       }
   }
-}
+};
+
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
-    SELECT "SessionID", "EndDate" , "Complete", "StartDate"
+    SELECT "SessionID", "EndDate" , "Complete"
     FROM "LineSchemas"."MissionSessions" 
     WHERE "UserID" = $1 
     ORDER BY "SessionID" DESC 
     LIMIT 1;
   `;
   const result = await pool.query(query, [userId]);
+  console.log("this is the result from getLatestIncomplete", result)
 
   if (result.rows.length > 0) {
     return result.rows[0]; // Return the latest incomplete session
@@ -169,6 +156,7 @@ async function saveUserReflection(userId, reflection) {
   await pool.query(updateReflectionQuery, [reflection, latestSessionId]);
 }
   async function getCompletedSessionsForUser(userId) {
+    console.log("checking for userId", userId)
     const query = `
         SELECT "SessionID", "StartDate", "EndDate", "Rating", "Complete", "Reflection"
         FROM "LineSchemas"."MissionSessions"
@@ -178,8 +166,8 @@ async function saveUserReflection(userId, reflection) {
     const result = await pool.query(query, [userId]);
     return result.rows.map(session => ({
       ...session,
-      StartDate: session.StartDate.toISOString().substring(0, 10), // Format date as 'YYYY-MM-DD'
-      EndDate: session.EndDate.toISOString().substring(0, 10), // Format date as 'YYYY-MM-DD'
+      StartDate: session.StartDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' }).substring(0, 10), // Format date as 'YYYY-MM-DD'
+      EndDate: session.EndDate.toLocaleDateString('en-CA', { timeZone: 'Asia/Bangkok' }).substring(0, 10), // Format date as 'YYYY-MM-DD'
     }));
   }
   async function getMissionsBySessionId(sessionId) {

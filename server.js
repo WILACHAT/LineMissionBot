@@ -103,7 +103,7 @@ app.get('/session-data', (req, res) => {
 
 
 
-
+/*
 app.post('/', async (req, res) => {
   try {
     const { userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate } = req.body;
@@ -121,7 +121,7 @@ app.post('/', async (req, res) => {
   }
 });
 
-
+*/
 
 async function setupRichMenu(imagePath) {
   const richMenuId = await lineBotService.createRichMenu();

@@ -43,7 +43,7 @@ function displayMissions(missions) {
     });
 }
 
-
+ 
 function displayCompletionStatus(missions) {
     const totalMissions = missions.length;
     const completedMissions = missions.filter(m => m.Complete).length;
@@ -73,6 +73,8 @@ function submitReflection() {
     })
     .then(response => {
         if (response.ok) {
+            window.location.href = `/history/?userId=${userId}`;
+
             console.log('Reflection submitted successfully');
         } else {
             throw new Error('Reflection submission failed');
