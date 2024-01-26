@@ -172,11 +172,13 @@ async function setDefaultRichMenu(richMenuId) {
     }
 }
 
-async function sendImageWithUrl(replyToken, imageUrl, title, text, url, userId) {
+async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, userId) {
   const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${channelAccessToken}`
   };
+  const fullUrl = `${baseUrl}?userId=${encodeURIComponent(userId)}`;
+
 
   const body = {
       replyToken: replyToken,
@@ -196,7 +198,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, url, userId) 
                               {
                                   type: 'uri',
                                   label: 'View Details',
-                                  uri: url
+                                  uri: fullUrl
                               }
                           ]
                       }
