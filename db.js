@@ -3,12 +3,16 @@ const { Pool } = require('pg');
 
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres', 
-  password: process.env.DB_PASSWORD, 
-  port: 5432,
-});
+  user: 'doadmin',
+  host: 'db-postgresql-sgp1-70402-do-user-8313236-0.c.db.ondigitalocean.com',
+  database: 'defaultdb',
+  password: process.env.DB_PASSWORD,
+  port: 25060,
+  ssl: {
+    rejectUnauthorized: false,
+    ca: fs.readFileSync('ca-certificate.crt').toString(),
+  }
+  });
 
 async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
