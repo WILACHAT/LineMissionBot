@@ -156,6 +156,7 @@ async function saveUserReflection(userId, reflection) {
   await pool.query(updateReflectionQuery, [reflection, latestSessionId]);
 }
   async function getCompletedSessionsForUser(userId) {
+    console.log("checking for userId", userId)
     const query = `
         SELECT "SessionID", "StartDate", "EndDate", "Rating", "Complete", "Reflection"
         FROM "LineSchemas"."MissionSessions"
