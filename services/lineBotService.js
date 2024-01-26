@@ -12,7 +12,7 @@ const lineConfig = {
 const client = new line.Client(lineConfig);
 
 async function sendLineNotification(lineUserId, messageText, UserID) {
-const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/completed";
+const baseUrl = "https://waan.ngrok.app/completed";
 const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
 
 const messages = [
@@ -171,11 +171,58 @@ async function setDefaultRichMenu(richMenuId) {
         console.error('Error setting rich menu as default:', error.response ? error.response.data : error.message);
     }
 }
+
+async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, userId) {
+  const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${channelAccessToken}`
+  };
+  const fullUrl = `${baseUrl}?userId=${encodeURIComponent(userId)}`;
+
+
+  const body = {
+      replyToken: replyToken,
+      messages: [
+          {
+              type: 'template',
+              altText: 'This is a carousel template',
+              template: {
+                  type: 'carousel',
+                  columns: [
+                      {
+                          thumbnailImageUrl: imageUrl,
+                          imageBackgroundColor: "#FFFFFF",
+                          title: title,
+                          text: text,
+                          actions: [
+                              {
+                                  type: 'uri',
+                                  label: 'View Details',
+                                  uri: fullUrl
+                              }
+                          ]
+                      }
+                  ],
+                  imageAspectRatio: 'square',
+                  imageSize: 'contain'
+              }
+          }
+      ]
+  };
+
+  try {
+      const response = await axios.post('https://api.line.me/v2/bot/message/reply', body, { headers });
+      console.log('Image with URL sent:', response.data);
+  } catch (error) {
+      console.error('Error sending image with URL:', error.response ? error.response.data : error.message);
+  }
+}
 module.exports = {
   replyToUser,
   createRichMenu,
   uploadRichMenuImage,
   setDefaultRichMenu,
   sendLineNotification,
+  sendImageWithUrl
 
 };
