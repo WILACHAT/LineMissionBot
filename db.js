@@ -1,5 +1,7 @@
 require('dotenv').config();
 const { Pool } = require('pg');
+const fs = require('fs');
+
 
 
 const pool = new Pool({
@@ -13,7 +15,6 @@ const pool = new Pool({
     ca: fs.readFileSync('ca-certificate.crt').toString(),
   }
   });
-
 async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
   const result = await pool.query(query, [lineId]);
