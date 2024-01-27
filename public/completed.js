@@ -73,9 +73,8 @@ function submitReflection() {
     })
     .then(response => {
         if (response.ok) {
-            window.location.href = `/history/?userId=${userId}`;
-
-            console.log('Reflection submitted successfully');
+            const historyLink = `history.html?userId=${encodeURIComponent(userId)}`;
+            window.location.href = historyLink;
         } else {
             throw new Error('Reflection submission failed');
         }
