@@ -230,6 +230,22 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     form.onsubmit = async function(e) {
         e.preventDefault();
+
+        let allMissionsFilled = true;
+        for (let i = 1; i <= missionCount; i++) {
+            const title = document.getElementById(`missiontitle${i}`).value.trim();
+            const description = document.getElementById(`missiondes${i}`).value.trim();
+            if (!title || !description) {
+                allMissionsFilled = false;
+                break;
+            }
+        }
+    
+        if (!allMissionsFilled) {
+            alert("Please fill in both the title and description for each mission.");
+            return;
+        }
+        
         console.log("check for req", req)
         const startDateInput = document.getElementById('startDateInput').value;
         const endDateInput = document.getElementById('endDateInput').value;
