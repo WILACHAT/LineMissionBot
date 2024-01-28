@@ -15,8 +15,8 @@ function createMissionInputGroup(missionNumber) {
 
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
-        <input id="missiontitle${missionNumber}" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        <input id="missiontitle${missionNumber}" type="text" placeholder="ใส่ชื่อเป้าหมาย" required>
+        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
         ${deleteButtonHTML}
     `;
 
@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() >= startDate.getTime()) {
+        if (endDate.getTime() > startDate.getTime()) {
            
           
            
