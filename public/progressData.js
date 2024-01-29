@@ -125,70 +125,42 @@ function startCountdown(endDate) {
 }
 
 
-
-
-
-/*function checkAndDisplayContent() {
-    if (countdownLoaded && missionsLoaded) {
-        displayLoading(false);
-    }
-}
-*/
-
-/*
-function displayLoading(show) {
-    const loadingIndicator = document.getElementById('loading-indicator');
-    if (!loadingIndicator) {
-        console.error('Loading indicator element not found');
-        return;
-    }
-    loadingIndicator.style.display = show ? 'block' : 'none';
-}
-*/
-
 // Inside the window.onload function
 window.onload = async function() {
-    
     const params = new URLSearchParams(window.location.search);
-    const userId = params.get('userId'); 
-
-   // displayLoading(true);
-    const what = document.getElementById("whatisgoingon")
-    const what2 = document.getElementById("whatisgoingon")
+    const userId = params.get('userId');
 
     try {
-         const params = new URLSearchParams(window.location.search);
-        const userId = params.get('userId'); 
         const data = await fetchLatestIncompleteSession(userId);
-        console.log("data recived after fetch", data)
-        if (data.session) {
-            if (!data.session.Complete) {
-                // If session is ongoing (Complete = False)
-                populateMissions(data.missions);
-                startCountdown(new Date(data.endDate));
-                setupDeleteSessionButton(userId);
-                what.style.display = 'block';
+        console.log("data received after fetch", data);
 
-            } else {
-                // If session is not ongoing (Complete = True)
-                const startNewMissionLink = `<a href="index.html?userId=${userId}" class="start-new-mission">Start New Mission</a>`;
-                document.getElementById('missions').innerHTML = `
-                <div class="no-session">
-                    <p>ไม่มีการประชุมที่ใช้งานอยู่ คุณสามารถเริ่มภารกิจใหม่ได้</p>
-                    ${startNewMissionLink}
-                </div>`;
-                document.getElementById('countdown').style.display = 'none';
-                document.getElementById('deleteSessionButton').style.display = 'none';
-                what2.style.display = 'block';
-
-            }
+        // Check if there is an existing session and it's not complete
+        if (data.session && !data.session.Complete) {
+            populateMissions(data.missions);
+            startCountdown(new Date(data.endDate));
+            setupDeleteSessionButton(userId);
+            document.getElementById('whatisgoingon').style.display = 'block';
+        } else {
+            // Handle the case where there is no session or missions
+            displayNoSessionMessage(userId);
         }
     } catch (error) {
         console.error('Error:', error);
-    } finally {
-       // displayLoading(false);
+        displayNoSessionMessage(userId); // Display the message in case of an error too
     }
 };
+
+function displayNoSessionMessage(userId) {
+    const startNewMissionLink = `<a href="index.html?userId=${userId}" class="start-new-mission">เริ่มเซสชันภารกิจใหม่</a>`;
+    document.getElementById('missions').innerHTML = `
+        <div class="no-session">
+            <p>คุณไม่มีเซสชันที่ใช้งานอยู่ในขณะนี้ คุณสามารถเริ่มภารกิจใหม่ได้</p>
+            ${startNewMissionLink}
+        </div>`;
+    document.getElementById('countdown').style.display = 'none';
+    document.getElementById('deleteSessionButton').style.display = 'none';
+    document.getElementById('whatisgoingon').style.display = 'block';
+}
 
 
 function setupDeleteSessionButton(userId) {

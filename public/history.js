@@ -38,6 +38,18 @@ function displaySessionHistory(sessions) {
     const sessionsContainer = document.getElementById('sessions-container');
     sessionsContainer.innerHTML = '';
 
+    if (sessions.length === 0) {
+        // No sessions found
+        const startNewSessionLink = `<a href="index.html?userId=${userId}" class="start-new-session">เริ่มเซสชันภารกิจใหม่</a>`;
+        sessionsContainer.innerHTML = `
+            <div class="no-session">
+                <p>คุณยังไม่ได้ทำเซสชันใดๆ เสร็จสิ้น</p> 
+                <p>โปรดทำเซสชันเพื่อดูประวัติ</p>
+                ${startNewSessionLink}
+            </div>`;
+        return;
+    }
+
     sessions.forEach(session => {
         const formattedStartDate = formatDate(session.StartDate);
         const formattedEndDate = formatDate(session.EndDate);
