@@ -359,6 +359,60 @@ button[type="submit"]:hover {
     border-color: #FDD771;
     border-width: 2.5px;
 }
+/* Add this to your CSS file */
+.alert-box-cfdelete {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    color: #333;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    position: fixed; /* Or absolute, depending on your layout */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Add this to your existing CSS styles */
+.alert-box-cfdelete {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    color: #333;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    position: fixed; /* Fixed position */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for exact centering */
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.button-no, .button-yes {
+    width: 100px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button-yes {
+    background-color: #ca3535;
+}
+
+.button-no {
+    background-color: #e9ab4e;
+}
+
+
+/* Rest of your CSS for buttons and other elements */
+
 
 
 </style>
@@ -370,6 +424,18 @@ button[type="submit"]:hover {
         <a id="viewOngoingProgressLink" href="#">ดูความคืบหน้าปัจจุบันของคุณ</a>
         <button id="deleteSessionButton">ลบเซสชันปัจจุบัน</button>
     </div>
+
+    <!-- Add this inside your main HTML file -->
+<div id="customConfirm" class="alert-box-cfdelete" style="display: none;">
+    <p>คุณมั่นใจแล้วใช่มั้ยว่าจะลบเซสชั่นปัจจุบัน?</p>
+        
+        <p>เซสชั่นปัจจุบันจะถูกลบออกไปจากประวัติการใช้งาน</p>
+    <div class="button-container">
+        <button type="button" id="confirmNo" class="button-no">ไม่</button>
+        <button type="button" id="confirmYes" class="button-yes">ลบ</button>
+    </div>
+</div>
+
     
 
 <div id="missionForm">

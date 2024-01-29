@@ -126,6 +126,26 @@ function startCountdown(endDate) {
 
 
 
+
+
+/*function checkAndDisplayContent() {
+    if (countdownLoaded && missionsLoaded) {
+        displayLoading(false);
+    }
+}
+*/
+
+/*
+function displayLoading(show) {
+    const loadingIndicator = document.getElementById('loading-indicator');
+    if (!loadingIndicator) {
+        console.error('Loading indicator element not found');
+        return;
+    }
+    loadingIndicator.style.display = show ? 'block' : 'none';
+}
+*/
+
 // Inside the window.onload function
 window.onload = async function() {
     
@@ -173,22 +193,30 @@ window.onload = async function() {
 
 function setupDeleteSessionButton(userId) {
     const deleteSessionButton = document.getElementById('deleteSessionButton');
-    if (deleteSessionButton) {
-        deleteSessionButton.addEventListener('click', async function() {
-            const confirmDelete = confirm("Are you sure you want to delete your current session? This cannot be undone.");
-            if (confirmDelete) {
-                try {
-                    const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        alert('Current session has been deleted.');
-                        window.location.reload(); // Reload the page
-                    } else {
-                        throw new Error('Failed to delete session');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
+    const customConfirm = document.getElementById('customConfirm');
+    const confirmYes = document.getElementById('confirmYes');
+    const confirmNo = document.getElementById('confirmNo');
+
+    deleteSessionButton.addEventListener('click', function() {
+        customConfirm.style.display = 'block';
+    });
+
+    confirmYes.addEventListener('click', async function() {
+        try {
+            const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
+            if (response.ok) {
+                //alert('Current session has been deleted.');
+                window.location.reload(); // Reload the page
+            } else {
+                throw new Error('Failed to delete session');
             }
-        });
-    }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        customConfirm.style.display = 'none';
+    });
+
+    confirmNo.addEventListener('click', function() {
+        customConfirm.style.display = 'none';
+    });
 }

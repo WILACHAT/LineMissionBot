@@ -224,6 +224,56 @@ h1{
     font-size: 24px; /* Adjust size as needed */
     color: green; /* Choose a suitable color */
 }
+.alert-box-cfdelete {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    color: #333;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    position: fixed; /* Or absolute, depending on your layout */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Add this to your existing CSS styles */
+.alert-box-cfdelete {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    color: #333;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    position: fixed; /* Fixed position */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for exact centering */
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.button-no, .button-yes {
+    width: 100px;
+    height: 40px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button-yes {
+    background-color: #ca3535;
+}
+
+.button-no {
+    background-color: #e9ab4e;
+}
+
 
 
 
@@ -232,6 +282,14 @@ h1{
 <body>
     
     <h1>ความคืบหน้า</h1>
+
+    <div id="customConfirm" class="alert-box-cfdelete" style="display: none;">
+        <p>คุณมั่นใจแล้วใช่มั้ยว่าจะลบเซสชั่นปัจจุบัน เซสชั่นปัจจุบันจะถูกลบออกไปจากประวัติการใช้งาน</p>
+        <div class="button-container">
+            <button id="confirmNo" class="button-no">ไม่</button>
+            <button id="confirmYes" class="button-yes">ลบ</button>
+        </div>
+    </div>
    
     <div id="whatisgoingon" style="display: none;" style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-center; align-items: center; gap: 28px; display: inline-flex">
         <div class="thai-text-label">เป้าหมายของคุณ</div>
