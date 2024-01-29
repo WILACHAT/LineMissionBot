@@ -1,27 +1,36 @@
 let userId; 
 let missionCount = 0;
 let currentMissionIndex = 1;
+const titleOptions = ["การเรียน", "งาน", "ออกกำลังกาย", "การทำสมาธิ", "ความสัมพันธ์", "การกิน", "การเงิน" ,"การอ่าน", "อื่นๆ"];
+
 
 
 function createMissionInputGroup(missionNumber) {
     const missionInputGroup = document.createElement('div');
     missionInputGroup.className = 'mission-input-group';
     missionInputGroup.id = `missionGroup${missionNumber}`;
-    missionInputGroup.style.display = missionNumber === 1 ? 'block' : 'none'; // Show only the first mission initially
-
+    missionInputGroup.style.display = missionNumber === 1 ? 'block' : 'none';
 
     let deleteButtonHTML = missionNumber === 1 ? '' : 
         `<button class="delete-mission-button" type="button" onclick="deleteMission(${missionNumber})">ลบเป้าหมายนี้</button>`;
 
+    // Create dropdown for mission titles
+    let titleDropdownHTML = `<select id="missiontitle${missionNumber}"  class="mission-title-dropdown" required>`;
+    titleOptions.forEach(option => {
+        titleDropdownHTML += `<option value="${option}">${option}</option>`;
+    });
+    titleDropdownHTML += `</select>`;
+
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
-        <input id="missiontitle${missionNumber}" type="text" placeholder="ใส่ชื่อเป้าหมาย" required>
+        ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
         ${deleteButtonHTML}
     `;
 
     return missionInputGroup;
 }
+
 
 function addMission() {
     missionCount++;
@@ -293,7 +302,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() > startDate.getTime()) {
+        if (endDate.getTime() >= startDate.getTime()) {
            
           
            

@@ -13,25 +13,35 @@ function populateMissions(missions) {
     missionsContainer.innerHTML = '';
 
     missions.forEach(mission => {
+        // Create mission container
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
 
+        // Mission title
         const missionTitle = document.createElement('div');
         missionTitle.classList.add('mission-title');
         missionTitle.innerText = mission.Title;
+        missionDiv.appendChild(missionTitle);
 
+        // Mission description
         const missionDesc = document.createElement('div');
         missionDesc.classList.add('mission-description');
         missionDesc.innerText = mission.Description;
+        missionDiv.appendChild(missionDesc);
 
+        // Checkmark for completed missions
+        const missionCheckmark = document.createElement('div');
+        missionCheckmark.classList.add('mission-checkmark');
+        missionCheckmark.innerHTML = '✔';
+        missionCheckmark.style.display = mission.Complete ? 'block' : 'none';
+        missionDiv.appendChild(missionCheckmark);
+
+        // Complete/Not Complete button
         const completeButton = document.createElement('button');
         completeButton.classList.add('complete-mission');
-        completeButton.setAttribute('data-mission-id', mission.Misson_ID);
+        completeButton.setAttribute('data-mission-id', mission.Mission_ID);
         completeButton.setAttribute('data-completed', mission.Complete);
         completeButton.innerText = mission.Complete ? 'Not Complete' : 'Complete';
-
-        missionDiv.appendChild(missionTitle);
-        missionDiv.appendChild(missionDesc);
         missionDiv.appendChild(completeButton);
 
         completeButton.addEventListener('click', function() {
@@ -39,18 +49,19 @@ function populateMissions(missions) {
             updateMissionStatus(mission.Misson_ID, !completed);
             this.setAttribute('data-completed', !completed);
             this.textContent = !completed ? 'Not Complete' : 'Complete';
-            missionDiv.style.backgroundColor = !completed ? '#77dd77' : 'white';
+            missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white';
+            missionCheckmark.style.display = !completed ? 'block' : 'none'; // Toggle checkmark
         });
+        
 
         missionsContainer.appendChild(missionDiv);
 
-        // Apply the initial background color
-        missionDiv.style.backgroundColor = mission.Complete ? '#77dd77' : 'white';
+        missionDiv.style.backgroundColor = mission.Complete ? '#FFA500' : 'white';
     });
 
     missionsLoaded = true;
-    //checkAndDisplayContent();
 }
+
 
 
 
@@ -115,26 +126,6 @@ function startCountdown(endDate) {
 
 
 
-
-
-/*function checkAndDisplayContent() {
-    if (countdownLoaded && missionsLoaded) {
-        displayLoading(false);
-    }
-}
-*/
-
-/*
-function displayLoading(show) {
-    const loadingIndicator = document.getElementById('loading-indicator');
-    if (!loadingIndicator) {
-        console.error('Loading indicator element not found');
-        return;
-    }
-    loadingIndicator.style.display = show ? 'block' : 'none';
-}
-*/
-
 // Inside the window.onload function
 window.onload = async function() {
     
@@ -149,6 +140,7 @@ window.onload = async function() {
          const params = new URLSearchParams(window.location.search);
         const userId = params.get('userId'); 
         const data = await fetchLatestIncompleteSession(userId);
+        console.log("data recived after fetch", data)
         if (data.session) {
             if (!data.session.Complete) {
                 // If session is ongoing (Complete = False)

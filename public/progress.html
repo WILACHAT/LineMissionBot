@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>New Page</title>
+    <title>Meerkat</title>
     <style>
           body {
             font-family: Arial, sans-serif;
@@ -18,6 +18,8 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
+    position: relative;
+
 }
             #missions {
     display: flex;
@@ -214,6 +216,15 @@ h1{
     background-color: #45a049; /* Darker shade for hover */
 }
 
+.mission-checkmark {
+    display: none; /* Hide by default */
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    font-size: 24px; /* Adjust size as needed */
+    color: green; /* Choose a suitable color */
+}
+
 
 
     </style>
@@ -222,8 +233,6 @@ h1{
     
     <h1>ความคืบหน้า</h1>
    
-
-  
     <div id="whatisgoingon" style="display: none;" style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-center; align-items: center; gap: 28px; display: inline-flex">
         <div class="thai-text-label">เป้าหมายของคุณ</div>
         <div id="countdown" class="countdownclass">
