@@ -6,7 +6,7 @@ const { sendLineNotification } = require('./services/lineBotService');
 
 
 function scheduleTask() {
-    cron.schedule('*/1 * * * *', async () => {
+    cron.schedule('*/5 * * * *', async () => {
         console.log('Checking for expired missions at:', new Date().toLocaleString());
         const expiredMissions = await db.findExpiredMissions();
         console.log("expiredMissions", expiredMissions)
@@ -42,6 +42,22 @@ function scheduleTask() {
             console.log('No expired missions found at this time.');
         }
     });
+    cron.schedule('0 * * * *', async () => { // Runs every hour
+        console.log('Checking for missions needing reminders:', new Date().toLocaleString());
+
+        const missionsForReminder = await db.findMissionsNeedingReminder();
+
+        for (const mission of missionsForReminder) {
+            const user = await db.getUserLineIdByUserId(mission.UserID);
+            if (user) {
+                const messageText = `Reminder: Your mission started at ${mission.StartDate.toLocaleString()}. Check your progress!`;
+                await sendLineNotification(user, messageText, mission.UserID);
+                await db.updateNextReminderTime(mission.SessionID);
+            }
+        }
+    });
+
+    
 }
 
 module.exports = {
