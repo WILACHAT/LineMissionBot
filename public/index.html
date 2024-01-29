@@ -228,14 +228,14 @@ button[type="submit"]:hover {
     margin: 20px auto; /* Center button with automatic margins */
     padding: 15px 30px; /* Increase padding for a larger button */
     font-size: 1rem; /* Increase font size */
-    background-color: #D4B17C; /* Use your theme color */
+    background-color: #FFA500; /* Use your theme color */
     color: #333; /* Dark text for contrast */
     border: none;
     border-radius: 25px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 #addMissionButton:hover {
-    background-color: #e5c45f; /* Slightly darker on hover */
+    background-color: #FFA500; /* Slightly darker on hover */
 }
 
 #missionNavigation {
@@ -331,6 +331,34 @@ button[type="submit"]:hover {
 .delete-mission-button:focus {
     outline: none; /* Removes the outline to keep the styling clean */
 }
+.mission-title-dropdown {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding for styling */
+    margin-top: 5px; /* Space below the title */
+    margin-bottom: 15px; /* Space above the textarea */
+    border: 1px solid #5A5A5A; /* Border color */
+    border-radius: 9.2px; /* Border radius to match your design */
+    background: white;
+    box-shadow: none; /* No shadow to match other inputs */
+    font-family: 'Sarabun', sans-serif;
+    font-size: 1rem; /* Font size */
+    -webkit-appearance: none; /* Removes default styling on iOS */
+    -moz-appearance: none; /* Removes default styling on Firefox */
+    appearance: none; /* Removes default styling */
+    cursor: pointer; /* Changes cursor to pointer to indicate it's a dropdown */
+}
+
+/* Style the dropdown arrow */
+.mission-title-dropdown::-ms-expand {
+    display: none; /* Hide the default arrow in IE */
+}
+
+/* Optional: Style for when the dropdown is focused */
+.mission-title-dropdown:focus {
+    outline: none;
+    border-color: #FDD771;
+    border-width: 2.5px;
+}
 
 
 </style>
@@ -364,12 +392,13 @@ button[type="submit"]:hover {
         <div id="missionsContainer">
             <!-- Missions will be added here dynamically -->
         </div>
-       
-        <button type="button" id="addMissionButton">เพิ่มเป้าหมาย</button>
         <div id="missionNavigation">
             <button id="navigateLeft" type="button" onclick="navigateMission('left')">&lt; Prev</button>
             <button id="navigateRight" type="button" onclick="navigateMission('right')">Next &gt;</button>
         </div>
+       
+        <button type="button" id="addMissionButton">เพิ่มเป้าหมาย</button>
+    
       
         
         <button type="submit">เสร็จสิ้น</button>

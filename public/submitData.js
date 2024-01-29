@@ -1,27 +1,36 @@
 let userId; 
 let missionCount = 0;
 let currentMissionIndex = 1;
+const titleOptions = ["การเรียน", "งาน", "ออกกำลังกาย", "การทำสมาธิ", "ความสัมพันธ์", "การกิน", "การเงิน" ,"การอ่าน", "อื่นๆ"];
+
 
 
 function createMissionInputGroup(missionNumber) {
     const missionInputGroup = document.createElement('div');
     missionInputGroup.className = 'mission-input-group';
     missionInputGroup.id = `missionGroup${missionNumber}`;
-    missionInputGroup.style.display = missionNumber === 1 ? 'block' : 'none'; // Show only the first mission initially
-
+    missionInputGroup.style.display = missionNumber === 1 ? 'block' : 'none';
 
     let deleteButtonHTML = missionNumber === 1 ? '' : 
         `<button class="delete-mission-button" type="button" onclick="deleteMission(${missionNumber})">ลบเป้าหมายนี้</button>`;
 
+    // Create dropdown for mission titles
+    let titleDropdownHTML = `<select id="missiontitle${missionNumber}"  class="mission-title-dropdown" required>`;
+    titleOptions.forEach(option => {
+        titleDropdownHTML += `<option value="${option}">${option}</option>`;
+    });
+    titleDropdownHTML += `</select>`;
+
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
-        <input id="missiontitle${missionNumber}" type="text" placeholder="ใส่ชื่อเป้าหมาย">
-        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย"></textarea>
+        ${titleDropdownHTML}
+        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
         ${deleteButtonHTML}
     `;
 
     return missionInputGroup;
 }
+
 
 function addMission() {
     missionCount++;
@@ -230,6 +239,22 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     form.onsubmit = async function(e) {
         e.preventDefault();
+
+        let allMissionsFilled = true;
+        for (let i = 1; i <= missionCount; i++) {
+            const title = document.getElementById(`missiontitle${i}`).value.trim();
+            const description = document.getElementById(`missiondes${i}`).value.trim();
+            if (!title || !description) {
+                allMissionsFilled = false;
+                break;
+            }
+        }
+    
+        if (!allMissionsFilled) {
+            alert("Please fill in both the title and description for each mission.");
+            return;
+        }
+        
         console.log("check for req", req)
         const startDateInput = document.getElementById('startDateInput').value;
         const endDateInput = document.getElementById('endDateInput').value;
