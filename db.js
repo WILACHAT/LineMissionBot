@@ -51,9 +51,13 @@ async function saveTokenForUser(lineId, token) {
 async function saveFormData(userId, missions, startDate, missionEndDate) {
   console.log("in saveFormData");
 
+  // Calculate the NextReminder time (12 hours after startDate)
+  let nextReminderTime = new Date(startDate);
+  nextReminderTime.setHours(nextReminderTime.getHours() + 12);
+
   // Step 1: Insert into MissionSessions and get SessionID
-  let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID") VALUES ($1, $2, $3) RETURNING "SessionID"';
-  let sessionResult = await pool.query(sessionInsertQuery, [startDate, missionEndDate, userId]);
+  let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID", "NextReminder") VALUES ($1, $2, $3, $4) RETURNING "SessionID"';
+  let sessionResult = await pool.query(sessionInsertQuery, [startDate, missionEndDate, userId, nextReminderTime]);
   let sessionId = sessionResult.rows[0].SessionID;
 
   // Step 2: Insert missions into Missions table
@@ -63,7 +67,7 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
           await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId]);
       }
   }
-};
+}
 
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
