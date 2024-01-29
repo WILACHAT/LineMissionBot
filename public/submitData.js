@@ -200,32 +200,45 @@ async function checkAndDisplaySession(userId) {
 
 function setupDeleteSessionButton(userId) {
     const deleteSessionButton = document.getElementById('deleteSessionButton');
+    const customConfirm = document.getElementById('customConfirm'); // Custom confirm dialog
+    const confirmNo = document.getElementById('confirmNo'); // No button
+    const confirmYes = document.getElementById('confirmYes'); // Yes button
+
     if (deleteSessionButton) {
-        deleteSessionButton.addEventListener('click', async function() {
-            // Confirmation dialog
-            const confirmDelete = confirm("Are you sure you want to delete your current mission? It will not be saved in history.");
-            
-            if (confirmDelete) {
-                try {
-                    const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        console.log('Session deleted successfully');
-                        // Hide ongoing session message and show form
-                        document.getElementById('ongoingSessionMessage').style.display = 'none';
-                        document.getElementById('missionForm').style.display = 'block';
-                        setInitialDates();
-                    } else {
-                        throw new Error('Failed to delete session');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
+        deleteSessionButton.addEventListener('click', function() {
+            // Display the custom confirmation dialog
+            customConfirm.style.display = 'block';
+        });
+
+        confirmNo.addEventListener('click', function() {
+            // Hide the custom confirmation dialog on "No"
+            customConfirm.style.display = 'none';
+            console.log('Session deletion cancelled.');
+        });
+
+        confirmYes.addEventListener('click', async function() {
+            // Perform delete action on "Yes"
+            try {
+                const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    console.log('Session deleted successfully');
+                    // Hide ongoing session message and show form
+                    document.getElementById('ongoingSessionMessage').style.display = 'none';
+                    document.getElementById('missionForm').style.display = 'block';
+                    setInitialDates();
+                } else {
+                    throw new Error('Failed to delete session');
                 }
-            } else {
-                console.log('Session deletion cancelled.');
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                // Hide the custom confirmation dialog
+                customConfirm.style.display = 'none';
             }
         });
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function(req) {
     const form = document.getElementById('dataForm');
