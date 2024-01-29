@@ -1,20 +1,15 @@
 require('dotenv').config();
 const { Pool } = require('pg');
-const fs = require('fs');
-
 
 
 const pool = new Pool({
-  user: 'doadmin',
-  host: 'db-postgresql-sgp1-70402-do-user-8313236-0.c.db.ondigitalocean.com',
-  database: 'defaultdb',
-  password: process.env.DB_PASSWORD,
-  port: 25060,
-  ssl: {
-    rejectUnauthorized: false,
-    ca: fs.readFileSync('ca-certificate.crt').toString(),
-  }
-  });
+  user: 'postgres',
+  host: 'localhost',
+  database: 'postgres', 
+  password: process.env.DB_PASSWORD, 
+  port: 5432,
+});
+
 async function getUserByLineId(lineId) {
   const query = 'SELECT * FROM "LineSchemas"."Users" WHERE "LineID" = $1';
   const result = await pool.query(query, [lineId]);
@@ -51,9 +46,13 @@ async function saveTokenForUser(lineId, token) {
 async function saveFormData(userId, missions, startDate, missionEndDate) {
   console.log("in saveFormData");
 
+  // Calculate the NextReminder time (12 hours after startDate)
+  let nextReminderTime = new Date(startDate);
+  nextReminderTime.setHours(nextReminderTime.getHours() + 12);
+
   // Step 1: Insert into MissionSessions and get SessionID
-  let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID") VALUES ($1, $2, $3) RETURNING "SessionID"';
-  let sessionResult = await pool.query(sessionInsertQuery, [startDate, missionEndDate, userId]);
+  let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID", "NextReminder") VALUES ($1, $2, $3, $4) RETURNING "SessionID"';
+  let sessionResult = await pool.query(sessionInsertQuery, [startDate, missionEndDate, userId, nextReminderTime]);
   let sessionId = sessionResult.rows[0].SessionID;
 
   // Step 2: Insert missions into Missions table
@@ -63,7 +62,8 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
           await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId]);
       }
   }
-};
+}
+
 
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
@@ -204,12 +204,23 @@ async function updateMissionSessionRating(sessionId, rating) {
   const query = 'UPDATE "LineSchemas"."MissionSessions" SET "Rating" = $1 WHERE "SessionID" = $2';
   await pool.query(query, [rating, sessionId]);
 }
+async function findMissionsNeedingReminder() {
+  const query = `
+      SELECT * FROM "LineSchemas"."MissionSessions"
+      WHERE "NextReminder" <= NOW() AND "Complete" = false;
+  `;
+  const result = await pool.query(query);
+  return result.rows;
+}
 
-  
-
-
-
-
+async function updateNextReminderTime(sessionId) {
+  const query = `
+      UPDATE "LineSchemas"."MissionSessions"
+      SET "NextReminder" = NOW() + INTERVAL '12 hours'
+      WHERE "SessionID" = $1;
+  `;
+  await pool.query(query, [sessionId]);
+}
 
 // Add a function to send notifications and update the 'NotificationSent' status
 module.exports = {
@@ -230,7 +241,10 @@ module.exports = {
   getMissionsBySessionId,
   getLatestSessionByUserId,
   deleteSessionById,
-  updateMissionSessionRating
+  updateMissionSessionRating,
+  findMissionsNeedingReminder,
+  updateNextReminderTime
+
 
 
 };
