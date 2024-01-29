@@ -33,17 +33,17 @@ function scheduleTask() {
 
                 if (user) {
                     console.log("inside useer if")
-                    const messageText = `Your mission with ID: ${mission.SessionID} has expired!`;
+                    const messageText = `สวัสดีครับลูกพี่ your mission with ID: ${mission.SessionID} has expired!`;
                     console.log("user id is correct?", user)
                     await sendLineNotification(user, messageText, mission.UserID);
-                    await db.markNotificationAsSent(mission.SessionID); // Mark the notification as sent
+                    await db.markNotificationAsSent(mission.SessionID); 
                 }
             }
         } else {
             console.log('No expired missions found at this time.');
         }
     });
-    cron.schedule('0 * * * *', async () => { // Runs every hour
+    cron.schedule('0 * * * *', async () => { 
         console.log('Checking for missions needing reminders:', new Date().toLocaleString());
 
         const missionsForReminder = await db.findMissionsNeedingReminder();

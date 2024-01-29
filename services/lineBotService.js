@@ -6,7 +6,7 @@ const line = require('@line/bot-sdk');
 const { channelAccessToken } = require('../config');
 
 const lineConfig = {
-  channelAccessToken: channelAccessToken // Set in your .env file
+  channelAccessToken: channelAccessToken 
 };
 
 const client = new line.Client(lineConfig);
@@ -18,7 +18,7 @@ const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
 const messages = [
     {
         type: 'text',
-        text: 'สวัสดีครับลูกพี่'
+        text: messageText
     },
     {
         type: 'text',
