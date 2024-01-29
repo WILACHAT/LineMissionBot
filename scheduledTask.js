@@ -1,8 +1,9 @@
-// In your scheduledTask.js or wherever you're implementing the cron job
 
 const cron = require('node-cron');
 const db = require('./db');
 const { sendLineNotification } = require('./services/lineBotService');
+const { sendLineNotificationAlert } = require('./services/lineBotService');
+
 
 
 function scheduleTask() {
@@ -51,13 +52,11 @@ function scheduleTask() {
             const user = await db.getUserLineIdByUserId(mission.UserID);
             if (user) {
                 const messageText = `Reminder: Your mission started at ${mission.StartDate.toLocaleString()}. Check your progress!`;
-                await sendLineNotification(user, messageText, mission.UserID);
+                await sendLineNotificationAlert(user, messageText, mission.UserID);
                 await db.updateNextReminderTime(mission.SessionID);
             }
         }
     });
-
-    
 }
 
 module.exports = {
