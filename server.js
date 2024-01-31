@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 });
 
 // Uncomment and use this middleware if you want to restrict access to LINE requests only
-/*
+
 function checkIfRequestFromLine(req, res, next) {
     const userAgent = req.headers['user-agent'];
     if (userAgent && userAgent.includes('Line')) {
@@ -53,7 +53,7 @@ function checkIfRequestFromLine(req, res, next) {
     }
 }
 app.use(checkIfRequestFromLine);
-*/
+
 
 
 app.use('/', missionRoutes);
