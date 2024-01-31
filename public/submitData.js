@@ -15,18 +15,32 @@ function createMissionInputGroup(missionNumber) {
         `<button class="delete-mission-button" type="button" onclick="deleteMission(${missionNumber})">ลบเป้าหมายนี้</button>`;
 
     // Create dropdown for mission titles
-    let titleDropdownHTML = `<select id="missiontitle${missionNumber}"  class="mission-title-dropdown" required>`;
+    let titleDropdownHTML = `<select id="missiontitle${missionNumber}" class="mission-title-dropdown" required>`;
     titleOptions.forEach(option => {
         titleDropdownHTML += `<option value="${option}">${option}</option>`;
     });
     titleDropdownHTML += `</select>`;
 
+    // Add date and time input for mission deadline
+    let deadlineInputHTML = `
+        <input type="datetime-local" id="missionDeadline ${missionNumber}" class="mission-deadline-input" required>
+    `;
+
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
+        <label for="missionDeadline${missionNumber}">กำหนดเวลาสำหรับเป้าหมายนี้: (ไม่บังคับ)</label>
+        ${deadlineInputHTML}
         ${deleteButtonHTML}
     `;
+
+    // Update the maximum deadline date when the end date changes
+    const endDateInput = document.getElementById('endDateInput');
+    endDateInput.addEventListener('change', function() {
+        const maxDeadlineDate = endDateInput.value;
+        document.getElementById(`missionDeadline${missionNumber}`).max = maxDeadlineDate;
+    });
 
     return missionInputGroup;
 }
@@ -126,22 +140,34 @@ function navigateMission(direction) {
 
 function setInitialDates() {
     const today = new Date();
-    const formattedToday = today.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' format
+    const formattedToday = today.toLocaleDateString('en-CA');
 
-    // Create a 'tomorrow' date based on today and format it
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const formattedTomorrow = tomorrow.toLocaleDateString('en-CA');
-
-    // Set the startDateInput to today's date and make it read-only
     const startDateInput = document.getElementById('startDateInput');
     startDateInput.value = formattedToday;
     startDateInput.readOnly = true;
 
-    // Set the endDateInput to allow dates from tomorrow onwards
-    const endDateInput = document.getElementById('endDateInput');
-    endDateInput.setAttribute('min', formattedTomorrow);
+    updateEndDateInput();
 }
+
+function updateEndDateInput() {
+    const startDateInput = document.getElementById('startDateInput');
+    const endDateInput = document.getElementById('endDateInput');
+    
+    const startDate = new Date(startDateInput.value);
+    
+    // Setting the minimum end date (the day after the start date)
+    const minEndDate = new Date(startDate);
+    minEndDate.setDate(minEndDate.getDate() + 1);
+    endDateInput.min = minEndDate.toISOString().split('T')[0];
+
+    // Setting the maximum end date (one month after the start date)
+    const maxEndDate = new Date(startDate);
+    maxEndDate.setMonth(maxEndDate.getMonth() + 1);
+    maxEndDate.setDate(maxEndDate.getDate() - 1); // Set one day before a month to ensure it's within a month
+    endDateInput.max = maxEndDate.toISOString().split('T')[0];
+}
+document.getElementById('startDateInput').addEventListener('change', updateEndDateInput);
+window.onload = setInitialDates;
 
 async function getLatestSession(userId) {
     try {
@@ -154,7 +180,6 @@ async function getLatestSession(userId) {
         console.error('Error:', error);
         return null;
     }
-
 }
 
 function formatDate(date) {
@@ -165,6 +190,7 @@ window.onload = async function(req) {
     const params = new URLSearchParams(window.location.search);
     userId = params.get('userId');  // Obtain userId from query parameter
     console.log("wtf is the userId", userId)
+
     //const params = new URLSearchParams(window.location.search);
    // userId = params.get('userId'); 
     //const userId = 4; // Replace with actual user ID
