@@ -311,7 +311,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
         console.log("currentTime", currentTime)
 
         console.log("today", today)
-        alert("endDate: " + endDate.getTime() + "startDate: " + startDate.getTime());
+        alert("endDate1: " + endDate + "startDate1: " + startDate);
+        alert("endDate2: " + endDate.getTime() + "startDate2: " + startDate.getTime());
 
 
     
