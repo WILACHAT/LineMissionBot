@@ -3,7 +3,32 @@ let missionCount = 0;
 let currentMissionIndex = 1;
 const titleOptions = ["การเรียน", "งาน", "ออกกำลังกาย", "การทำสมาธิ", "ความสัมพันธ์", "การกิน", "การเงิน" ,"การอ่าน", "อื่นๆ"];
 
+function initializeFlatpickr() {
+    // Initialize Flatpickr only for the end date with initial settings
+    flatpickr("#endDateInput", {
+        dateFormat: "Y-m-d",
+        minDate: new Date().fp_incr(1), // Tomorrow
+        maxDate: new Date().fp_incr(30), // One month from today
+        disable: [
+            function(date) {
+                // Disable dates outside of the initial valid range
+                return date < new Date().fp_incr(1) || date > new Date().fp_incr(30);
+            }
+        ]
+    });
+}
 
+function updateEndDatePicker() {
+    const startDateInput = document.getElementById('startDateInput');
+    const startDate = new Date(startDateInput.value);
+
+    // Update the min and max date for the endDateInput
+    const endDatePicker = flatpickr("#endDateInput", {
+        dateFormat: "Y-m-d",
+        minDate: new Date(startDate).fp_incr(1), // One day after start date
+        maxDate: new Date(startDate).fp_incr(30) // One month after start date
+    });
+}
 
 function createMissionInputGroup(missionNumber) {
     const missionInputGroup = document.createElement('div');
@@ -137,7 +162,6 @@ function navigateMission(direction) {
 }
 
 
-
 function setInitialDates() {
     const today = new Date();
     const formattedToday = today.toLocaleDateString('en-CA');
@@ -190,6 +214,8 @@ window.onload = async function(req) {
     const params = new URLSearchParams(window.location.search);
     userId = params.get('userId');  // Obtain userId from query parameter
     console.log("wtf is the userId", userId)
+    initializeFlatpickr();
+
 
     //const params = new URLSearchParams(window.location.search);
    // userId = params.get('userId'); 
