@@ -286,8 +286,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
        
-        let startDate = new Date(startDateInput + 'T' + currentTime);
-        let endDate = new Date(endDateInput + 'T' + currentTime);
+        let startDate = new Date(startDateInput);
+        let endDate = new Date(endDateInput);
         const inputStartDate = new Date(startDateInput);
         const inputEndDate = new Date(endDateInput);
         
