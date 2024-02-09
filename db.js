@@ -58,8 +58,8 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
   // Step 2: Insert missions into Missions table
   for (let mission of missions) {
       if (mission.title && mission.description) { // Insert only if title and description are provided
-          let missionInsertQuery = 'INSERT INTO "LineSchemas"."Missions" ("Title", "Description", "SessionID") VALUES ($1, $2, $3)';
-          await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId]);
+          let missionInsertQuery = 'INSERT INTO "LineSchemas"."Missions" ("Title", "Description", "SessionID", "Due_Date") VALUES ($1, $2, $3 ,$4)';
+          await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId, mission.duedate]);
       }
   }
 }
@@ -221,6 +221,40 @@ async function updateNextReminderTime(sessionId) {
   `;
   await pool.query(query, [sessionId]);
 }
+async function completeMissionSessionByUserId(userId) {
+  const query = `
+      UPDATE "LineSchemas"."MissionSessions"
+      SET "Complete" = TRUE
+      WHERE "UserID" = $1 AND "Complete" = FALSE
+      RETURNING "SessionID";
+  `;
+  const result = await pool.query(query, [userId]);
+  if (result.rows.length === 0) {
+      throw new Error('No session found to mark as completed.');
+  }
+  return result.rows[0]; // Return the completed session
+}
+async function findMissionsDueBetween(startTime, endTime) {
+  const query = `
+      SELECT m.*, s."UserID"
+      FROM "LineSchemas"."Missions" m
+      INNER JOIN "LineSchemas"."MissionSessions" s ON m."SessionID" = s."SessionID"
+      WHERE m."Due_Date" BETWEEN $1 AND $2 AND m."Complete" = false AND m."Reminded" = false;
+  `;
+  const result = await pool.query(query, [startTime, endTime]);
+  return result.rows;
+}
+
+async function markMissionAsReminded(missionId) {
+  const query = `
+      UPDATE "LineSchemas"."Missions"
+      SET "Reminded" = TRUE
+      WHERE "Misson_ID" = $1;
+  `;
+  await pool.query(query, [missionId]);
+}
+
+
 
 // Add a function to send notifications and update the 'NotificationSent' status
 module.exports = {
@@ -237,13 +271,16 @@ module.exports = {
   getCompletedMissionsForUser,
   saveUserReflection,
   completeMissionSession,
+  completeMissionSessionByUserId,
   getCompletedSessionsForUser,
   getMissionsBySessionId,
   getLatestSessionByUserId,
   deleteSessionById,
   updateMissionSessionRating,
   findMissionsNeedingReminder,
-  updateNextReminderTime
+  updateNextReminderTime,
+  findMissionsDueBetween,
+  markMissionAsReminded
 
 
 

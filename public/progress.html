@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Sarabun' rel='stylesheet'>
 
     <title>Meerkat</title>
     <style>
@@ -33,27 +34,32 @@
 
 
 .mission-title {
-    font-size: 16px;
+    text-align: center;
+    font-size: 18px;
     font-weight: bold;
     margin-bottom: 8px;
     color: #333; /* A dark color for the title */
 }
 
 .mission-description {
+    font-family: 'Sarabun';
+
+    text-align: center;
     margin-bottom: 8px; /* Space between description and button */
-    font-size: 14px; /* Adjust font size as needed */
+    font-size: 18px; /* Adjust font size as needed */
     color: #333; /* Match color with title */
 }
 
 .complete-mission {
-    width: calc(100% - 20px); /* Full width accounting for padding */
+    width: 100%; /* Full width accounting for padding */
     padding: 10px;
     border-radius: 8px;
     border: none;
     background: #FDD771; /* Button background color */
-    color: white;
+    color: black;
     font-weight: bold;
     cursor: pointer;
+    font-size: 15px;
 }
 
 .complete-mission:hover {
@@ -173,11 +179,27 @@ h1{
     margin-bottom: 24px; /* Space below this div */
 }
 
+.donebtn {
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Full width */
+    margin-bottom: 24px; /* Space below this div */
+}
 .deletebtn {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     background-color: #f44336;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+.donedonebtn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #45a049;
     color: white;
     cursor: pointer;
     font-size: 16px;
@@ -274,6 +296,20 @@ h1{
     background-color: #e9ab4e;
 }
 
+.complete-mission.disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+.countdown-timer, .mission-due-date {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 0;
+    background-color: #ca3535; /* Slightly darker shade for visibility */
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
 
 
 
@@ -317,9 +353,16 @@ h1{
                 <div style="width: 29px; height: 32.95px; left: 23px; top: 32.95px; position: absolute; background: white; border-radius: 6px; border: 1.80px #FFD12E solid"></div>
             </div>
         </div>
+
+        <div class="donebtn">
+            <button id="doneSessionButton" class="donedonebtn">เซสชันภารกิจเสร็จสิ้น</button>
+        </div>
+
+
         <div class="abovedeletebtn">
             <button id="deleteSessionButton" class="deletebtn">ลบเซสชันปัจจุบัน</button>
         </div>
+
     </div>
       <div id="whatisgoingon2" style="display: none;">
         <h1>hello</h1>
