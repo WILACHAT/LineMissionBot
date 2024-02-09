@@ -21,6 +21,8 @@ const ThaiLocale = {
     scrollTitle: 'เลื่อนเพื่อเพิ่มหรือลด',
     toggleTitle: 'คลิกเพื่อเปลี่ยน',
 };
+
+
 function initializeFlatpickr() {
     // Initialize Flatpickr only for the end date with initial settings
     flatpickr("#endDateInput", {

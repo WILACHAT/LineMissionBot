@@ -6,9 +6,6 @@ const { sendLineNotification } = require('./services/lineBotService');
 const { sendLineNotificationAlert } = require('./services/lineBotService');
 const { sendLineNotificationMission } = require('./services/lineBotService');
 
-
-
-
 function scheduleTask() {
     cron.schedule('*/5 * * * *', async () => {
         console.log('Checking for expired missions at:', new Date().toLocaleString());
