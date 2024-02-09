@@ -17,7 +17,7 @@ router.get('/getLatestIncompleteSession', async (req, res) => {
         'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 ORDER BY "Misson_ID" ASC',
         [sessionId]
       );
-      res.json({ session: latestSession, missions: missionsResult.rows, endDate: latestSession.EndDate, startDate:  latestSession.StartDate});
+      res.json({ session: latestSession, missions: missionsResult.rows, endDate: latestSession.EndDate });
     } else { 
       res.status(404).json({ message: 'No incomplete session found for the user.' });
     }
@@ -41,6 +41,20 @@ router.post('/updateMissionStats', async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
-  
+  // Server-side
+router.post('/completeMissionSession', async (req, res) => {
+  try {
+    console.log("jj abrhams", req.body)
+      // If you're sending userId in the body:
+      const { userId } = req.body; // Correct way to receive userId for a POST request
+
+      await db.completeMissionSessionByUserId(userId);
+      res.status(200).json({ message: 'Session marked as completed successfully' });
+  } catch (error) {
+      console.error('Error completing session:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;

@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confetti.css">
+
+
+    <!-- Include Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <title>Meerkat</title>
     <style>
@@ -38,7 +44,6 @@ body {
     color: #333;
     margin-top: 10px;
     text-align: center; /* Centers text inside the title */
-
 }
 
 .input-group {
@@ -63,13 +68,13 @@ body {
     background: transparent;
     box-shadow: none;
 }
+
 .input-group input:focus, .input-group textarea:focus {
     border-color: #FDD771; /* Changes the border color to yellow */
     /* Optionally, add other styles to enhance the focus state */
     outline: none; /* Removes the default focus outline */
     border-width: 2.5px;
 }
-
 
 .input-group textarea {
     resize: vertical;
@@ -182,9 +187,59 @@ button[type="submit"]:hover {
     /*box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.19);*/
     border: 0.3px solid #dddddd;
 }
+.flatpickr-calendar {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 90%; /* Adjusted for smaller screens */
+    max-width: 310px; /* Adjust maximum width for mobile devices */
+    height: auto; /* Height adjusts based on content */
+}
+
+/* Adjust font sizes and paddings inside the calendar */
+.flatpickr-calendar .flatpickr-months {
+    font-size: 16px; /* Adjusted font size */
+    padding: 0; /* Reset padding */
+}
+
+.flatpickr-calendar .flatpickr-months .flatpickr-prev-month,
+.flatpickr-calendar .flatpickr-months .flatpickr-next-month {
+    width: 30px; /* Adjust width */
+    height: 30px; /* Adjust height */
+    margin: 0 10px; /* Add horizontal margin for spacing */
+}
+
+.flatpickr-calendar .flatpickr-months .flatpickr-current-month {
+    flex-grow: 1; /* Allow the current month to grow */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center the month name horizontally */
+    align-items: center; /* Center the month name vertically */
+    padding: 0 4px; /* Add padding for some breathing space */
+}
+
+.flatpickr-calendar .flatpickr-months .flatpickr-current-month > span {
+    font-size: 14px; /* Adjust font size if necessary to fit the text */
+    white-space: nowrap; /* Prevent the month name from wrapping */
+}
+
+.flatpickr-calendar .flatpickr-weekdays,
+.flatpickr-calendar .flatpickr-days {
+    font-size: 16px; /* Adjusted font size */
+}
+
+.flatpickr-calendar .flatpickr-weekday {
+    padding: 5px 10px; /* Adjust padding */
+}
+
+.flatpickr-calendar .flatpickr-day {
+    padding: 5px; /* Adjust padding */
+    margin: 2px; /* Adjust margin */
+}
+
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
+  
     .date-input-container {
         flex-direction: column;
         align-items: flex-start;
@@ -212,7 +267,7 @@ button[type="submit"]:hover {
     border-radius: 8px;
     border: 0.3px solid #dddddd;
     margin-top: 20px;
-    height: 325px;
+    height: 390px;
     position: relative;
     margin: 10px auto; /* Centers the div and gives 10px margin from top and bottom */
     width: 90%; 
@@ -274,7 +329,7 @@ button[type="submit"]:hover {
     margin-top:15px;
 }
 .mission-input-group textarea {
-    height: 140px; 
+    height: 170px; 
     font-size: 1.25rem;   
 }
 
@@ -409,11 +464,21 @@ button[type="submit"]:hover {
 .button-no {
     background-color: #e9ab4e;
 }
+.mission-deadline-input {
+    height: 40px !important; /* Reduced height for the datetime-local input */
+    padding: 6px 12px !important; /* Adjusted padding for better text alignment */
+    font-size: 14px !important; /* Smaller font size */
+    border-radius: 6px !important; /* Adjusted border radius */
+    border: 1px solid #B0B0B0 !important; /* Border style */
+    margin-top: 5px !important; /* Space above the input */
+    background: transparent !important; /* Transparent background */
+    width: 100% 
+}
 
-
-/* Rest of your CSS for buttons and other elements */
-
-
+/* If you want to adjust the width as well */
+.mission-deadline-input {
+    width: 100%; /* Adjust the width as needed, or use a specific value like 150px */
+}
 
 </style>
 
@@ -436,7 +501,6 @@ button[type="submit"]:hover {
     </div>
 </div>
 
-    
 
 <div id="missionForm">
     <div id="block-btw-mission">
@@ -449,7 +513,7 @@ button[type="submit"]:hover {
             </div>
                 <div class="date-input-group">
                     <label for="endDateInput">วันที่สิ้นสุด</label>
-                    <input id="endDateInput" type="date">
+                    <input id="endDateInput"  onchange="updateMissionDatePickers(event)"type="date">
                 </div>
             
                 <img class="date-image" src="meerkat_hello.png" alt="Meerkat Hello">

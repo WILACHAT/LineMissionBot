@@ -56,6 +56,29 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
         console.error('Failed to send LINE notification:', error);
     }
   }
+
+  async function sendLineNotificationMission(lineUserId, messageText, UserID) {
+    const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/progress";
+    const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
+    
+    const messages = [
+        {
+            type: 'text',
+            text: messageText
+        },
+        {
+            type: 'text',
+            text: `${linkUrl}`
+        }
+    ]
+      console.log("lineUserId print", lineUserId, messages)
+      try {
+          await client.pushMessage(lineUserId, messages);
+          console.log('Notification sent to LINE user:', lineUserId);
+      } catch (error) {
+          console.error('Failed to send LINE notification:', error);
+      }
+    }
   
 
 async function replyToUser(replyToken, url, userId) {
@@ -248,6 +271,7 @@ module.exports = {
   setDefaultRichMenu,
   sendLineNotification,
   sendLineNotificationAlert,
-  sendImageWithUrl
+  sendImageWithUrl,
+  sendLineNotificationMission
 
 };
