@@ -452,8 +452,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const inputStartDate = new Date(startDateInput);
         const inputEndDate = new Date(endDateInput);
 
-        alert("inputStartDate" + inputStartDate)
-        alert("inputEndDate" + inputEndDate)
+        //alert("inputStartDate" + inputStartDate)
+        //alert("inputEndDate" + inputEndDate)
 
 
 
@@ -463,8 +463,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
 
-        alert("timeDiff" + timeDiff)
-        alert("daysDiff" + daysDiff)
+        //alert("timeDiff" + timeDiff)
+        //alert("daysDiff" + daysDiff)
 
 
 
@@ -475,16 +475,16 @@ document.addEventListener('DOMContentLoaded', function(req) {
         // Create UTC end date by adding the difference in days
         let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
 
-        alert("startDatee" + startDatee)
-        alert("endDatee" + endDatee)
+        //alert("startDatee" + startDatee)
+        //alert("endDatee" + endDatee)
 
 
         const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
        
-        alert("formattedStartDate" + formattedStartDate)
+       // alert("formattedStartDate" + formattedStartDate)
 
         const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
-        alert("formattedEndDate" + formattedEndDate)
+        //alert("formattedEndDate" + formattedEndDate)
 
 
      
