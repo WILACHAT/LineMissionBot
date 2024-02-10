@@ -234,16 +234,19 @@ async function completeMissionSessionByUserId(userId) {
   }
   return result.rows[0]; // Return the completed session
 }
-async function findMissionsDueBetween(startTime, endTime) {
+async function findMissionsDueBetween() {
   const query = `
       SELECT m.*, s."UserID"
       FROM "LineSchemas"."Missions" m
       INNER JOIN "LineSchemas"."MissionSessions" s ON m."SessionID" = s."SessionID"
-      WHERE m."Due_Date" BETWEEN $1 AND $2 AND m."Complete" = false AND m."Reminded" = false;
+      WHERE m."Due_Date" BETWEEN NOW() AND NOW() + INTERVAL '2 hours'
+      AND m."Complete" = false 
+      AND m."Reminded" = false;
   `;
-  const result = await pool.query(query, [startTime, endTime]);
+  const result = await pool.query(query);
   return result.rows;
-}
+};
+
 
 async function markMissionAsReminded(missionId) {
   const query = `
