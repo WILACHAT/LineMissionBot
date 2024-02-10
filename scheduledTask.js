@@ -60,7 +60,6 @@ function scheduleTask() {
     });
     cron.schedule('*/5 * * * *', async () => { // Corrected to run every 5 minutes
         console.log('Checking for upcoming missions at:', new Date().toLocaleString());
-    
         // Fetch missions that are due within the next 2 hours and haven't been reminded yet
         const missionsDueSoon = await db.findMissionsDueBetween();
     
