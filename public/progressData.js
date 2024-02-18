@@ -88,7 +88,7 @@ async function updateMissionStatus(missionId, completed) {
         console.error('Error updating mission status:', error);
     }
 }
-
+/*
 function startCountdown(endDate) {
     var countdownContainer = document.getElementById('countdown');
     // Make sure we don't overwrite our countdown structure
@@ -124,7 +124,7 @@ function startCountdown(endDate) {
    // checkAndDisplayContent();
 }
 
-
+*/
 // Inside the window.onload function
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
@@ -137,7 +137,7 @@ window.onload = async function() {
         // Check if there is an existing session and it's not complete
         if (data.session && !data.session.Complete) {
             populateMissions(data.missions);
-            startCountdown(new Date(data.endDate));
+          //  startCountdown(new Date(data.endDate));
             setupDeleteSessionButton(userId);
             document.getElementById('whatisgoingon').style.display = 'block';
         } else {
