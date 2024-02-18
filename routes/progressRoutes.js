@@ -10,7 +10,7 @@ router.get('/getLatestIncompleteSession', async (req, res) => {
     console.log("yee", userId)
     try {
       // Fetch all incomplete sessions for the user
-      let incompleteSessions = await db.getAllIncompleteSessionsByUserId(userId); // Adjust the DB query method accordingly
+      let incompleteSessions = await db.getLatestIncompleteSessionByUserId(userId); // Adjust the DB query method accordingly
       console.log("Found incomplete sessions", incompleteSessions);
     
       // Check if there are any incomplete sessions
