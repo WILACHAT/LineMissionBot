@@ -100,43 +100,82 @@ async function updateMissionStatus(missionId, completed) {
         console.error('Error updating mission status:', error);
     }
 }
-/*
-function startCountdown(endDate) {
-    var countdownContainer = document.getElementById('countdown');
-    // Make sure we don't overwrite our countdown structure
-    var daysElem = document.getElementById('days-number');
-    var hoursElem = document.getElementById('hours-number');
-    var minutesElem = document.getElementById('minutes-number');
-    var secondsElem = document.getElementById('seconds-number');
 
+function startCountdown(endDate, sessionId) {
+    // Create a countdown container for this session
+    var countdownContainer = document.createElement('div');
+    countdownContainer.id = `countdown-${sessionId}`;
+    countdownContainer.classList.add('countdownclass');
+
+    // Create and append the countdown elements for days, hours, minutes, and seconds
+    var daysBox = document.createElement('div');
+    daysBox.id = `days-box-${sessionId}`;
+    var hoursBox = document.createElement('div');
+    hoursBox.id = `hours-box-${sessionId}`;
+    var minutesBox = document.createElement('div');
+    minutesBox.id = `minutes-box-${sessionId}`;
+    var secondsBox = document.createElement('div');
+    secondsBox.id = `seconds-box-${sessionId}`;
+
+    var daysLabel = document.createElement('div');
+    daysLabel.id = `days-label-${sessionId}`;
+    daysLabel.textContent = 'Days';
+    var hoursLabel = document.createElement('div');
+    hoursLabel.id = `hours-label-${sessionId}`;
+    hoursLabel.textContent = 'Hours';
+    var minutesLabel = document.createElement('div');
+    minutesLabel.id = `minutes-label-${sessionId}`;
+    minutesLabel.textContent = 'Minutes';
+    var secondsLabel = document.createElement('div');
+    secondsLabel.id = `seconds-label-${sessionId}`;
+    secondsLabel.textContent = 'Seconds';
+
+    // Append boxes to the countdown container
+    countdownContainer.appendChild(daysBox);
+    countdownContainer.appendChild(hoursBox);
+    countdownContainer.appendChild(minutesBox);
+    countdownContainer.appendChild(secondsBox);
+
+    // Append labels to the countdown container
+    countdownContainer.appendChild(daysLabel);
+    countdownContainer.appendChild(hoursLabel);
+    countdownContainer.appendChild(minutesLabel);
+    countdownContainer.appendChild(secondsLabel);
+
+    // Append the countdown container to the session's missions container
+    document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
+
+    // Start the countdown
     var countdown = setInterval(function() {
         var now = new Date().getTime();
-        var distance = endDate - now;
+        var distance = endDate.getTime() - now;
 
+        // Calculate time left
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the respective elements
+        daysBox.textContent = days.toString().padStart(2, '0');
+        hoursBox.textContent = hours.toString().padStart(2, '0');
+        minutesBox.textContent = minutes.toString().padStart(2, '0');
+        secondsBox.textContent = seconds.toString().padStart(2, '0');
+
+        // If the countdown is finished, write some text
         if (distance < 0) {
             clearInterval(countdown);
-            daysElem.innerText = '00';
-            hoursElem.innerText = '00';
-            minutesElem.innerText = '00';
-            secondsElem.innerText = '00';
-            countdownContainer.innerHTML += 'EXPIRED';
-        } else {
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysElem.innerText = days.toString().padStart(2, '0');
-            hoursElem.innerText = hours.toString().padStart(2, '0');
-            minutesElem.innerText = minutes.toString().padStart(2, '0');
-            secondsElem.innerText = seconds.toString().padStart(2, '0');
+            countdownContainer.textContent = 'EXPIRED'; // You can change this text or add additional handling for expired countdowns
         }
     }, 1000);
-    countdownLoaded = true;
-   // checkAndDisplayContent();
+
+    // Store the interval ID in a way that allows you to clear it later if necessary
+    // For example, you could add it to an object that keeps track of all countdowns
+    window.countdownIntervals = window.countdownIntervals || {};
+    window.countdownIntervals[sessionId] = countdown;
 }
 
-*/
+
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
     const userId = params.get('userId');
@@ -150,7 +189,7 @@ window.onload = async function() {
                 console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
-                    // startCountdown(new Date(data.endDate));
+                    startCountdown(new Date(data.endDate), data.session.SessionID);
                     setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
