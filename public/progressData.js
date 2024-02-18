@@ -132,7 +132,10 @@ window.onload = async function() {
 
         if (sessionsData && sessionsData.length > 0) {
             sessionsData.forEach(data => {
+                console.log("missionsssss", data.missions)
                 if (data.session && !data.session.Complete) {
+                    console.log("missionsssss in if", data.missions)
+
                     populateMissions(data.missions);
                     //startCountdown(new Date(data.endDate));
                     setupDeleteSessionButton(data.session.SessionID);
