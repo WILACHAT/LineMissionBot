@@ -71,12 +71,11 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
 
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
-    SELECT "SessionID", "EndDate" , "Complete"
-    FROM "LineSchemas"."MissionSessions" 
-    WHERE "UserID" = $1 
-    ORDER BY "SessionID" DESC 
-    ;
-  `;
+  SELECT "SessionID", "EndDate", "Complete"
+  FROM "LineSchemas"."MissionSessions" 
+  WHERE "UserID" = $1 AND "Complete" = false
+  ORDER BY "SessionID" DESC;
+`;
   const result = await pool.query(query, [userId]);
   console.log("this is the result from getLatestIncomplete", result)
 
