@@ -198,18 +198,7 @@ function updateEndDateInput() {
 document.getElementById('startDateInput').addEventListener('change', updateEndDateInput);
 window.onload = setInitialDates;
 
-async function getLatestSession(userId) {
-    try {
-        const response = await fetch(`/checkLatestSession?userId=${userId}`);
-        if (!response.ok) {
-            throw new Error('Session not found or an error occurred.');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error:', error);
-        return null;
-    }
-}
+
 
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
@@ -225,7 +214,6 @@ window.onload = async function(req) {
     //const params = new URLSearchParams(window.location.search);
    // userId = params.get('userId'); 
     //const userId = 4; // Replace with actual user ID
-    await checkAndDisplaySession(userId);
 
     // Now set the href for the "View Your Current Progress" link
     const viewProgressLink = document.getElementById('viewProgressLink');
@@ -239,21 +227,7 @@ window.onload = async function(req) {
     }
 };
 
-async function checkAndDisplaySession(userId) {
-    const latestSessionData = await getLatestSession(userId);
-    const missionForm = document.getElementById('missionForm');
-    const ongoingSessionMessage = document.getElementById('ongoingSessionMessage');
 
-    if (latestSessionData && !latestSessionData.Complete) {
-        ongoingSessionMessage.style.display = 'block';
-        missionForm.style.display = 'none';
-        setupDeleteSessionButton(userId);
-    } else {
-        ongoingSessionMessage.style.display = 'none';
-        missionForm.style.display = 'block';
-        setInitialDates();
-    }
-}
 
 function setupDeleteSessionButton(userId) {
     const deleteSessionButton = document.getElementById('deleteSessionButton');
