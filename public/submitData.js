@@ -209,6 +209,13 @@ window.onload = async function(req) {
     const params = new URLSearchParams(window.location.search);
     userId = params.get('userId');  // Obtain userId from query parameter
     console.log("wtf is the userId", userId)
+    const today = new Date();
+    const formattedToday = today.toLocaleDateString('en-CA');
+
+    const startDateInput = document.getElementById('startDateInput');
+    startDateInput.value = formattedToday;
+    startDateInput.readOnly = true;
+    
     initializeFlatpickr();
 
     console.log("startdateinput",document.getElementById('startDateInput').value )
