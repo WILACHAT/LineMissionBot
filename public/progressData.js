@@ -102,66 +102,47 @@ async function updateMissionStatus(missionId, completed) {
 }
 
 function startCountdown(endDate, sessionId) {
-    // Create the countdown container dynamically
+    // Create a countdown container for this session
     var countdownContainer = document.createElement('div');
-    countdownContainer.classList.add('countdownclass');
     countdownContainer.id = `countdown-${sessionId}`;
+    countdownContainer.classList.add('countdownclass');
 
-    // Clone the countdown structure for this container
-    var countdownBackground = document.createElement('div');
-    countdownBackground.id = 'countdown-background';
-
+    // Create and append the countdown elements for days, hours, minutes, and seconds
     var daysBox = document.createElement('div');
-    daysBox.id = 'days-box';
+    daysBox.id = `days-box-${sessionId}`;
     var hoursBox = document.createElement('div');
-    hoursBox.id = 'hours-box';
+    hoursBox.id = `hours-box-${sessionId}`;
     var minutesBox = document.createElement('div');
-    minutesBox.id = 'minutes-box';
+    minutesBox.id = `minutes-box-${sessionId}`;
     var secondsBox = document.createElement('div');
-    secondsBox.id = 'seconds-box';
+    secondsBox.id = `seconds-box-${sessionId}`;
 
     var daysLabel = document.createElement('div');
-    daysLabel.id = 'days-label';
-    daysLabel.textContent = 'วัน';
+    daysLabel.id = `days-label-${sessionId}`;
+    daysLabel.textContent = 'Days';
     var hoursLabel = document.createElement('div');
-    hoursLabel.id = 'hours-label';
-    hoursLabel.textContent = 'ชั่วโมง';
+    hoursLabel.id = `hours-label-${sessionId}`;
+    hoursLabel.textContent = 'Hours';
     var minutesLabel = document.createElement('div');
-    minutesLabel.id = 'minutes-label';
-    minutesLabel.textContent = 'นาที';
+    minutesLabel.id = `minutes-label-${sessionId}`;
+    minutesLabel.textContent = 'Minutes';
     var secondsLabel = document.createElement('div');
-    secondsLabel.id = 'seconds-label';
-    secondsLabel.textContent = 'วินาที';
+    secondsLabel.id = `seconds-label-${sessionId}`;
+    secondsLabel.textContent = 'Seconds';
 
-    var daysNumber = document.createElement('div');
-    daysNumber.id = 'days-number';
-    var hoursNumber = document.createElement('div');
-    hoursNumber.id = 'hours-number';
-    var minutesNumber = document.createElement('div');
-    minutesNumber.id = 'minutes-number';
-    var secondsNumber = document.createElement('div');
-    secondsNumber.id = 'seconds-number';
+    // Append boxes to the countdown container
+    countdownContainer.appendChild(daysBox);
+    countdownContainer.appendChild(hoursBox);
+    countdownContainer.appendChild(minutesBox);
+    countdownContainer.appendChild(secondsBox);
 
-    // Append all elements to the countdown background
-    countdownBackground.appendChild(daysBox);
-    countdownBackground.appendChild(hoursBox);
-    countdownBackground.appendChild(minutesBox);
-    countdownBackground.appendChild(secondsBox);
+    // Append labels to the countdown container
+    countdownContainer.appendChild(daysLabel);
+    countdownContainer.appendChild(hoursLabel);
+    countdownContainer.appendChild(minutesLabel);
+    countdownContainer.appendChild(secondsLabel);
 
-    countdownBackground.appendChild(daysLabel);
-    countdownBackground.appendChild(hoursLabel);
-    countdownBackground.appendChild(minutesLabel);
-    countdownBackground.appendChild(secondsLabel);
-
-    countdownBackground.appendChild(daysNumber);
-    countdownBackground.appendChild(hoursNumber);
-    countdownBackground.appendChild(minutesNumber);
-    countdownBackground.appendChild(secondsNumber);
-
-    // Append the countdown background to the countdown container
-    countdownContainer.appendChild(countdownBackground);
-
-    // Append the countdown container to the main missions container
+    // Append the countdown container to the session's missions container
     document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
 
     // Start the countdown
@@ -169,26 +150,29 @@ function startCountdown(endDate, sessionId) {
         var now = new Date().getTime();
         var distance = endDate.getTime() - now;
 
+        // Calculate time left
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Display the result in the respective elements
+        daysBox.textContent = days.toString().padStart(2, '0');
+        hoursBox.textContent = hours.toString().padStart(2, '0');
+        minutesBox.textContent = minutes.toString().padStart(2, '0');
+        secondsBox.textContent = seconds.toString().padStart(2, '0');
+
+        // If the countdown is finished, write some text
         if (distance < 0) {
             clearInterval(countdown);
-            daysNumber.textContent = '00';
-            hoursNumber.textContent = '00';
-            minutesNumber.textContent = '00';
-            secondsNumber.textContent = '00';
-            countdownContainer.innerHTML += 'EXPIRED';
-        } else {
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysNumber.textContent = days.toString().padStart(2, '0');
-            hoursNumber.textContent = hours.toString().padStart(2, '0');
-            minutesNumber.textContent = minutes.toString().padStart(2, '0');
-            secondsNumber.textContent = seconds.toString().padStart(2, '0');
+            countdownContainer.textContent = 'EXPIRED'; // You can change this text or add additional handling for expired countdowns
         }
     }, 1000);
 
+    // Store the interval ID in a way that allows you to clear it later if necessary
+    // For example, you could add it to an object that keeps track of all countdowns
+
+}
 
 
 window.onload = async function() {
