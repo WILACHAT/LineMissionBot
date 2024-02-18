@@ -100,84 +100,69 @@ async function updateMissionStatus(missionId, completed) {
         console.error('Error updating mission status:', error);
     }
 }
+function createCountdownBox(boxId, sessionId, labelText) {
+    var box = document.createElement('div');
+    box.id = `${boxId}-${sessionId}`;
+    box.classList.add(boxId);
 
+    var number = document.createElement('div');
+    number.id = `${boxId}-number-${sessionId}`;
+    number.classList.add(`${boxId}-number`);
+
+    var label = document.createElement('div');
+    label.id = `${boxId}-label-${sessionId}`;
+    label.classList.add(`${boxId}-label`);
+    label.textContent = labelText;
+
+    box.appendChild(number);
+    box.appendChild(label);
+
+    return box;
+}
 function startCountdown(endDate, sessionId) {
 
-    var sessionContainer = document.getElementById(`session-container-${sessionId}`);
-    if (!sessionContainer) {
-        // Create the session container if it does not exist
-        sessionContainer = document.createElement('div');
-        sessionContainer.id = `session-container-${sessionId}`;
-        sessionContainer.classList.add('session-container');
-        // Append the new session container to the main container, likely where you have 'whatisgoingon'
-        document.getElementById('whatisgoingon').prepend(sessionContainer);
+    var countdownContainer = document.getElementById(`countdown-${sessionId}`);
+    if (!countdownContainer) {
+        // If a countdown does not exist, create it
+        countdownContainer = document.createElement('div');
+        countdownContainer.classList.add('countdownclass');
+        countdownContainer.id = `countdown-${sessionId}`;
+
+        // Create the countdown background
+        var countdownBackground = document.createElement('div');
+        countdownBackground.classList.add('countdown-background');
+
+        // Create countdown time boxes with unique IDs using sessionId
+        var daysBox = createCountdownBox('days-box', sessionId, 'วัน');
+        var hoursBox = createCountdownBox('hours-box', sessionId, 'ชั่วโมง');
+        var minutesBox = createCountdownBox('minutes-box', sessionId, 'นาที');
+        var secondsBox = createCountdownBox('seconds-box', sessionId, 'วินาที');
+
+        // Append all elements to the countdown background
+        countdownBackground.append(daysBox, hoursBox, minutesBox, secondsBox);
+
+        // Append the countdown background to the countdown container
+        countdownContainer.appendChild(countdownBackground);
+        
+        // Find or create the session container
+        var sessionContainer = document.getElementById(`session-container-${sessionId}`);
+        if (!sessionContainer) {
+            // Create the session container if it does not exist
+            sessionContainer = document.createElement('div');
+            sessionContainer.id = `session-container-${sessionId}`;
+            sessionContainer.classList.add('session-container');
+            // Prepend the session container to 'whatisgoingon' container
+            document.getElementById('whatisgoingon').prepend(sessionContainer);
+        }
+
+        // Prepend the countdown container to the session container
+        sessionContainer.prepend(countdownContainer);
     }
-    // Create the countdown container dynamically
-    var countdownContainer = document.createElement('div');
-    countdownContainer.classList.add('countdownclass');
-    countdownContainer.id = `countdown-${sessionId}`;
-
-    // Clone the countdown structure for this container
-    var countdownBackground = document.createElement('div');
-    countdownBackground.id = 'countdown-background';
-
-    var daysBox = document.createElement('div');
-    daysBox.id = 'days-box';
-    var hoursBox = document.createElement('div');
-    hoursBox.id = 'hours-box';
-    var minutesBox = document.createElement('div');
-    minutesBox.id = 'minutes-box';
-    var secondsBox = document.createElement('div');
-    secondsBox.id = 'seconds-box';
-
-    var daysLabel = document.createElement('div');
-    daysLabel.id = 'days-label';
-    daysLabel.textContent = 'วัน';
-    var hoursLabel = document.createElement('div');
-    hoursLabel.id = 'hours-label';
-    hoursLabel.textContent = 'ชั่วโมง';
-    var minutesLabel = document.createElement('div');
-    minutesLabel.id = 'minutes-label';
-    minutesLabel.textContent = 'นาที';
-    var secondsLabel = document.createElement('div');
-    secondsLabel.id = 'seconds-label';
-    secondsLabel.textContent = 'วินาที';
-
-    var daysNumber = document.createElement('div');
-    daysNumber.id = 'days-number';
-    var hoursNumber = document.createElement('div');
-    hoursNumber.id = 'hours-number';
-    var minutesNumber = document.createElement('div');
-    minutesNumber.id = 'minutes-number';
-    var secondsNumber = document.createElement('div');
-    secondsNumber.id = 'seconds-number';
-
-    // Append all elements to the countdown background
-    countdownBackground.appendChild(daysBox);
-    countdownBackground.appendChild(hoursBox);
-    countdownBackground.appendChild(minutesBox);
-    countdownBackground.appendChild(secondsBox);
-
-    countdownBackground.appendChild(daysLabel);
-    countdownBackground.appendChild(hoursLabel);
-    countdownBackground.appendChild(minutesLabel);
-    countdownBackground.appendChild(secondsLabel);
-
-    countdownBackground.appendChild(daysNumber);
-    countdownBackground.appendChild(hoursNumber);
-    countdownBackground.appendChild(minutesNumber);
-    countdownBackground.appendChild(secondsNumber);
+    
+    clearInterval(window.countdownIntervals[sessionId]);
+    window.countdownIntervals[sessionId] = setInterval(function() {
 
 
-    // Append the countdown background to the countdown container
-    countdownContainer.appendChild(countdownBackground);
-
-    // Append the countdown container to the main missions container
-    document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
-    sessionContainer.prepend(countdownContainer);
-
-    // Start the countdown
-    var countdown = setInterval(function() {
         var now = new Date().getTime();
         var distance = endDate.getTime() - now;
 
