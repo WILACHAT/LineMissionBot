@@ -210,6 +210,7 @@ window.onload = async function(req) {
     console.log("wtf is the userId", userId)
     initializeFlatpickr();
 
+    console.log("startdateinput",document.getElementById('startDateInput').value )
 
     //const params = new URLSearchParams(window.location.search);
    // userId = params.get('userId'); 
