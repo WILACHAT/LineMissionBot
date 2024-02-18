@@ -188,7 +188,6 @@ function startCountdown(endDate, sessionId) {
             secondsNumber.textContent = seconds.toString().padStart(2, '0');
         }
     }, 1000);
-}
 
 
 
@@ -198,13 +197,14 @@ window.onload = async function() {
 
     try {
         const sessionsData = await fetchLatestIncompleteSession(userId);
-        console.log("data received after f etch", sessionsData);
+        console.log("data received after fetch", sessionsData);
 
         if (sessionsData && sessionsData.length > 0) {
             sessionsData.forEach(data => {
                 console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
+                    startCountdown(new Date(data.endDate), data.session.SessionID);
                     setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
