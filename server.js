@@ -12,6 +12,7 @@ const historyRoutes = require('./routes/historyRoutes');
 
 
 
+
 const { verifyToken } = require('./utils/tokenUtils'); // Make sure you have this function
 
 const { scheduleTask } = require('./scheduledTask');
@@ -19,14 +20,12 @@ const { scheduleTask } = require('./scheduledTask');
 const app = express();
 
 // Configure session middleware
-/*
 app.use(session({
   secret: process.env.SESSION_SECRET, // Make sure SESSION_SECRET is set in your .env file
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true } // Set to false if not using https
 }));
-*/
 
 app.use(express.json({
   verify: (req, res, buf) => {
@@ -53,8 +52,8 @@ function checkIfRequestFromLine(req, res, next) {
     }
 }
 app.use(checkIfRequestFromLine);
-
 */
+
 
 app.use('/', missionRoutes);
 app.use('/progress', progressRoutes);
@@ -68,7 +67,7 @@ app.use('/history', historyRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-     //console.log("we win", req.session)
+     console.log("we win", req.session)
     res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
@@ -84,10 +83,24 @@ app.get('/history', (req, res) => {
 });
 
 console.log("server console.log")
+app.get('/session-data', (req, res) => {
+  console.log("this is in app.get? fak off", req)
+
+  console.log("this is in app.get? fak off", req.session)
+  console.log("this is in app.get? fak off", req.session.userId)
+
+
+  if (req.session.userId) {
+    console.log("this is in app.get?")
+      res.json({ userId: req.session.userId });
+  } else {
+      res.status(404).send('Session not found');
+  }
+});
 
 
 
-/*
+
 app.post('/', async (req, res) => {
   try {
     const { userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate } = req.body;
@@ -105,7 +118,7 @@ app.post('/', async (req, res) => {
   }
 });
 
-*/
+
 
 async function setupRichMenu(imagePath) {
   const richMenuId = await lineBotService.createRichMenu();

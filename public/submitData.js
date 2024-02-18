@@ -3,31 +3,12 @@ let missionCount = 0;
 let currentMissionIndex = 1;
 const titleOptions = ["การเรียน", "งาน", "ออกกำลังกาย", "การทำสมาธิ", "ความสัมพันธ์", "การกิน", "การเงิน" ,"การอ่าน", "อื่นๆ"];
 
-const ThaiLocale = {
-    weekdays: {
-        shorthand: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
-        longhand: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
-    },
-    months: {
-        shorthand: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
-        longhand: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-    },
-    firstDayOfWeek: 1, 
-    ordinal: function (nth) {
-        return nth;
-    },
-    rangeSeparator: ' ถึง ',
-    weekAbbreviation: 'สัปดาห์',
-    scrollTitle: 'เลื่อนเพื่อเพิ่มหรือลด',
-    toggleTitle: 'คลิกเพื่อเปลี่ยน',
-};
 function initializeFlatpickr() {
     // Initialize Flatpickr only for the end date with initial settings
     flatpickr("#endDateInput", {
         dateFormat: "Y-m-d",
         minDate: new Date().fp_incr(1), // Tomorrow
         maxDate: new Date().fp_incr(30), // One month from today
-        locale: ThaiLocale,  // Set the locale to Thai
         disable: [
             function(date) {
                 // Disable dates outside of the initial valid range
@@ -37,6 +18,17 @@ function initializeFlatpickr() {
     });
 }
 
+function updateEndDatePicker() {
+    const startDateInput = document.getElementById('startDateInput');
+    const startDate = new Date(startDateInput.value);
+
+    // Update the min and max date for the endDateInput
+    const endDatePicker = flatpickr("#endDateInput", {
+        dateFormat: "Y-m-d",
+        minDate: new Date(startDate).fp_incr(1), // One day after start date
+        maxDate: new Date(startDate).fp_incr(30) // One month after start date
+    });
+}
 
 function createMissionInputGroup(missionNumber) {
     const missionInputGroup = document.createElement('div');
@@ -54,24 +46,29 @@ function createMissionInputGroup(missionNumber) {
     });
     titleDropdownHTML += `</select>`;
 
+    // Add date and time input for mission deadline
+    let deadlineInputHTML = `
+        <input type="datetime-local" id="missionDeadline ${missionNumber}" class="mission-deadline-input" required>
+    `;
 
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
+        <label for="missionDeadline${missionNumber}">กำหนดเวลาสำหรับเป้าหมายนี้: (ไม่บังคับ)</label>
+        ${deadlineInputHTML}
         ${deleteButtonHTML}
     `;
 
-    // Append the new mission input group to the container
-    const missionsContainer = document.getElementById('missionsContainer');
-    missionsContainer.appendChild(missionInputGroup);
+    // Update the maximum deadline date when the end date changes
+    const endDateInput = document.getElementById('endDateInput');
+    endDateInput.addEventListener('change', function() {
+        const maxDeadlineDate = endDateInput.value;
+        document.getElementById(`missionDeadline${missionNumber}`).max = maxDeadlineDate;
+    });
 
-
-
-    // Return the new mission input group element
     return missionInputGroup;
-};
-
+}
 
 
 function addMission() {
@@ -312,14 +309,12 @@ document.addEventListener('DOMContentLoaded', function(req) {
         for (let i = 1; i <= missionCount; i++) {
             const title = document.getElementById(`missiontitle${i}`).value.trim();
             const description = document.getElementById(`missiondes${i}`).value.trim();
-
-
             if (!title || !description) {
                 allMissionsFilled = false;
                 break;
             }
         }
-            
+    
         if (!allMissionsFilled) {
             alert("Please fill in both the title and description for each mission.");
             return;
@@ -331,7 +326,6 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const today = new Date().toISOString().split('T')[0];
         console.log("startDateInput", startDateInput)
         console.log("endDateInput", endDateInput)
-
         console.log("today", today)
         console.log("walouch", new Date())
 
@@ -344,45 +338,24 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
        
-      
+        let startDate = new Date(startDateInput + 'T' + currentTime);
+        let endDate = new Date(endDateInput + 'T' + currentTime);
         const inputStartDate = new Date(startDateInput);
         const inputEndDate = new Date(endDateInput);
-
-        //alert("inputStartDate" + inputStartDate)
-        //alert("inputEndDate" + inputEndDate)
-
-
-
         
         // Calculate the difference in days
         const timeDiff = inputEndDate - inputStartDate;
-
         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-
-        //alert("timeDiff" + timeDiff)
-        //alert("daysDiff" + daysDiff)
-
-
-
         
         // Create UTC start date
         let startDatee = new Date(currentDateUTC + 'T' + currentTime);
-
+        
         // Create UTC end date by adding the difference in days
         let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
-
-        //alert("startDatee" + startDatee)
-        //alert("endDatee" + endDatee)
-
-
+        
+        // Format start and end dates to ISO strings
         const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
-       
-       // alert("formattedStartDate" + formattedStartDate)
-
         const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
-        //alert("formattedEndDate" + formattedEndDate)
-
-
      
 
         console.log("formattedStartDate", formattedStartDate)
@@ -394,8 +367,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
+        if (endDate.getTime() >= startDate.getTime()) {
            
-        
+          
+           
             console.log("check startdate", formattedStartDate)
             console.log("check enddate", formattedEndDate)
 
@@ -406,17 +381,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
             for (let i = 1; i <= missionCount; i++) {
                 const title = document.getElementById(`missiontitle${i}`).value;
                 const description = document.getElementById(`missiondes${i}`).value;
-                
-                // Get the due date and time from the input
-                // Assuming duedateInput is in the format "YYYY-MM-DDTHH:MM" (ISO local date-time format)
-            
-                
-            
-                // Push the data with the UTC date and time
                 missionData.push({ title, description });
-            }
-            
-            
+    }
     
             const data = {
                 userId: userId,
@@ -451,7 +417,11 @@ document.addEventListener('DOMContentLoaded', function(req) {
             } catch (error) {
                 console.log("hehe")
             }
-      
+        } else {
+            // If dates are invalid, show an alert and stop form submission
+            alert("Invalid date selected. Please select a valid date.");
+            return;
+        }
     };
     
 });

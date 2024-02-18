@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/confetti.css">
-
 
     <!-- Include Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -187,59 +185,9 @@ button[type="submit"]:hover {
     /*box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.19);*/
     border: 0.3px solid #dddddd;
 }
-.flatpickr-calendar {
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    overflow: hidden;
-    width: 90%; /* Adjusted for smaller screens */
-    max-width: 310px; /* Adjust maximum width for mobile devices */
-    height: auto; /* Height adjusts based on content */
-}
-
-/* Adjust font sizes and paddings inside the calendar */
-.flatpickr-calendar .flatpickr-months {
-    font-size: 16px; /* Adjusted font size */
-    padding: 0; /* Reset padding */
-}
-
-.flatpickr-calendar .flatpickr-months .flatpickr-prev-month,
-.flatpickr-calendar .flatpickr-months .flatpickr-next-month {
-    width: 30px; /* Adjust width */
-    height: 30px; /* Adjust height */
-    margin: 0 10px; /* Add horizontal margin for spacing */
-}
-
-.flatpickr-calendar .flatpickr-months .flatpickr-current-month {
-    flex-grow: 1; /* Allow the current month to grow */
-    display: flex; /* Use flexbox for alignment */
-    justify-content: center; /* Center the month name horizontally */
-    align-items: center; /* Center the month name vertically */
-    padding: 0 4px; /* Add padding for some breathing space */
-}
-
-.flatpickr-calendar .flatpickr-months .flatpickr-current-month > span {
-    font-size: 14px; /* Adjust font size if necessary to fit the text */
-    white-space: nowrap; /* Prevent the month name from wrapping */
-}
-
-.flatpickr-calendar .flatpickr-weekdays,
-.flatpickr-calendar .flatpickr-days {
-    font-size: 16px; /* Adjusted font size */
-}
-
-.flatpickr-calendar .flatpickr-weekday {
-    padding: 5px 10px; /* Adjust padding */
-}
-
-.flatpickr-calendar .flatpickr-day {
-    padding: 5px; /* Adjust padding */
-    margin: 2px; /* Adjust margin */
-}
-
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 600px) {
-  
     .date-input-container {
         flex-direction: column;
         align-items: flex-start;
@@ -513,7 +461,7 @@ button[type="submit"]:hover {
             </div>
                 <div class="date-input-group">
                     <label for="endDateInput">วันที่สิ้นสุด</label>
-                    <input id="endDateInput"  onchange="updateMissionDatePickers(event)"type="date">
+                    <input id="endDateInput" type="date">
                 </div>
             
                 <img class="date-image" src="meerkat_hello.png" alt="Meerkat Hello">
