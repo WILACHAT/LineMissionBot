@@ -127,37 +127,24 @@ window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
     const userId = params.get('userId');
 
-try {
-    const data = await fetchLatestIncompleteSessions(userId); // Assume this now fetches multiple sessions
-    console.log("Data received after fetch", data);
+    try {
+        const data = await fetchLatestIncompleteSession(userId);
+        console.log("data received after fetch", data);
 
-    if (data && data.length > 0) {
-        data.forEach(sessionData => {
-            if (sessionData.session && !sessionData.session.Complete) {
-                populateMissions(sessionData.missions);
-                // Assuming startCountdown and setupDeleteSessionButton can handle session-specific data
-                // You might need to adjust these functions to be able to handle multiple sessions
-                startCountdown(new Date(sessionData.endDate), sessionData.session.SessionID); // Modified to pass SessionID
-                setupDeleteSessionButton(sessionData.session.SessionID);
-                
-                // Make sure to adjust how you display sessions
-                // For example, append session-specific content to a parent element
-                const sessionElement = document.createElement('div');
-                sessionElement.id = `session-${sessionData.session.SessionID}`;
-                sessionElement.style.display = 'block';
-                // Populate sessionElement with session-specific information...
-                document.body.appendChild(sessionElement); // Adjust as necessary to insert into the correct location
-            }
-        });
-    } else {
-        // Handle the case where there are no sessions or missions
-        displayNoSessionMessage(userId);
+        // Check if there is an existing session and it's not complete
+        if (data.session && !data.session.Complete) {
+            populateMissions(data.missions);
+          //  startCountdown(new Date(data.endDate));
+            setupDeleteSessionButton(userId);
+            document.getElementById('whatisgoingon').style.display = 'block';
+        } else {
+            // Handle the case where there is no session or missions
+            displayNoSessionMessage(userId);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        displayNoSessionMessage(userId); // Display the message in case of an error too
     }
-} catch (error) {
-    console.error('Error:', error);
-    displayNoSessionMessage(userId); // Display the message in case of an error too
-};
-
 };
 
 function displayNoSessionMessage(userId) {
