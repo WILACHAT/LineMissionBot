@@ -64,7 +64,6 @@ function createMissionInputGroup(missionNumber) {
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
         ${deleteButtonHTML}
     `;
-
     // Update the maximum deadline date when the end date changes
     const endDateInput = document.getElementById('endDateInput');
     endDateInput.addEventListener('change', function() {

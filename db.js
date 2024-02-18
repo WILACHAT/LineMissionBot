@@ -75,7 +75,7 @@ async function getLatestIncompleteSessionByUserId(userId) {
     FROM "LineSchemas"."MissionSessions" 
     WHERE "UserID" = $1 
     ORDER BY "SessionID" DESC 
-    LIMIT 1;
+    ;
   `;
   const result = await pool.query(query, [userId]);
   console.log("this is the result from getLatestIncomplete", result)
