@@ -122,30 +122,34 @@ function startCountdown(endDate) {
 }
 
 */
-// Inside the window.onload function
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
     const userId = params.get('userId');
 
     try {
-        const data = await fetchLatestIncompleteSession(userId);
-        console.log("data received after fetch", data);
+        const sessionsData = await fetchLatestIncompleteSession(userId);
+        console.log("data received after fetch", sessionsData);
 
-        // Check if there is an existing session and it's not complete
-        if (data.session && !data.session.Complete) {
-            populateMissions(data.missions);
-          //  startCountdown(new Date(data.endDate));
-            setupDeleteSessionButton(userId);
-            document.getElementById('whatisgoingon').style.display = 'block';
+        if (sessionsData && sessionsData.length > 0) {
+            sessionsData.forEach(data => {
+                if (data.session && !data.session.Complete) {
+                    populateMissions(data.missions);
+                    startCountdown(new Date(data.endDate));
+                    setupDeleteSessionButton(data.session.SessionID);
+                    document.getElementById('whatisgoingon').style.display = 'block';
+                } else {
+                    displayNoSessionMessage(userId);
+                }
+            });
         } else {
-            // Handle the case where there is no session or missions
             displayNoSessionMessage(userId);
         }
     } catch (error) {
         console.error('Error:', error);
-        displayNoSessionMessage(userId); // Display the message in case of an error too
+        displayNoSessionMessage(userId);
     }
 };
+
 
 function displayNoSessionMessage(userId) {
     const startNewMissionLink = `<a href="index.html?userId=${userId}" class="start-new-mission">เริ่มเซสชันภารกิจใหม่</a>`;
