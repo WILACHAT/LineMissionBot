@@ -168,6 +168,7 @@ function navigateMission(direction) {
 
 
 function setInitialDates() {
+    console.log("are you in the setInitialDates")
     const today = new Date();
     const formattedToday = today.toLocaleDateString('en-CA');
 
@@ -195,7 +196,7 @@ function updateEndDateInput() {
     maxEndDate.setDate(maxEndDate.getDate() - 1); // Set one day before a month to ensure it's within a month
     endDateInput.max = maxEndDate.toISOString().split('T')[0];
 }
-document.getElementById('startDateInput').addEventListener('change', updateEndDateInput);
+//document.getElementById('startDateInput').addEventListener('change', updateEndDateInput);
 window.onload = setInitialDates;
 
 
