@@ -134,7 +134,7 @@ window.onload = async function() {
             sessionsData.forEach(data => {
                 if (data.session && !data.session.Complete) {
                     populateMissions(data.missions);
-                    startCountdown(new Date(data.endDate));
+                    //startCountdown(new Date(data.endDate));
                     setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
