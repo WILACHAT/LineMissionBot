@@ -218,6 +218,7 @@ window.onload = async function() {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
                     startCountdown(new Date(data.endDate), data.session.SessionID);
                     setupDeleteSessionButton(data.session.SessionID);
+                    document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
                     displayNoSessionMessage(userId);
                 }
