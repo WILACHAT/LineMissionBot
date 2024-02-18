@@ -9,59 +9,74 @@ async function fetchLatestIncompleteSession(userId) {
     }
     return response.json();
 }
-function populateMissions(missions) {
-    const missionsContainer = document.getElementById('missions');
-    missionsContainer.innerHTML = '';
+function populateMissions(missions, sessionId) {
+    // Create or get a unique container for the missions of this particular session
+    let sessionMissionsContainer = document.getElementById(`missions-${sessionId}`);
+    if (!sessionMissionsContainer) {
+        // If the container doesn't exist, create it and append it to the main missions container
+        sessionMissionsContainer = document.createElement('div');
+        sessionMissionsContainer.id = `missions-${sessionId}`;
+        sessionMissionsContainer.classList.add('session-missions-container');
+        document.getElementById('missions').appendChild(sessionMissionsContainer);
+    }
 
+    // Clear the container to ensure we're not duplicating missions
+    sessionMissionsContainer.innerHTML = '';
+
+    // Iterate through each mission and create its DOM elements
     missions.forEach(mission => {
-        // Create mission container
+        // Create the container for the individual mission
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
 
-        // Mission title
+        // Create and append the mission title element
         const missionTitle = document.createElement('div');
         missionTitle.classList.add('mission-title');
-        missionTitle.innerText = mission.Title;
+        missionTitle.innerText = mission.Title; // Assuming 'Title' is the correct property
         missionDiv.appendChild(missionTitle);
 
-        // Mission description
+        // Create and append the mission description element
         const missionDesc = document.createElement('div');
         missionDesc.classList.add('mission-description');
-        missionDesc.innerText = mission.Description;
+        missionDesc.innerText = mission.Description; // Assuming 'Description' is the correct property
         missionDiv.appendChild(missionDesc);
 
-        // Checkmark for completed missions
+        // Create and append the checkmark for completed missions
         const missionCheckmark = document.createElement('div');
         missionCheckmark.classList.add('mission-checkmark');
-        missionCheckmark.innerHTML = '✔';
-        missionCheckmark.style.display = mission.Complete ? 'block' : 'none';
+        missionCheckmark.innerHTML = mission.Complete ? '✔' : ''; // Adjust if needed
         missionDiv.appendChild(missionCheckmark);
 
-        // Complete/Not Complete button
+        // Create and append the Complete/Not Complete button
         const completeButton = document.createElement('button');
         completeButton.classList.add('complete-mission');
-        completeButton.setAttribute('data-mission-id', mission.Mission_ID);
+        completeButton.setAttribute('data-mission-id', mission.Mission_ID); // Assuming 'Mission_ID' is correct
         completeButton.setAttribute('data-completed', mission.Complete);
-        completeButton.innerText = mission.Complete ? 'Not Complete' : 'Complete';
+        completeButton.innerText = mission.Complete ? 'Not Complete' : 'Complete'; // Toggle button text based on status
         missionDiv.appendChild(completeButton);
 
+        // Add an event listener to the Complete/Not Complete button
         completeButton.addEventListener('click', function() {
+            // Toggle the completed status
             const completed = this.getAttribute('data-completed') === 'true';
-            updateMissionStatus(mission.Misson_ID, !completed);
+            updateMissionStatus(mission.Mission_ID, !completed); // Function to update the status
             this.setAttribute('data-completed', !completed);
-            this.textContent = !completed ? 'Not Complete' : 'Complete';
-            missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white';
-            missionCheckmark.style.display = !completed ? 'block' : 'none'; // Toggle checkmark
+            this.innerText = !completed ? 'Not Complete' : 'Complete';
+            missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white'; // Change color based on status
+            missionCheckmark.style.display = !completed ? 'block' : 'none'; // Show or hide checkmark
         });
-        
 
-        missionsContainer.appendChild(missionDiv);
+        // Append the mission to the session's missions container
+        sessionMissionsContainer.appendChild(missionDiv);
 
+        // Set the background color of the mission element based on completion status
         missionDiv.style.backgroundColor = mission.Complete ? '#FFA500' : 'white';
     });
 
+    // Variable to track if missions have been loaded - ensure this is declared and managed appropriately
     missionsLoaded = true;
 }
+
 
 async function updateMissionStatus(missionId, completed) {
     console.log("in update mission")
@@ -132,12 +147,10 @@ window.onload = async function() {
 
         if (sessionsData && sessionsData.length > 0) {
             sessionsData.forEach(data => {
-                console.log("missionsssss", data.missions)
+                console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
-                    console.log("missionsssss in if", data.missions)
-
-                    populateMissions(data.missions);
-                    //startCountdown(new Date(data.endDate));
+                    populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
+                    // startCountdown(new Date(data.endDate));
                     setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
@@ -147,6 +160,7 @@ window.onload = async function() {
         } else {
             displayNoSessionMessage(userId);
         }
+        
     } catch (error) {
         console.error('Error:', error);
         displayNoSessionMessage(userId);
