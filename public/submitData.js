@@ -38,95 +38,6 @@ function initializeFlatpickr() {
 }
 
 
-/*
-function updateMissionDatePickers() {
-    const endDateInput = document.getElementById('endDateInput').value;
-    const startDateInput = document.getElementById('startDateInput').value;
-    // Convert input values to Date objects
-    const endDate = endDateInput ? new Date(endDateInput) : null;
-    const startDate = startDateInput ? new Date(startDateInput) : null;
-    
-    // Check if endDate is set before enabling mission date pickers
-    if (endDate) {
-        // Loop through all mission deadline inputs to update their Flatpickr instances
-        document.querySelectorAll('.mission-deadline-input').forEach(input => {
-            const missionNumber = input.id.replace('missionDeadline', '');
-            initializeDeadlinePicker(missionNumber, startDate, endDate);
-        });
-    }
-}
-*/
-function updateMissionDatePickers(e) {
-    const endDateValue = e.target.value; // Get the value of the endDateInput
-    const startDateValue = document.getElementById('startDateInput').value; // Get the start date value
-    const missionDeadlineInputs = document.querySelectorAll('.mission-deadline-input');
-
-    if (endDateValue) {
-        // Enable all mission deadline inputs and update their Flatpickr instances
-        missionDeadlineInputs.forEach(input => {
-            input.disabled = false;
-            input.placeholder = ''; // Remove placeholder text
-
-            const missionNumber = input.id.replace('missionDeadline', '');
-            // Update Flatpickr instance with new date range
-            initializeDeadlinePicker(missionNumber, startDateValue, endDateValue);
-        });
-    } else {
-        // Disable all mission deadline inputs
-        missionDeadlineInputs.forEach(input => {
-            input.disabled = true;
-            input.placeholder = 'โปรดระบุวันที่สิ้นสุดก่อน'; // Placeholder text in Thai
-        });
-    }
-}
-function initializeDeadlinePicker(missionNumber, startDate, endDate) {
-    console.log("missionNUMBER", missionNumber)
-    //console.log("startDate", startDate)
-    //console.log("endDate", endDate)
-
-    const currentDate = new Date();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
-
-    //console.log("currentDate", currentDate)
-   // console.log("currentHour", currentHour)
-   // console.log("currentMinute", currentMinute)
-
-    // Adjust the current hour by one, considering the day rollover
-    const adjustedHour = (currentHour + 1) % 24;
-    const adjustedStart = new Date(currentDate);
-    adjustedStart.setHours(adjustedHour, currentMinute, 0, 0);
-
-    // If the adjusted start time is before the current time, use the current time instead
-    const start = adjustedStart < currentDate ? currentDate : adjustedStart;
-
-   // console.log("Adjusted START", start)
-
-    const what = new Date();
-   // console.log("what is what", what)
-    const currentTimeStringg = what.toTimeString(); // Converts the current time part of the Date object to a string
-    const hour = currentTimeStringg.split(":")[0]; // Extracts the hour
-    const minute = currentTimeStringg.split(":")[1]; // Extracts the minute
-
-
-    const end = new Date(new Date(endDate).setHours(hour, minute, 0, 0));
-    //console.log("END", end)
-
-    flatpickr(`#missionDeadline${missionNumber}`, {
-        enableTime: true,
-        time_24hr: true,
-        dateFormat: "Y-m-d H:i",
-        minDate: start, // Now correctly adjusted to be at least 1 hour ahead or the current time
-        maxDate: new Date(end.setDate(end.getDate() + 1)), // No need to adjust endDate anymore
-        locale: ThaiLocale,
-        disable: [
-            function(date) {
-                // Now unnecessary since minDate and maxDate should handle this
-                return false; // Simplified as the minDate and maxDate constraints are now correctly set
-            }
-        ]
-    });
-}
 function createMissionInputGroup(missionNumber) {
     const missionInputGroup = document.createElement('div');
     missionInputGroup.className = 'mission-input-group';
@@ -143,17 +54,12 @@ function createMissionInputGroup(missionNumber) {
     });
     titleDropdownHTML += `</select>`;
 
-    // Adjust the creation of mission deadline input to ensure it doesn't get replaced improperly
-    let missionDeadlineInputHTML = `
-        <label for="missionDeadline${missionNumber}">กำหนดเวลาสำหรับเป้าหมายนี้: (ไม่บังคับ)</label>
-        <input type="text" id="missionDeadline${missionNumber}" class="mission-deadline-input" placeholder="โปรดระบุวันที่สิ้นสุดก่อน" disabled>
-    `;
+
 
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
-        ${missionDeadlineInputHTML}
         ${deleteButtonHTML}
     `;
 
@@ -169,7 +75,6 @@ function createMissionInputGroup(missionNumber) {
         missionDeadlineInput.disabled = false; // Enable the input
         missionDeadlineInput.placeholder = ''; // Clear the placeholder
         // Initialize Flatpickr with the correct dates
-        initializeDeadlinePicker(missionNumber, startDateValue, endDateValue);
     }
 
     // Return the new mission input group element
