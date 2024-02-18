@@ -80,7 +80,7 @@ async function getLatestIncompleteSessionByUserId(userId) {
   console.log("this is the result from getLatestIncomplete", result)
 
   if (result.rows.length > 0) {
-    return result.rows[0]; // Return the latest incomplete session
+    return result.rows; // Return the latest incomplete session
   } else {
     return null; // Return null if no incomplete session exists
   }
