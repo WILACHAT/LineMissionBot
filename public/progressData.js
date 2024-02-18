@@ -188,6 +188,7 @@ function startCountdown(endDate, sessionId) {
             secondsNumber.textContent = seconds.toString().padStart(2, '0');
         }
     }, 1000);
+}
 
 
 
