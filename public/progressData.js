@@ -103,14 +103,14 @@ async function updateMissionStatus(missionId, completed) {
 
 function startCountdown(endDate, sessionId) {
 
-    var dateAboveContainer = document.getElementById(`dateabove-${sessionId}`);
-    if (!dateAboveContainer) {
+      var sessionContainer = document.getElementById(`session-container-${sessionId}`);
+    if (!sessionContainer) {
         // Create the session container if it does not exist
-        dateAboveContainer = document.createElement('div');
-        dateAboveContainer.id = `dateabove-${sessionId}`;
+        sessionContainer = document.createElement('div');
+        sessionContainer.id = `session-container-${sessionId}`;
         sessionContainer.classList.add('session-container');
         // Append the new session container to the main container, likely where you have 'whatisgoingon'
-        document.getElementById('whatisgoingon').prepend(dateAboveContainer);
+        document.getElementById('whatisgoingon').prepend(sessionContainer);
     }
     // Create the countdown container dynamically
     var countdownContainer = document.createElement('div');
@@ -169,9 +169,10 @@ function startCountdown(endDate, sessionId) {
     countdownBackground.appendChild(secondsNumber);
 
     // Append the countdown background to the countdown container
-    dateAboveContainer.appendChild(countdownContainer);
+    countdownContainer.appendChild(countdownBackground);
 
     // Append the countdown container to the main missions container
+    document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
 
     // Start the countdown
     var countdown = setInterval(function() {
@@ -212,9 +213,7 @@ window.onload = async function() {
             sessionsData.forEach(data => {
                 console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
-                    populateMissions(data.missions, data.session.SessionID); 
-                    startCountdown(new Date(data.endDate), data.session.SessionID);
-                    // Pass SessionID here
+                    populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
                     setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
