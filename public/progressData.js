@@ -102,6 +102,16 @@ async function updateMissionStatus(missionId, completed) {
 }
 
 function startCountdown(endDate, sessionId) {
+
+    var sessionContainer = document.getElementById(`session-container-${sessionId}`);
+    if (!sessionContainer) {
+        // Create the session container if it does not exist
+        sessionContainer = document.createElement('div');
+        sessionContainer.id = `session-container-${sessionId}`;
+        sessionContainer.classList.add('session-container');
+        // Append the new session container to the main container, likely where you have 'whatisgoingon'
+        document.getElementById('whatisgoingon').prepend(sessionContainer);
+    }
     // Create the countdown container dynamically
     var countdownContainer = document.createElement('div');
     countdownContainer.classList.add('countdownclass');
@@ -158,11 +168,13 @@ function startCountdown(endDate, sessionId) {
     countdownBackground.appendChild(minutesNumber);
     countdownBackground.appendChild(secondsNumber);
 
+
     // Append the countdown background to the countdown container
     countdownContainer.appendChild(countdownBackground);
 
     // Append the countdown container to the main missions container
     document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
+    sessionContainer.prepend(countdownContainer);
 
     // Start the countdown
     var countdown = setInterval(function() {
@@ -206,7 +218,6 @@ window.onload = async function() {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
                     startCountdown(new Date(data.endDate), data.session.SessionID);
                     setupDeleteSessionButton(data.session.SessionID);
-                    document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
                     displayNoSessionMessage(userId);
                 }
