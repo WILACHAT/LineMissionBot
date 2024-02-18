@@ -102,16 +102,6 @@ async function updateMissionStatus(missionId, completed) {
 }
 
 function startCountdown(endDate, sessionId) {
-
-      var sessionContainer = document.getElementById(`session-container-${sessionId}`);
-    if (!sessionContainer) {
-        // Create the session container if it does not exist
-        sessionContainer = document.createElement('div');
-        sessionContainer.id = `session-container-${sessionId}`;
-        sessionContainer.classList.add('session-container');
-        // Append the new session container to the main container, likely where you have 'whatisgoingon'
-        document.getElementById('whatisgoingon').prepend(sessionContainer);
-    }
     // Create the countdown container dynamically
     var countdownContainer = document.createElement('div');
     countdownContainer.classList.add('countdownclass');
@@ -199,7 +189,7 @@ function startCountdown(endDate, sessionId) {
         }
     }, 1000);
 
-}
+
 
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
@@ -207,7 +197,7 @@ window.onload = async function() {
 
     try {
         const sessionsData = await fetchLatestIncompleteSession(userId);
-        console.log("data received after fetch", sessionsData);
+        console.log("data received after f etch", sessionsData);
 
         if (sessionsData && sessionsData.length > 0) {
             sessionsData.forEach(data => {
