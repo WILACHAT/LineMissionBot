@@ -68,7 +68,8 @@ function scheduleTask() {
                 if (user) {
                     const messageText = `Reminder: Your mission titled "${mission.Title}" is due in less than 2 hours. Please check your progress!`;
                     await sendLineNotificationMission(user, messageText, mission.UserID);
-                    await db.markMissionAsReminded(mission.Mission_ID); // Ensure correct spelling of "Mission_ID"
+                    await db.markMissionAsReminded(mission.Misson_ID);
+
                 }
             }
         }

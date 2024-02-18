@@ -480,6 +480,97 @@ button[type="submit"]:hover {
     width: 100%; /* Adjust the width as needed, or use a specific value like 150px */
 }
 
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000; /* Ensure it's above other content */
+    justify-content: center;
+    align-items: center;
+}
+
+#timePickerContainer {
+    display: flex;
+    background: #333; /* Dark background like in the image */
+    border-radius: 20px; /* Rounded corners */
+    overflow: hidden; /* Hides the non-selected parts */
+    width: 250px; /* Width of the picker */
+    font-family: 'Helvetica Neue', sans-serif; /* iOS-like font */
+}
+
+.timePickerColumn {
+    flex: 1;
+    text-align: center;
+    overflow-y: scroll;
+    height: 250px; /* Height of each picker column */
+}
+
+.timePickerColumn ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.timePickerColumn li {
+    line-height: 50px; /* This sets the height of each slot */
+    font-size: 24px; /* Larger text size */
+    color: white; /* White text color */
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+/* Highlight the central selection */
+.timePickerColumn li {
+    opacity: 0.6; /* Fade the non-selected items */
+}
+
+.timePickerColumn li.selected {
+    opacity: 1; /* Fully opaque for selected item */
+    background: rgba(255, 255, 255, 0.1); /* Slightly lighter background for the selected item */
+    border-radius: 10px; /* Rounded corners for the selected item */
+}
+
+#overlayHeader {
+    margin-bottom: 20px; /* Space below the date display */
+    font-size: 20px; /* Larger text size */
+    color: white; /* White text color */
+    text-align: center;
+}
+
+#closeOverlay {
+    position: absolute;
+    bottom: 20px; /* Position the close button at the bottom */
+    left: 50%; /* Center the button */
+    transform: translateX(-50%); /* Align the center properly */
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    background: #f44336;
+    color: white;
+    border-radius: 20px;
+}
+.timePickerColumn {
+    scroll-snap-type: y mandatory;
+}
+
+.timePickerColumn li {
+    scroll-snap-align: center;
+}
+
+
+/* Make the overlay content fill the width on smaller screens */
+@media (max-width: 600px) {
+    #timePickerContainer {
+        width: 90%; /* Take up most of the screen width */
+    }
+}
+
+
 </style>
 
 <body>
@@ -500,6 +591,25 @@ button[type="submit"]:hover {
         <button type="button" id="confirmYes" class="button-yes">ลบ</button>
     </div>
 </div>
+
+<div id="overlay">
+    <div id="overlayHeader">
+        <!-- Container for the selected date display -->
+        <div id="selectedDateDisplay"></div>
+    </div>
+    <div id="timePickerContainer">
+        <div class="timePickerColumn" id="hourPicker">
+            <ul></ul>
+        </div>
+        <div class="timePickerColumn" id="minutePicker">
+            <ul></ul>
+        </div>
+        <!-- Removed AM/PM picker -->
+    </div>
+    <button id="closeOverlay">Close</button>
+</div>
+
+
 
 
 <div id="missionForm">

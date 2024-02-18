@@ -40,24 +40,8 @@ function initializeFlatpickr() {
 }
 
 
-/*
-function updateMissionDatePickers() {
-    const endDateInput = document.getElementById('endDateInput').value;
-    const startDateInput = document.getElementById('startDateInput').value;
-    // Convert input values to Date objects
-    const endDate = endDateInput ? new Date(endDateInput) : null;
-    const startDate = startDateInput ? new Date(startDateInput) : null;
-    
-    // Check if endDate is set before enabling mission date pickers
-    if (endDate) {
-        // Loop through all mission deadline inputs to update their Flatpickr instances
-        document.querySelectorAll('.mission-deadline-input').forEach(input => {
-            const missionNumber = input.id.replace('missionDeadline', '');
-            initializeDeadlinePicker(missionNumber, startDate, endDate);
-        });
-    }
-}
-*/
+
+
 function updateMissionDatePickers(e) {
     const endDateValue = e.target.value; // Get the value of the endDateInput
     const startDateValue = document.getElementById('startDateInput').value; // Get the start date value
@@ -81,10 +65,15 @@ function updateMissionDatePickers(e) {
         });
     }
 }
+
+
 function initializeDeadlinePicker(missionNumber, startDate, endDate) {
     console.log("missionNUMBER", missionNumber)
     //console.log("startDate", startDate)
     //console.log("endDate", endDate)
+    const lastDate = new Date(endDate);
+    let lastDatee = new Date(lastDate.getTime()); 
+ 
 
     const currentDate = new Date();
     const currentHour = currentDate.getHours();
@@ -110,17 +99,25 @@ function initializeDeadlinePicker(missionNumber, startDate, endDate) {
     const hour = currentTimeStringg.split(":")[0]; // Extracts the hour
     const minute = currentTimeStringg.split(":")[1]; // Extracts the minute
 
+    const formattedEndDate = lastDatee
+    .toISOString().split('T')[0] + 'T' + currentTimeStringg.split(":")[0] + ':' + currentTimeStringg.split(":")[1];
 
     const end = new Date(new Date(endDate).setHours(hour, minute, 0, 0));
     //console.log("END", end)
+    const endOverlay = new Date(formattedEndDate)
 
     flatpickr(`#missionDeadline${missionNumber}`, {
-        enableTime: true,
-        time_24hr: true,
-        dateFormat: "Y-m-d H:i",
+        dateFormat: "Y-m-d",
         minDate: start, // Now correctly adjusted to be at least 1 hour ahead or the current time
-        maxDate: new Date(end.setDate(end.getDate() + 1)), // No need to adjust endDate anymore
+        maxDate: new Date(formattedEndDate), 
         locale: ThaiLocale,
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                // Using the already computed start and end times from the initializeDeadlinePicker scope
+                showOverlay(missionNumber, adjustedHour, currentMinute, hour, minute, start, formattedEndDate, selectedDates);
+            }
+            
+        },
         disable: [
             function(date) {
                 // Now unnecessary since minDate and maxDate should handle this
@@ -148,8 +145,8 @@ function createMissionInputGroup(missionNumber) {
     // Adjust the creation of mission deadline input to ensure it doesn't get replaced improperly
     let missionDeadlineInputHTML = `
         <label for="missionDeadline${missionNumber}">กำหนดเวลาสำหรับเป้าหมายนี้: (ไม่บังคับ)</label>
-        <input type="text" id="missionDeadline${missionNumber}" class="mission-deadline-input" placeholder="โปรดระบุวันที่สิ้นสุดก่อน" disabled>
-    `;
+        <input type="text" id="missionDeadline${missionNumber}" class="mission-deadline-input" 
+        placeholder="โปรดระบุวันที่สิ้นสุดก่อน" disabled>`;
 
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
@@ -170,6 +167,7 @@ function createMissionInputGroup(missionNumber) {
         const missionDeadlineInput = document.getElementById(`missionDeadline${missionNumber}`);
         missionDeadlineInput.disabled = false; // Enable the input
         missionDeadlineInput.placeholder = ''; // Clear the placeholder
+      
         // Initialize Flatpickr with the correct dates
         initializeDeadlinePicker(missionNumber, startDateValue, endDateValue);
     }
@@ -177,6 +175,83 @@ function createMissionInputGroup(missionNumber) {
     // Return the new mission input group element
     return missionInputGroup;
 };
+
+function formatDate(date) {
+    if (!(date instanceof Date)) {
+        console.error('formatDate: Provided value is not a Date object', date);
+        return null;
+    }
+    return date.toISOString().split('T')[0];
+}
+function updateSelectedDateDisplay(selectedDate) {
+    const selectedDateDisplay = document.getElementById('selectedDateDisplay');
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    selectedDateDisplay.textContent = selectedDate.toLocaleDateString('en-US', options);
+}
+function populateTimeLists(startHour, endHour, startMinute, endMinute, startDate, endDate, selectedDateArray) {
+    const selectedDate = selectedDateArray[0]; // Assuming selectedDateArray holds Date objects
+    const selectedHour = selectedDate.getHours(); // Extract the hour from the selected date
+    const selectedMinute = selectedDate.getMinutes(); // Extract the minute from the selected date
+
+    // Prepare to populate the hour and minute lists
+    const hourList = document.getElementById('hourPicker').querySelector('ul');
+    const minuteList = document.getElementById('minutePicker').querySelector('ul');
+
+    // Clear previous list items
+    hourList.innerHTML = '';
+    minuteList.innerHTML = '';
+
+    // Check if the selected date is the start or end date
+    const startDateStr = formatDate(startDate);
+    const endDateStr = formatDate(new Date(endDate));
+    const selectedDateStr = formatDate(selectedDate);
+    const isStartDate = selectedDateStr === startDateStr;
+    const isEndDate = selectedDateStr === endDateStr;
+
+    // Adjust the start and end hours and minutes based on the selected date
+    const currentStartHour = isStartDate ? startHour : 0;
+    const currentEndHour = isEndDate ? endHour : 23;
+    const currentStartMinute = (isStartDate && selectedHour === startHour) ? startMinute : 0;
+    const currentEndMinute = (isEndDate && selectedHour === endHour) ? endMinute : 59;
+
+    // Populate hours
+    for (let i = currentStartHour; i <= currentEndHour; i++) {
+        let li = document.createElement('li');
+        li.textContent = i < 10 ? '0' + i : i;
+        hourList.appendChild(li);
+    }
+
+    // Populate minutes
+    for (let i = currentStartMinute; i <= currentEndMinute; i++) {
+        let li = document.createElement('li');
+        li.textContent = i < 10 ? '0' + i : i;
+        minuteList.appendChild(li);
+    }
+
+    // Update the display for the selected date
+    updateSelectedDateDisplay(selectedDate); // Update the displayed date in the overlay
+
+    // Scroll to the selected hour and minute if necessary
+    // ... (existing scrolling code) ...
+}
+
+
+function showOverlay(missionNumber, startHour, startMinute, endHour, endMinute, startDate, endDate, selected) {
+    const overlay = document.getElementById('overlay');
+    updateSelectedDateDisplay(selected[0]);
+
+    if (overlay) {
+        overlay.style.display = 'flex'; // This will make the overlay and its content visible
+        populateTimeLists(startHour, endHour, startMinute, endMinute, startDate, endDate, selected); // Populate the time selection lists
+    }
+}
+
+function hideOverlay() {
+    document.getElementById('overlay').style.display = 'none';
+}
+
+// Event listener for closing the overlay
+document.getElementById('closeOverlay').addEventListener('click', hideOverlay);
 
 
 
