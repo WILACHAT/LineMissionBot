@@ -100,80 +100,76 @@ async function updateMissionStatus(missionId, completed) {
         console.error('Error updating mission status:', error);
     }
 }
-
 function startCountdown(endDate, sessionId) {
-
-    var sessionContainer = document.getElementById(`session-container-${sessionId}`);
-    if (!sessionContainer) {
-        // Create the session container if it does not exist
-        sessionContainer = document.createElement('div');
-        sessionContainer.id = `session-container-${sessionId}`;
-        sessionContainer.classList.add('session-container');
-        // Append the new session container to the main container, likely where you have 'whatisgoingon'
-        document.getElementById('whatisgoingon').prepend(sessionContainer);
+    // Check if there's already a countdown for this session, remove it if there is
+    var existingCountdown = document.getElementById(`countdown-${sessionId}`);
+    if (existingCountdown) {
+        existingCountdown.remove();
     }
+
     // Create the countdown container dynamically
     var countdownContainer = document.createElement('div');
     countdownContainer.classList.add('countdownclass');
     countdownContainer.id = `countdown-${sessionId}`;
 
-    // Clone the countdown structure for this container
-    var countdownBackground = document.createElement('div');
-    countdownBackground.id = 'countdown-background';
-
+    // Create the structure for the countdown
     var daysBox = document.createElement('div');
-    daysBox.id = 'days-box';
+    daysBox.classList.add('days-box');
     var hoursBox = document.createElement('div');
-    hoursBox.id = 'hours-box';
+    hoursBox.classList.add('hours-box');
     var minutesBox = document.createElement('div');
-    minutesBox.id = 'minutes-box';
+    minutesBox.classList.add('minutes-box');
     var secondsBox = document.createElement('div');
-    secondsBox.id = 'seconds-box';
+    secondsBox.classList.add('seconds-box');
 
     var daysLabel = document.createElement('div');
-    daysLabel.id = 'days-label';
+    daysLabel.classList.add('days-label');
     daysLabel.textContent = 'วัน';
     var hoursLabel = document.createElement('div');
-    hoursLabel.id = 'hours-label';
+    hoursLabel.classList.add('hours-label');
     hoursLabel.textContent = 'ชั่วโมง';
     var minutesLabel = document.createElement('div');
-    minutesLabel.id = 'minutes-label';
+    minutesLabel.classList.add('minutes-label');
     minutesLabel.textContent = 'นาที';
     var secondsLabel = document.createElement('div');
-    secondsLabel.id = 'seconds-label';
+    secondsLabel.classList.add('seconds-label');
     secondsLabel.textContent = 'วินาที';
 
     var daysNumber = document.createElement('div');
-    daysNumber.id = 'days-number';
+    daysNumber.classList.add('days-number');
     var hoursNumber = document.createElement('div');
-    hoursNumber.id = 'hours-number';
+    hoursNumber.classList.add('hours-number');
     var minutesNumber = document.createElement('div');
-    minutesNumber.id = 'minutes-number';
+    minutesNumber.classList.add('minutes-number');
     var secondsNumber = document.createElement('div');
-    secondsNumber.id = 'seconds-number';
+    secondsNumber.classList.add('seconds-number');
 
-    // Append all elements to the countdown background
-    countdownBackground.appendChild(daysBox);
-    countdownBackground.appendChild(hoursBox);
-    countdownBackground.appendChild(minutesBox);
-    countdownBackground.appendChild(secondsBox);
+    // Append the number and label divs to the corresponding box divs
+    daysBox.appendChild(daysNumber);
+    daysBox.appendChild(daysLabel);
+    hoursBox.appendChild(hoursNumber);
+    hoursBox.appendChild(hoursLabel);
+    minutesBox.appendChild(minutesNumber);
+    minutesBox.appendChild(minutesLabel);
+    secondsBox.appendChild(secondsNumber);
+    secondsBox.appendChild(secondsLabel);
 
-    countdownBackground.appendChild(daysLabel);
-    countdownBackground.appendChild(hoursLabel);
-    countdownBackground.appendChild(minutesLabel);
-    countdownBackground.appendChild(secondsLabel);
+    // Append the box divs to the countdown container
+    countdownContainer.appendChild(daysBox);
+    countdownContainer.appendChild(hoursBox);
+    countdownContainer.appendChild(minutesBox);
+    countdownContainer.appendChild(secondsBox);
 
-    countdownBackground.appendChild(daysNumber);
-    countdownBackground.appendChild(hoursNumber);
-    countdownBackground.appendChild(minutesNumber);
-    countdownBackground.appendChild(secondsNumber);
+    // Find the session container
+    var sessionContainer = document.getElementById(`session-container-${sessionId}`);
+    if (!sessionContainer) {
+        sessionContainer = document.createElement('div');
+        sessionContainer.id = `session-container-${sessionId}`;
+        sessionContainer.classList.add('session-container');
+        document.getElementById('whatisgoingon').prepend(sessionContainer);
+    }
 
-
-    // Append the countdown background to the countdown container
-    countdownContainer.appendChild(countdownBackground);
-
-    // Append the countdown container to the main missions container
-    document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
+    // Prepend the countdown to the session container so it appears above the missions
     sessionContainer.prepend(countdownContainer);
 
     // Start the countdown
@@ -187,7 +183,7 @@ function startCountdown(endDate, sessionId) {
             hoursNumber.textContent = '00';
             minutesNumber.textContent = '00';
             secondsNumber.textContent = '00';
-            countdownContainer.innerHTML += 'EXPIRED';
+            countdownContainer.innerHTML = 'EXPIRED'; // You might want to adjust this to match your UI design
         } else {
             var days = Math.floor(distance / (1000 * 60 * 60 * 24));
             var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -200,8 +196,8 @@ function startCountdown(endDate, sessionId) {
             secondsNumber.textContent = seconds.toString().padStart(2, '0');
         }
     }, 1000);
-
 }
+
 
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
