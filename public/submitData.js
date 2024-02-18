@@ -55,7 +55,6 @@ function createMissionInputGroup(missionNumber) {
     titleDropdownHTML += `</select>`;
 
 
-
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
@@ -67,15 +66,7 @@ function createMissionInputGroup(missionNumber) {
     const missionsContainer = document.getElementById('missionsContainer');
     missionsContainer.appendChild(missionInputGroup);
 
-    // Check if the endDateInput has a value and enable the mission deadline input accordingly
-    const endDateValue = document.getElementById('endDateInput').value;
-    if (endDateValue) {
-        const startDateValue = document.getElementById('startDateInput').value;
-        const missionDeadlineInput = document.getElementById(`missionDeadline${missionNumber}`);
-        missionDeadlineInput.disabled = false; // Enable the input
-        missionDeadlineInput.placeholder = ''; // Clear the placeholder
-        // Initialize Flatpickr with the correct dates
-    }
+
 
     // Return the new mission input group element
     return missionInputGroup;
@@ -418,27 +409,11 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 
                 // Get the due date and time from the input
                 // Assuming duedateInput is in the format "YYYY-MM-DDTHH:MM" (ISO local date-time format)
-                const duedateInput = document.getElementById(`missionDeadline${i}`).value;
-                console.log("this is the duedate before save", duedateInput);
             
-                // Create a Date object from the input string
-                let duedateUTC = null;
-
-                // Check if duedateInput is not null and not an empty string
-                if (duedateInput) {
-                    // Create a Date object from the input string
-                    let duedateLocal = new Date(duedateInput);
-                    
-                    // Convert the local Date object to a UTC string
-                    duedateUTC = duedateLocal.toISOString();
-                    
-                    console.log("this is the duedate after conversion to UTC", duedateUTC);
-                }
-            
-                console.log("this is the duedate after conversion to UTC", duedateUTC);
+                
             
                 // Push the data with the UTC date and time
-                missionData.push({ title, description, duedate: duedateUTC });
+                missionData.push({ title, description });
             }
             
             
