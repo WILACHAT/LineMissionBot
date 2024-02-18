@@ -3,12 +3,31 @@ let missionCount = 0;
 let currentMissionIndex = 1;
 const titleOptions = ["การเรียน", "งาน", "ออกกำลังกาย", "การทำสมาธิ", "ความสัมพันธ์", "การกิน", "การเงิน" ,"การอ่าน", "อื่นๆ"];
 
+const ThaiLocale = {
+    weekdays: {
+        shorthand: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        longhand: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+    },
+    months: {
+        shorthand: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+        longhand: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+    },
+    firstDayOfWeek: 1, 
+    ordinal: function (nth) {
+        return nth;
+    },
+    rangeSeparator: ' ถึง ',
+    weekAbbreviation: 'สัปดาห์',
+    scrollTitle: 'เลื่อนเพื่อเพิ่มหรือลด',
+    toggleTitle: 'คลิกเพื่อเปลี่ยน',
+};
 function initializeFlatpickr() {
     // Initialize Flatpickr only for the end date with initial settings
     flatpickr("#endDateInput", {
         dateFormat: "Y-m-d",
         minDate: new Date().fp_incr(1), // Tomorrow
         maxDate: new Date().fp_incr(30), // One month from today
+        locale: ThaiLocale,  // Set the locale to Thai
         disable: [
             function(date) {
                 // Disable dates outside of the initial valid range
@@ -18,17 +37,8 @@ function initializeFlatpickr() {
     });
 }
 
-function updateEndDatePicker() {
-    const startDateInput = document.getElementById('startDateInput');
-    const startDate = new Date(startDateInput.value);
 
-    // Update the min and max date for the endDateInput
-    const endDatePicker = flatpickr("#endDateInput", {
-        dateFormat: "Y-m-d",
-        minDate: new Date(startDate).fp_incr(1), // One day after start date
-        maxDate: new Date(startDate).fp_incr(30) // One month after start date
-    });
-}
+
 
 function createMissionInputGroup(missionNumber) {
     const missionInputGroup = document.createElement('div');
@@ -46,17 +56,13 @@ function createMissionInputGroup(missionNumber) {
     });
     titleDropdownHTML += `</select>`;
 
-    // Add date and time input for mission deadline
-    let deadlineInputHTML = `
-        <input type="datetime-local" id="missionDeadline ${missionNumber}" class="mission-deadline-input" required>
-    `;
+
 
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
         <label for="missionDeadline${missionNumber}">กำหนดเวลาสำหรับเป้าหมายนี้: (ไม่บังคับ)</label>
-        ${deadlineInputHTML}
         ${deleteButtonHTML}
     `;
 
