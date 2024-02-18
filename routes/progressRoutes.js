@@ -35,6 +35,7 @@ router.get('/getLatestIncompleteSession', async (req, res) => {
             endDate: session.EndDate
           });
         }
+        console.log("tell me what", sessionsData)
     
         // Respond with the sessions data
         res.json(sessionsData);
