@@ -309,12 +309,14 @@ document.addEventListener('DOMContentLoaded', function(req) {
         for (let i = 1; i <= missionCount; i++) {
             const title = document.getElementById(`missiontitle${i}`).value.trim();
             const description = document.getElementById(`missiondes${i}`).value.trim();
+
+
             if (!title || !description) {
                 allMissionsFilled = false;
                 break;
             }
         }
-    
+            
         if (!allMissionsFilled) {
             alert("Please fill in both the title and description for each mission.");
             return;
@@ -326,6 +328,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const today = new Date().toISOString().split('T')[0];
         console.log("startDateInput", startDateInput)
         console.log("endDateInput", endDateInput)
+
         console.log("today", today)
         console.log("walouch", new Date())
 
@@ -338,24 +341,45 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
        
-        let startDate = new Date(startDateInput + 'T' + currentTime);
-        let endDate = new Date(endDateInput + 'T' + currentTime);
+      
         const inputStartDate = new Date(startDateInput);
         const inputEndDate = new Date(endDateInput);
+
+        //alert("inputStartDate" + inputStartDate)
+        //alert("inputEndDate" + inputEndDate)
+
+
+
         
         // Calculate the difference in days
         const timeDiff = inputEndDate - inputStartDate;
+
         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+        //alert("timeDiff" + timeDiff)
+        //alert("daysDiff" + daysDiff)
+
+
+
         
         // Create UTC start date
         let startDatee = new Date(currentDateUTC + 'T' + currentTime);
-        
+
         // Create UTC end date by adding the difference in days
         let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
-        
-        // Format start and end dates to ISO strings
+
+        //alert("startDatee" + startDatee)
+        //alert("endDatee" + endDatee)
+
+
         const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
+       
+       // alert("formattedStartDate" + formattedStartDate)
+
         const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
+        //alert("formattedEndDate" + formattedEndDate)
+
+
      
 
         console.log("formattedStartDate", formattedStartDate)
@@ -367,10 +391,8 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
     
         // Validate that the start date is today and the end date is no earlier than the day after
-        if (endDate.getTime() >= startDate.getTime()) {
            
-          
-           
+        
             console.log("check startdate", formattedStartDate)
             console.log("check enddate", formattedEndDate)
 
@@ -381,8 +403,15 @@ document.addEventListener('DOMContentLoaded', function(req) {
             for (let i = 1; i <= missionCount; i++) {
                 const title = document.getElementById(`missiontitle${i}`).value;
                 const description = document.getElementById(`missiondes${i}`).value;
-                missionData.push({ title, description });
-    }
+                
+                // Get the due date and time from the input
+                // Assuming duedateInput is in the format "YYYY-MM-DDTHH:MM" (ISO local date-time format)
+             
+                // Push the data with the UTC date and time
+                missionData.push({ title, description});
+            }
+            
+            
     
             const data = {
                 userId: userId,
@@ -417,11 +446,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
             } catch (error) {
                 console.log("hehe")
             }
-        } else {
-            // If dates are invalid, show an alert and stop form submission
-            alert("Invalid date selected. Please select a valid date.");
-            return;
-        }
+      
     };
     
 });
