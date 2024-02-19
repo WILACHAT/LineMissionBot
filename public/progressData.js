@@ -101,7 +101,6 @@ async function updateMissionStatus(missionId, completed) {
     }
 }
 
-function startCountdown(endDate, sessionId) {
     // Create the countdown container dynamically
     function startCountdown(endDate, sessionId) {
         // Create the countdown container dynamically
@@ -191,7 +190,7 @@ function startCountdown(endDate, sessionId) {
             }
         }, 1000);
     }
-}
+
 
 
 
