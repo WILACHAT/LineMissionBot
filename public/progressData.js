@@ -108,6 +108,7 @@ function startCountdown(endDate, sessionId) {
     countdownContainer.id = `countdown-${sessionId}`;
 
     // Clone the countdown structure for this container
+    //var countdownBackground = document.getElementById('countdown-background')
     var countdownBackground = document.createElement('div');
     countdownBackground.id = 'countdown-background';
 
@@ -162,7 +163,7 @@ function startCountdown(endDate, sessionId) {
     countdownContainer.appendChild(countdownBackground);
 
     // Append the countdown container to the main missions container
-    document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
+   // document.getElementById(`missions-${sessionId}`).appendChild(countdownContainer);
 
     // Start the countdown
     var countdown = setInterval(function() {
@@ -204,8 +205,9 @@ window.onload = async function() {
             sessionsData.forEach(data => {
                 console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
-                    populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
                     startCountdown(new Date(data.endDate), data.session.SessionID);
+
+                    populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
                     setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
