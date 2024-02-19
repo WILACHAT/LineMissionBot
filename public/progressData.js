@@ -189,7 +189,7 @@ function startCountdown(endDate, sessionId) {
         }
     }, 1000);
 
-
+}
 
 
 window.onload = async function() {
