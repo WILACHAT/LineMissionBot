@@ -108,7 +108,6 @@ function startCountdown(endDate, sessionId) {
     countdownContainer.id = `countdown-${sessionId}`;
 
     // Clone the countdown structure for this container
-    //var countdownBackground = document.getElementById('countdown-background')
     var countdownBackground = document.createElement('div');
     countdownBackground.id = 'countdown-background';
 
