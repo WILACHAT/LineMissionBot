@@ -73,6 +73,10 @@ function populateMissions(missions, sessionId) {
         missionDiv.style.backgroundColor = mission.Complete ? '#FFA500' : 'white';
     });
 
+    const deleteButtonContainer = document.createElement('div');
+    deleteButtonContainer.classList.add('abovedeletebtn');
+
+    // Create delete button for the session
     const deleteSessionButton = document.createElement('button');
     deleteSessionButton.innerText = 'ลบเซสชันนี้';
     deleteSessionButton.classList.add('deletebtn');
@@ -85,17 +89,18 @@ function populateMissions(missions, sessionId) {
         customConfirm.setAttribute('data-session-id', sessionId);
     });
 
-    // Append the delete button to the session container
-    sessionMissionsContainer.appendChild(deleteSessionButton);
+    // Append the delete button to the wrapper container
+    deleteButtonContainer.appendChild(deleteSessionButton);
+
+    // Append the wrapper container to the session missions container
+    sessionMissionsContainer.appendChild(deleteButtonContainer);
 }
 
-// You should have this logic outside of the populateMissions function,
-// so it is set up once and can handle any session deletion.
 document.getElementById('confirmYes').addEventListener('click', async function() {
     const customConfirm = document.getElementById('customConfirm');
-    const sessionId = customConfirm.getAttribute('data-session-id'); // Retrieve the sessionId to delete
+    const sessionId = customConfirm.getAttribute('data-session-id');
     try {
-        // Replace 'userId' with the actual way you retrieve the userId in your app
+        // Update the fetch URL as needed for your application context
         const response = await fetch(`/deleteCurrentSession?sessionId=${sessionId}`, { method: 'DELETE' });
         if (response.ok) {
             window.location.reload(); // Reload the page
@@ -227,8 +232,6 @@ function startCountdown(endDate, sessionId) {
         }
     }, 1000);
 }
-
-
 
 
 window.onload = async function() {
