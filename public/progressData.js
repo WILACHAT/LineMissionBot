@@ -75,7 +75,7 @@ function populateMissions(missions, sessionId) {
 
     const deleteSessionButton = document.createElement('button');
     deleteSessionButton.innerText = 'ลบเซสชันนี้';
-    deleteSessionButton.classList.add('delete-session-button');
+    deleteSessionButton.classList.add('deletebtn');
     deleteSessionButton.addEventListener('click', function() {
         // Show the existing customConfirm dialog
         const customConfirm = document.getElementById('customConfirm');
@@ -96,7 +96,7 @@ document.getElementById('confirmYes').addEventListener('click', async function()
     const sessionId = customConfirm.getAttribute('data-session-id'); // Retrieve the sessionId to delete
     try {
         // Replace 'userId' with the actual way you retrieve the userId in your app
-        const response = await fetch(`/deleteSession?sessionId=${sessionId}`, { method: 'DELETE' });
+        const response = await fetch(`/deleteCurrentSession?sessionId=${sessionId}`, { method: 'DELETE' });
         if (response.ok) {
             window.location.reload(); // Reload the page
         } else {
