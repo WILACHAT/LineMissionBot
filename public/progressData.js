@@ -3,142 +3,120 @@ let missionsLoaded = false;
 
 async function fetchLatestIncompleteSession(userId) {
     const response = await fetch(`/progress/getLatestIncompleteSession?userId=${userId}`);
+    console.log("this is the response", response)
     if (!response.ok) {
         throw new Error('Session not found or an error occurred.');
     }
     return response.json();
 }
+function populateMissions(missions, sessionId) {
+    // Create or get a unique container for the missions of this particular session
+    let sessionMissionsContainer = document.getElementById(`missions-${sessionId}`);
+    if (!sessionMissionsContainer) {
+        // If the container doesn't exist, create it and append it to the main missions container
+        sessionMissionsContainer = document.createElement('div');
+        sessionMissionsContainer.id = `missions-${sessionId}`;
+        sessionMissionsContainer.classList.add('session-missions-container');
+        document.getElementById('missions').appendChild(sessionMissionsContainer);
+    }
 
-function createCountdownTimer(dueDate, countdownTimer, completeButton) {
-    let endDate = new Date(dueDate).getTime();
+    // Clear the container to ensure we're not duplicating missions
+    sessionMissionsContainer.innerHTML = '';
 
-    let countdown = setInterval(function() {
-        let now = new Date().getTime();
-        let distance = endDate - now;
-
-        if (distance < 0) {
-            clearInterval(countdown);
-            countdownTimer.innerText = 'Expired';
-            completeButton.disabled = true;
-        } else {
-            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            countdownTimer.innerText = `เหลือเวลา: ${days} วัน ${hours} ชั่วโมง ${minutes} นาที ${seconds} วินาที`;
-            countdownTimer.style.color = 'white'; // Change the color to red
-        }
-    }, 1000);
-}
-function populateMissions(missions) {
-    const missionsContainer = document.getElementById('missions');
-    missionsContainer.innerHTML = '';
-
+    // Iterate through each mission and create its DOM elements
     missions.forEach(mission => {
+        // Create the container for the individual mission
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
 
+        // Create and append the mission title element
         const missionTitle = document.createElement('div');
         missionTitle.classList.add('mission-title');
-        missionTitle.innerText = mission.Title;
+        missionTitle.innerText = mission.Title; // Assuming 'Title' is the correct property
         missionDiv.appendChild(missionTitle);
 
+        // Create and append the mission description element
         const missionDesc = document.createElement('div');
         missionDesc.classList.add('mission-description');
-        missionDesc.innerText = mission.Description;
+        missionDesc.innerText = mission.Description; // Assuming 'Description' is the correct property
         missionDiv.appendChild(missionDesc);
 
-        let missionDueDate;
-        if (mission.Due_Date) {
-            missionDueDate = document.createElement('div');
-            missionDueDate.classList.add('mission-due-date');
-            missionDueDate.innerText = `วันที่ครบกำหนด: ${new Date(mission.Due_Date).toLocaleString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}`;
-            missionDiv.appendChild(missionDueDate);
-        }
-
-        const countdownTimer = document.createElement('div');
-        countdownTimer.classList.add('countdown-timer');
-        missionDiv.appendChild(countdownTimer);
-
-        const completeButton = document.createElement('button');
-        completeButton.classList.add('complete-mission');
-        completeButton.setAttribute('data-mission-id', mission.Misson_ID);
-        completeButton.setAttribute('data-completed', mission.Complete.toString());
-        completeButton.innerText = mission.Complete ? 'ยังไม่เสร็จ' : 'เสร็จแล้ว';
-        missionDiv.appendChild(completeButton);
-
+        // Create and append the checkmark for completed missions
         const missionCheckmark = document.createElement('div');
         missionCheckmark.classList.add('mission-checkmark');
-        missionCheckmark.innerHTML = '✔';
-        missionCheckmark.style.display = mission.Complete ? 'block' : 'none';
+        missionCheckmark.innerHTML = mission.Complete ? '✔' : ''; // Adjust if needed
         missionDiv.appendChild(missionCheckmark);
 
-        const isExpired = mission.Due_Date && new Date(mission.Due_Date).getTime() < new Date().getTime();
-        if (isExpired) {
-            countdownTimer.innerText = 'หมดเวลา';
-            completeButton.disabled = true;
-            completeButton.classList.add('disabled');
-        } else if (mission.Due_Date) {
-            createCountdownTimer(mission.Due_Date, countdownTimer, completeButton);
-        }
+        // Create and append the Complete/Not Complete button
+        const completeButton = document.createElement('button');
+        completeButton.classList.add('complete-mission');
+        completeButton.setAttribute('data-mission-id', mission.Mission_ID); // Assuming 'Mission_ID' is correct
+        completeButton.setAttribute('data-completed', mission.Complete);
+        completeButton.innerText = mission.Complete ? 'Not Complete' : 'Complete'; // Toggle button text based on status
+        missionDiv.appendChild(completeButton);
 
-        if (mission.Complete || isExpired) {
-            countdownTimer.style.display = 'none';
-            if (missionDueDate) missionDueDate.style.display = 'none';
-        }
-
+        // Add an event listener to the Complete/Not Complete button
         completeButton.addEventListener('click', function() {
-            const currentlyCompleted = this.getAttribute('data-completed') === 'true';
-            const newCompletedState = !currentlyCompleted;
-
-            updateMissionStatus(mission.Misson_ID, newCompletedState);
-            this.setAttribute('data-completed', newCompletedState.toString());
-            this.innerText = newCompletedState ? 'ยังไม่เสร็จ' : 'เสร็จแล้ว';
-            missionDiv.style.backgroundColor = newCompletedState ? '#FFA500' : 'white';
-
-            missionCheckmark.style.display = newCompletedState ? 'block' : 'none';
-            countdownTimer.style.display = newCompletedState || isExpired ? 'none' : '';
-            if (missionDueDate) missionDueDate.style.display = newCompletedState || isExpired ? 'none' : '';
+            // Toggle the completed status
+            const completed = this.getAttribute('data-completed') === 'true';
+            updateMissionStatus(mission.Mission_ID, !completed); // Function to update the status
+            this.setAttribute('data-completed', !completed);
+            this.innerText = !completed ? 'Not Complete' : 'Complete';
+            missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white'; // Change color based on status
+            missionCheckmark.style.display = !completed ? 'block' : 'none'; // Show or hide checkmark
         });
 
-        missionsContainer.appendChild(missionDiv);
+        // Append the mission to the session's missions container
+        sessionMissionsContainer.appendChild(missionDiv);
+
+        // Set the background color of the mission element based on completion status
         missionDiv.style.backgroundColor = mission.Complete ? '#FFA500' : 'white';
     });
 
-    missionsLoaded = true;
-};
+    const deleteButtonContainer = document.createElement('div');
+    deleteButtonContainer.classList.add('abovedeletebtn');
 
+    // Create delete button for the session
+    const deleteSessionButton = document.createElement('button');
+    deleteSessionButton.innerText = 'ลบเซสชันนี้';
+    deleteSessionButton.classList.add('deletebtn');
+    deleteSessionButton.addEventListener('click', function() {
+        // Show the existing customConfirm dialog
+        const customConfirm = document.getElementById('customConfirm');
+        customConfirm.style.display = 'block';
 
+        // Temporarily store the sessionId in a place accessible by the confirmation buttons
+        customConfirm.setAttribute('data-session-id', sessionId);
+    });
 
+    // Append the delete button to the wrapper container
+    deleteButtonContainer.appendChild(deleteSessionButton);
 
-
-
-function showCustomPopup(message, showButtons = true) {
-    const popup = document.getElementById('customConfirm');
-    const messageParagraph = popup.getElementsByTagName('p')[0];
-    const buttonsContainer = popup.querySelector('.button-container');
-
-    // Update the popup message
-    messageParagraph.textContent = message;
-
-    // Optionally show or hide the confirmation buttons
-    buttonsContainer.style.display = showButtons ? 'block' : 'none';
-
-    // Display the popup
-    popup.style.display = 'block';
-
-    // If not showing buttons, you might want to auto-hide the popup after a delay
-    if (!showButtons) {
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 800); // Adjust time as needed
-    }
+    // Append the wrapper container to the session missions container
+    sessionMissionsContainer.appendChild(deleteButtonContainer);
 }
 
+document.getElementById('confirmYes').addEventListener('click', async function() {
+    const customConfirm = document.getElementById('customConfirm');
+    const sessionId = customConfirm.getAttribute('data-session-id');
+    try {
+        // Update the fetch URL as needed for your application context
+        const response = await fetch(`/deleteCurrentSession?sessionId=${sessionId}`, { method: 'DELETE' });
+        if (response.ok) {
+            window.location.reload(); // Reload the page
+        } else {
+            throw new Error('Failed to delete session');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    customConfirm.style.display = 'none'; // Hide the dialog after processing
+});
 
-
-
+document.getElementById('confirmNo').addEventListener('click', function() {
+    const customConfirm = document.getElementById('customConfirm');
+    customConfirm.style.display = 'none'; // Hide the dialog if the user cancels
+});
 
 
 async function updateMissionStatus(missionId, completed) {
@@ -164,24 +142,82 @@ async function updateMissionStatus(missionId, completed) {
     }
 }
 
-function startCountdown(endDate) {
-    var countdownContainer = document.getElementById('countdown');
-    // Make sure we don't overwrite our countdown structure
-    var daysElem = document.getElementById('days-number');
-    var hoursElem = document.getElementById('hours-number');
-    var minutesElem = document.getElementById('minutes-number');
-    var secondsElem = document.getElementById('seconds-number');
+function startCountdown(endDate, sessionId) {
+    // Create the countdown container dynamically
+    var countdownContainer = document.createElement('div');
+    countdownContainer.classList.add('countdownclass');
+    countdownContainer.id = `countdown-${sessionId}`;
 
+    // Clone the countdown structure for this container
+    var countdownBackground = document.createElement('div');
+    countdownBackground.id = 'countdown-background';
+
+    var daysBox = document.createElement('div');
+    daysBox.id = 'days-box';
+    var hoursBox = document.createElement('div');
+    hoursBox.id = 'hours-box';
+    var minutesBox = document.createElement('div');
+    minutesBox.id = 'minutes-box';
+    var secondsBox = document.createElement('div');
+    secondsBox.id = 'seconds-box';
+
+    var daysLabel = document.createElement('div');
+    daysLabel.id = 'days-label';
+    daysLabel.textContent = 'วัน';
+    var hoursLabel = document.createElement('div');
+    hoursLabel.id = 'hours-label';
+    hoursLabel.textContent = 'ชั่วโมง';
+    var minutesLabel = document.createElement('div');
+    minutesLabel.id = 'minutes-label';
+    minutesLabel.textContent = 'นาที';
+    var secondsLabel = document.createElement('div');
+    secondsLabel.id = 'seconds-label';
+    secondsLabel.textContent = 'วินาที';
+
+    var daysNumber = document.createElement('div');
+    daysNumber.id = 'days-number';
+    var hoursNumber = document.createElement('div');
+    hoursNumber.id = 'hours-number';
+    var minutesNumber = document.createElement('div');
+    minutesNumber.id = 'minutes-number';
+    var secondsNumber = document.createElement('div');
+    secondsNumber.id = 'seconds-number';
+
+    // Append all elements to the countdown background
+    countdownBackground.appendChild(daysBox);
+    countdownBackground.appendChild(hoursBox);
+    countdownBackground.appendChild(minutesBox);
+    countdownBackground.appendChild(secondsBox);
+
+    countdownBackground.appendChild(daysLabel);
+    countdownBackground.appendChild(hoursLabel);
+    countdownBackground.appendChild(minutesLabel);
+    countdownBackground.appendChild(secondsLabel);
+
+    countdownBackground.appendChild(daysNumber);
+    countdownBackground.appendChild(hoursNumber);
+    countdownBackground.appendChild(minutesNumber);
+    countdownBackground.appendChild(secondsNumber);
+
+    // Append the countdown background to the countdown container
+    countdownContainer.appendChild(countdownBackground);
+
+    // Prepend the countdown container to the missions container
+    var missionsContainer = document.getElementById('missions');
+    var sessionMissionsContainer = document.getElementById(`missions-${sessionId}`);
+    missionsContainer.insertBefore(countdownContainer, sessionMissionsContainer);
+
+    // Start the countdown
     var countdown = setInterval(function() {
         var now = new Date().getTime();
-        var distance = endDate - now;
+        var distance = endDate.getTime() - now;
 
         if (distance < 0) {
             clearInterval(countdown);
-            daysElem.innerText = '00';
-            hoursElem.innerText = '00';
-            minutesElem.innerText = '00';
-            secondsElem.innerText = '00';
+            daysNumber.textContent = '00';
+            hoursNumber.textContent = '00';
+            minutesNumber.textContent = '00';
+            secondsNumber.textContent = '00';
             countdownContainer.innerHTML += 'EXPIRED';
         } else {
             var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -189,45 +225,45 @@ function startCountdown(endDate) {
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            daysElem.innerText = days.toString().padStart(2, '0');
-            hoursElem.innerText = hours.toString().padStart(2, '0');
-            minutesElem.innerText = minutes.toString().padStart(2, '0');
-            secondsElem.innerText = seconds.toString().padStart(2, '0');
+            daysNumber.textContent = days.toString().padStart(2, '0');
+            hoursNumber.textContent = hours.toString().padStart(2, '0');
+            minutesNumber.textContent = minutes.toString().padStart(2, '0');
+            secondsNumber.textContent = seconds.toString().padStart(2, '0');
         }
     }, 1000);
-    countdownLoaded = true;
-   // checkAndDisplayContent();
 }
 
 
-
-// Inside the window.onload function
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
     const userId = params.get('userId');
 
     try {
-        const data = await fetchLatestIncompleteSession(userId);
-        console.log("data received after fetch", data);
+        const sessionsData = await fetchLatestIncompleteSession(userId);
+        console.log("data received after fetch", sessionsData);
 
-        // Check if there is an existing session and it's not complete
-        if (data.session && !data.session.Complete) {
-            populateMissions(data.missions);
-            startCountdown(new Date(data.endDate));
-            setupCompleteSessionButton(userId);
-
-            setupDeleteSessionButton(userId);
-
-            document.getElementById('whatisgoingon').style.display = 'block';
+        if (sessionsData && sessionsData.length > 0) {
+            sessionsData.forEach(data => {
+                console.log("missions for session", data.session.SessionID, data.missions);
+                if (data.session && !data.session.Complete) {
+                    populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
+                    startCountdown(new Date(data.endDate), data.session.SessionID);
+                   // setupDeleteSessionButton(data.session.SessionID);
+                    document.getElementById('whatisgoingon').style.display = 'block';
+                } else {
+                    displayNoSessionMessage(userId);
+                }
+            });
         } else {
-            // Handle the case where there is no session or missions
             displayNoSessionMessage(userId);
         }
+        
     } catch (error) {
         console.error('Error:', error);
-        displayNoSessionMessage(userId); // Display the message in case of an error too
+        displayNoSessionMessage(userId);
     }
 };
+
 
 function displayNoSessionMessage(userId) {
     const startNewMissionLink = `<a href="index.html?userId=${userId}" class="start-new-mission">เริ่มเซสชันภารกิจใหม่</a>`;
@@ -238,72 +274,6 @@ function displayNoSessionMessage(userId) {
         </div>`;
     document.getElementById('countdown').style.display = 'none';
     document.getElementById('deleteSessionButton').style.display = 'none';
-    document.getElementById('doneSessionButton').style.display = 'none';
-
     document.getElementById('whatisgoingon').style.display = 'block';
-}
-function setupCompleteSessionButton(userId) {
-    // Client-side JavaScript
-const doneSessionButton = document.getElementById('doneSessionButton');
-if (doneSessionButton) {
-    doneSessionButton.addEventListener('click', async function() {
-        const isConfirmed = confirm("Are you sure you want to mark this session as completed?");
-        if (!isConfirmed) return;
-
-        try {
-            console.log("hi", userId)
-            // Note: userId is appended in the query parameters, not sent in the body
-            // Client-side
-            const response = await fetch('/progress/completeMissionSession', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId: userId })
-            });
-
-
-            if (!response.ok) throw new Error('Failed to complete the session.');
-
-            alert('Session marked as completed successfully!');
-            window.location.reload(); // or redirect
-        } catch (error) {
-            console.error('Error completing the session:', error);
-            alert('There was an error completing the session.');
-        }
-    });
-}
 
 }
-
-
-function setupDeleteSessionButton(userId) {
-    const deleteSessionButton = document.getElementById('deleteSessionButton');
-    const customConfirm = document.getElementById('customConfirm');
-    const confirmYes = document.getElementById('confirmYes');
-    const confirmNo = document.getElementById('confirmNo');
-
-    deleteSessionButton.addEventListener('click', function() {
-        customConfirm.style.display = 'block';
-    });
-
-    confirmYes.addEventListener('click', async function() {
-        try {
-            const response = await fetch(`/deleteCurrentSession?userId=${userId}`, { method: 'DELETE' });
-            if (response.ok) {
-                //alert('Current session has been deleted.');
-                window.location.reload(); // Reload the page
-            } else {
-                throw new Error('Failed to delete session');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        customConfirm.style.display = 'none';
-    });
-
-    confirmNo.addEventListener('click', function() {
-        customConfirm.style.display = 'none';
-    });
-}
-

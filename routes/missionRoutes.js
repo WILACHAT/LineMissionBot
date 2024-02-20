@@ -43,17 +43,13 @@ router.post('/submit', async (req, res) => {
 });
 
 router.delete('/deleteCurrentSession', async (req, res) => {
-    const userId =  req.query.userId // Obtain userId from query parameter
+    const sessionId =  req.query.sessionId // Obtain userId from query parameter
 
     try {
-        const latestSession = await db.getLatestSessionByUserId(userId);
-        if (latestSession && !latestSession.Complete) {
-            // Delete the session here
-            await db.deleteSessionById(latestSession.SessionID);
-            res.json({ message: 'Session deleted successfully' });
-        } else {
-            res.status(404).json({ message: 'No active session to delete' });
-        }
+       
+        await db.deleteSessionById(sessionId);
+        res.json({ message: 'Session deleted successfully' });
+     
     } catch (error) {
         console.error('Error deleting session:', error);
         res.status(500).json({ error: 'Internal Server Error' });

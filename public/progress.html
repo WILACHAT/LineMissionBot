@@ -12,7 +12,7 @@
             background: #FDD771;
         }
         .mission {
-    width: 94%;
+    width: 500px;
     margin: 10px auto; /* Center the mission horizontally */
     padding: 10px;
     background: white;
@@ -69,8 +69,14 @@
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
     .mission {
-        width: 90%; /* Adjusting width for smaller screens */
-        margin: 10px 5%;
+    width: 90%;
+    margin: 10px auto; /* Center the mission horizontally */
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    position: relative;
     }
 }
 
@@ -194,6 +200,10 @@ h1{
     color: white;
     cursor: pointer;
     font-size: 16px;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+
+
 }
 .donedonebtn {
     padding: 10px 20px;
@@ -312,8 +322,7 @@ h1{
 }
 
 
-
-    </style>
+</style>
 </head>
 <body>
     
@@ -328,42 +337,14 @@ h1{
     </div>
    
     <div id="whatisgoingon" style="display: none;" style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-center; align-items: center; gap: 28px; display: inline-flex">
-        <div class="thai-text-label">เป้าหมายของคุณ</div>
-        <div id="countdown" class="countdownclass">
-            <div id="countdown-background"></div>
-            <div id="days-box"></div>
-            <div id="hours-box"></div>
-            <div id="minutes-box"></div>
-            <div id="seconds-box"></div>
-            <div id="days-label">วัน</div>
-            <div id="hours-label">ชั่วโมง</div>
-            <div id="minutes-label">นาที</div>
-            <div id="seconds-label">วินาที</div>
-            <div id="days-number">00</div>
-            <div id="hours-number">00</div>
-            <div id="minutes-number">00</div>
-            <div id="seconds-number">00</div>
-        </div>
         
-        <div id="missions" style="flex-direction: column; justify-content: flex-center; align-items: flex-center; gap: 34px; display: flex">
-            <div style="width: 351px; height: 100px; position: relative">
-                <div style="width: 351px; height: 100px; left: 0px; top: 0px; position: absolute; background: white; box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17); border-radius: 14px"></div>
-                <div style="width: 129px; height: 20px; left: 74px; top: 17px; position: absolute; color: black; font-size: 19px; font-family: Sarabun; font-weight: 600; word-wrap: break-word">ชื่อภารกิจ</div>
-                <div style="width: 268px; height: 40.91px; left: 74px; top: 42px; position: absolute; color: black; font-size: 14.80px; font-family: Sarabun; font-weight: 400; word-wrap: break-word">Description hello my name is earth ayo wassup</div>
-                <div style="width: 29px; height: 32.95px; left: 23px; top: 32.95px; position: absolute; background: white; border-radius: 6px; border: 1.80px #FFD12E solid"></div>
-            </div>
+        <div id="missions" style="flex-direction: column; justify-content: flex-center; align-items: flex-center; display: flex">
         </div>
 
-        <div class="donebtn">
-            <button id="doneSessionButton" class="donedonebtn">เซสชันภารกิจเสร็จสิ้น</button>
-        </div>
-
-
-        <div class="abovedeletebtn">
-            <button id="deleteSessionButton" class="deletebtn">ลบเซสชันปัจจุบัน</button>
-        </div>
 
     </div>
+
+
       <div id="whatisgoingon2" style="display: none;">
         <h1>hello</h1>
     </div>
