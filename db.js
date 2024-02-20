@@ -69,7 +69,7 @@ async function getLatestIncompleteSessionByUserId(userId) {
   SELECT "SessionID", "EndDate", "Complete"
   FROM "LineSchemas"."MissionSessions" 
   WHERE "UserID" = $1 AND "Complete" = false
-  ORDER BY "SessionID" DESC;
+  ORDER BY "EndDate" ASC;
 `;
   const result = await pool.query(query, [userId]);
   console.log("this is the result from getLatestIncomplete", result)
@@ -80,6 +80,7 @@ async function getLatestIncompleteSessionByUserId(userId) {
     return null; // Return null if no incomplete session exists
   }
 }
+
 async function updateMissionStatus(missionId, completed) {
   console.log("missionid", missionId)
   console.log("completed", completed)
