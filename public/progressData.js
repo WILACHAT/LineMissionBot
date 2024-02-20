@@ -73,9 +73,43 @@ function populateMissions(missions, sessionId) {
         missionDiv.style.backgroundColor = mission.Complete ? '#FFA500' : 'white';
     });
 
-    // Variable to track if missions have been loaded - ensure this is declared and managed appropriately
-    missionsLoaded = true;
+    // Create delete button for the session
+    const deleteSessionButton = document.createElement('button');
+    deleteSessionButton.innerText = 'ลบเซสชันนี้';
+    deleteSessionButton.classList.add('delete-session-button');
+    deleteSessionButton.addEventListener('click', function() {
+        const customConfirm = document.createElement('div');
+        // Setup your customConfirm similar to your modal confirmation dialog
+        customConfirm.innerHTML = `
+            <p>Are you sure you want to delete this session?</p>
+            <button id="confirmYes-${sessionId}">Yes</button>
+            <button id="confirmNo-${sessionId}">No</button>
+        `;
+        document.body.appendChild(customConfirm);
+
+        document.getElementById(`confirmYes-${sessionId}`).addEventListener('click', async function() {
+            try {
+                const response = await fetch(`/deleteSession?userId=${userId}&sessionId=${sessionId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    window.location.reload(); // Reload the page
+                } else {
+                    throw new Error('Failed to delete session');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+            document.body.removeChild(customConfirm);
+        });
+
+        document.getElementById(`confirmNo-${sessionId}`).addEventListener('click', function() {
+            document.body.removeChild(customConfirm);
+        });
+    });
+
+    // Append the delete button to the session container
+    sessionMissionsContainer.appendChild(deleteSessionButton);
 }
+
 
 
 async function updateMissionStatus(missionId, completed) {
@@ -209,7 +243,7 @@ window.onload = async function() {
                 if (data.session && !data.session.Complete) {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
                     startCountdown(new Date(data.endDate), data.session.SessionID);
-                    setupDeleteSessionButton(data.session.SessionID);
+                   // setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
                     displayNoSessionMessage(userId);
@@ -237,7 +271,7 @@ function displayNoSessionMessage(userId) {
     document.getElementById('deleteSessionButton').style.display = 'none';
     document.getElementById('whatisgoingon').style.display = 'block';
 }
-
+/*
 
 function setupDeleteSessionButton(userId) {
     const deleteSessionButton = document.getElementById('deleteSessionButton');
@@ -267,4 +301,4 @@ function setupDeleteSessionButton(userId) {
     confirmNo.addEventListener('click', function() {
         customConfirm.style.display = 'none';
     });
-}
+}*/
