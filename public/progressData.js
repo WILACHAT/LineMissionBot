@@ -77,44 +77,41 @@ function populateMissions(missions, sessionId) {
     deleteSessionButton.innerText = 'ลบเซสชันนี้';
     deleteSessionButton.classList.add('delete-session-button');
     deleteSessionButton.addEventListener('click', function() {
-        // Dynamically create and setup the customConfirm dialog
-        const customConfirm = document.createElement('div');
-        customConfirm.setAttribute('id', `customConfirm-${sessionId}`);
-        customConfirm.innerHTML = `
-            <p>Are you sure you want to delete this session?</p>
-            <button id="confirmYes-${sessionId}">Yes</button>
-            <button id="confirmNo-${sessionId}">No</button>
-        `;
-        document.body.appendChild(customConfirm);
+        // Show the existing customConfirm dialog
+        const customConfirm = document.getElementById('customConfirm');
+        customConfirm.style.display = 'block';
 
-        // Adding event listeners directly after appending to ensure elements are available
-        const confirmYesButton = document.getElementById(`confirmYes-${sessionId}`);
-        const confirmNoButton = document.getElementById(`confirmNo-${sessionId}`);
-
-        confirmYesButton.addEventListener('click', async function() {
-            try {
-                // Assuming `userId` is globally available or retrieved from a reliable source
-                const response = await fetch(`/deleteSession?userId=${userId}&sessionId=${sessionId}`, { method: 'DELETE' });
-                if (response.ok) {
-                    window.location.reload(); // Reload the page
-                } else {
-                    throw new Error('Failed to delete session');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-            document.body.removeChild(customConfirm);
-        });
-
-        confirmNoButton.addEventListener('click', function() {
-            document.body.removeChild(customConfirm);
-        });
+        // Temporarily store the sessionId in a place accessible by the confirmation buttons
+        customConfirm.setAttribute('data-session-id', sessionId);
     });
 
     // Append the delete button to the session container
     sessionMissionsContainer.appendChild(deleteSessionButton);
 }
 
+// You should have this logic outside of the populateMissions function,
+// so it is set up once and can handle any session deletion.
+document.getElementById('confirmYes').addEventListener('click', async function() {
+    const customConfirm = document.getElementById('customConfirm');
+    const sessionId = customConfirm.getAttribute('data-session-id'); // Retrieve the sessionId to delete
+    try {
+        // Replace 'userId' with the actual way you retrieve the userId in your app
+        const response = await fetch(`/deleteSession?sessionId=${sessionId}`, { method: 'DELETE' });
+        if (response.ok) {
+            window.location.reload(); // Reload the page
+        } else {
+            throw new Error('Failed to delete session');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    customConfirm.style.display = 'none'; // Hide the dialog after processing
+});
+
+document.getElementById('confirmNo').addEventListener('click', function() {
+    const customConfirm = document.getElementById('customConfirm');
+    customConfirm.style.display = 'none'; // Hide the dialog if the user cancels
+});
 
 
 async function updateMissionStatus(missionId, completed) {
@@ -277,4 +274,3 @@ function displayNoSessionMessage(userId) {
     document.getElementById('whatisgoingon').style.display = 'block';
 
 }
-
