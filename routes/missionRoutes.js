@@ -43,11 +43,11 @@ router.post('/submit', async (req, res) => {
 });
 
 router.delete('/deleteCurrentSession', async (req, res) => {
-    const userId =  req.query.sessionId // Obtain userId from query parameter
+    const sessionId =  req.query.sessionId // Obtain userId from query parameter
 
     try {
        
-        await db.deleteSessionById(latestSession.SessionID);
+        await db.deleteSessionById(sessionId);
         res.json({ message: 'Session deleted successfully' });
      
     } catch (error) {
