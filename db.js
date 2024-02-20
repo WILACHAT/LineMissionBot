@@ -74,7 +74,7 @@ async function getLatestIncompleteSessionByUserId(userId) {
   SELECT "SessionID", "EndDate", "Complete"
   FROM "LineSchemas"."MissionSessions" 
   WHERE "UserID" = $1 AND "Complete" = false
-  ORDER BY "SessionID" DESC;
+  ORDER BY "EndDate" ASC;
 `;
   const result = await pool.query(query, [userId]);
   console.log("this is the result from getLatestIncomplete", result)
