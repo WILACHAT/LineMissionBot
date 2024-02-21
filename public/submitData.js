@@ -22,21 +22,25 @@ const ThaiLocale = {
     toggleTitle: 'คลิกเพื่อเปลี่ยน',
 };
 function initializeFlatpickr() {
-    // Initialize Flatpickr only for the end date with initial settings
+    const now = new Date();
+    const minDatee = new Date(now.getTime() + (60 * 60 * 1000));
+    // Initialize Flatpickr
     flatpickr("#endDateInput", {
-        dateFormat: "Y-m-d",
-        minDate: new Date().fp_incr(1), // Tomorrow
-        maxDate: new Date().fp_incr(30), // One month from today
-        locale: ThaiLocale,  // Set the locale to Thai
+        enableTime: true, // Enable time picker
+        dateFormat: "Y-m-d H:i", // Include time in the date format
+        defaultDate: now, // Set default date and time to the current time
+        minDate: new Date(now.getTime() + (60 * 60 * 1000)), // Set minimum date and time to +1 hour from now
+        maxDate: new Date().fp_incr(30), // Maximum date one month from today
+        locale: ThaiLocale, // Set the locale to Thai
+        time_24hr: true, // Use 24-hour format for time picker
         disable: [
             function(date) {
                 // Disable dates outside of the initial valid range
-                return date < new Date().fp_incr(1) || date > new Date().fp_incr(30);
+                return date > new Date().fp_incr(30);
             }
         ]
     });
-}
-
+};
 
 
 
@@ -65,11 +69,7 @@ function createMissionInputGroup(missionNumber) {
         ${deleteButtonHTML}
     `;
     // Update the maximum deadline date when the end date changes
-    const endDateInput = document.getElementById('endDateInput');
-    endDateInput.addEventListener('change', function() {
-        const maxDeadlineDate = endDateInput.value;
-        document.getElementById(`missionDeadline${missionNumber}`).max = maxDeadlineDate;
-    });
+   
 
     return missionInputGroup;
 }
@@ -174,10 +174,10 @@ function setInitialDates() {
     const startDateInput = document.getElementById('startDateInput');
     startDateInput.value = formattedToday;
     startDateInput.readOnly = true;
-
-    updateEndDateInput();
+    //updateEndDateInput();
 }
 
+/*
 function updateEndDateInput() {
     const startDateInput = document.getElementById('startDateInput');
     const endDateInput = document.getElementById('endDateInput');
@@ -194,11 +194,12 @@ function updateEndDateInput() {
     maxEndDate.setMonth(maxEndDate.getMonth() + 1);
     maxEndDate.setDate(maxEndDate.getDate() - 1); // Set one day before a month to ensure it's within a month
     endDateInput.max = maxEndDate.toISOString().split('T')[0];
+    
 }
+*/
 //document.getElementById('startDateInput').addEventListener('change', updateEndDateInput);
+
 window.onload = setInitialDates;
-
-
 
 function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
@@ -234,8 +235,6 @@ window.onload = async function(req) {
         viewOngoingProgressLink.href = `/progress?userId=${userId}`;
     }
 };
-
-
 
 function setupDeleteSessionButton(userId) {
     const deleteSessionButton = document.getElementById('deleteSessionButton');
@@ -315,6 +314,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const today = new Date().toISOString().split('T')[0];
         console.log("startDateInput", startDateInput)
         console.log("endDateInput", endDateInput)
+        //alert("enddateeee")
 
         console.log("today", today)
         console.log("walouch", new Date())
@@ -322,22 +322,32 @@ document.addEventListener('DOMContentLoaded', function(req) {
         const currentDateUTC = new Date().toISOString().split('T')[0];
         console.log("Current UTC Date:", currentDateUTC);
 
+        const [endDate, endTime] = endDateInput.split(' ');
+        const [hours, minutes] = endTime.split(':');
+        const endDateLocal = new Date(endDate + 'T' + hours + ':' + minutes + ':00');
+        const formattedEndDateUTC = endDateLocal.getUTCFullYear() + '-' +
+        String(endDateLocal.getUTCMonth() + 1).padStart(2, '0') + '-' + // Months are 0-indexed
+        String(endDateLocal.getUTCDate()).padStart(2, '0') + 'T' +
+        String(endDateLocal.getUTCHours()).padStart(2, '0') + ':' +
+        String(endDateLocal.getUTCMinutes()).padStart(2, '0') + ':' +
+        '00'; // Adding '00' for seconds to match the desired format
 
+
+        // Convert endDate to the desired format, which is already in YYYY-MM-DD format
+        // Combine it with the time part to get the full dateTime in ISO format
 
         // Combine the date and time for both start and end dates
         const currentTime = new Date().toISOString().split('T')[1]; // Gets current time in ISO format
 
-       
-      
+ 
         const inputStartDate = new Date(startDateInput);
         const inputEndDate = new Date(endDateInput);
+        const inputEndDatee = new Date(endDate);
+
 
         //alert("inputStartDate" + inputStartDate)
-        //alert("inputEndDate" + inputEndDate)
+       //alert("inputEndDate" + inputEndDate)
 
-
-
-        
         // Calculate the difference in days
         const timeDiff = inputEndDate - inputStartDate;
 
@@ -360,11 +370,17 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
 
         const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
+        console.log("formatted starttime", formattedStartDate)
        
        // alert("formattedStartDate" + formattedStartDate)
 
         const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
-        //alert("formattedEndDate" + formattedEndDate)
+        const formattedEndDatee = inputEndDatee.toISOString() + 'T' + endTime + ':00'; 
+
+       // const formattedEndDatee = inputEndDate.toISOString().split('T')[0] + 'T' + currentTime;
+        console.log("first format enddate", formattedEndDate)
+        console.log("second format enddate", formattedEndDateUTC)
+       // alert("formattedEndDate" + formattedEndDate)
 
 
      
@@ -397,14 +413,12 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 // Push the data with the UTC date and time
                 missionData.push({ title, description});
             }
-            
-            
     
             const data = {
                 userId: userId,
                 missions: missionData,
                 startDate: formattedStartDate,
-                missionEndDate: formattedEndDate
+                missionEndDate: formattedEndDateUTC
             };
 
     
