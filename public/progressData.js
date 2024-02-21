@@ -259,7 +259,6 @@ window.onload = async function() {
         }
         
     } catch (error) {
-        console.error('Error:', error);
         displayNoSessionMessage(userId);
     }
 };
@@ -272,8 +271,6 @@ function displayNoSessionMessage(userId) {
             <p>คุณไม่มีเซสชันที่ใช้งานอยู่ในขณะนี้ คุณสามารถเริ่มภารกิจใหม่ได้</p>
             ${startNewMissionLink}
         </div>`;
-    document.getElementById('countdown').style.display = 'none';
-    document.getElementById('deleteSessionButton').style.display = 'none';
     document.getElementById('whatisgoingon').style.display = 'block';
 
 }
