@@ -56,7 +56,16 @@ function populateMissions(missions, sessionId) {
         missionDiv.appendChild(completeButton);
 
         // Add an event listener to the Complete/Not Complete button
-    
+        completeButton.addEventListener('click', function() {
+            // Toggle the completed status
+            const completed = this.getAttribute('data-completed') === 'true';
+            console.log("in update again")
+            updateMissionStatus(mission.Misson_ID, !completed); 
+            this.setAttribute('data-completed', !completed);
+            this.innerText = !completed ? 'Not Complete' : 'Complete';
+            missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white'; // Change color based on status
+            missionCheckmark.style.display = !completed ? 'block' : 'none'; // Show or hide checkmark
+        });
 
         // Append the mission to the session's missions container
         sessionMissionsContainer.appendChild(missionDiv);
