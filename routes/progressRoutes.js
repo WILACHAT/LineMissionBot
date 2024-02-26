@@ -54,6 +54,7 @@ router.post('/updateMissionStats', async (req, res) => {
     const { missionId, completed } = req.body;
     console.log("yoyoyo", req.body)
     console.log("heree2")
+    console.log("what is going on")
   
     try {
       await db.updateMissionStatus(missionId, completed);
