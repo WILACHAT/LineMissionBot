@@ -59,7 +59,7 @@ function populateMissions(missions, sessionId) {
         completeButton.addEventListener('click', function() {
             // Toggle the completed status
             const completed = this.getAttribute('data-completed') === 'true';
-            updateMissionStatus(mission.Mission_ID, !completed); // Function to update the status
+            updateMissionStatus(mission.Misson_ID, !completed); // Function to update the status
             this.setAttribute('data-completed', !completed);
             this.innerText = !completed ? 'Not Complete' : 'Complete';
             missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white'; // Change color based on status
