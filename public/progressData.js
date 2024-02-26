@@ -59,7 +59,7 @@ function populateMissions(missions, sessionId) {
         completeButton.addEventListener('click', function() {
             // Toggle the completed status
             const completed = this.getAttribute('data-completed') === 'true';
-            console.log("in update")
+            console.log("in update again")
             updateMissionStatus(mission.Misson_ID, !completed); // Function to update the status
             this.setAttribute('data-completed', !completed);
             this.innerText = !completed ? 'Not Complete' : 'Complete';
