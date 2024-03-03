@@ -10,91 +10,133 @@ async function fetchLatestIncompleteSession(userId) {
     return response.json();
 }
 function populateMissions(missions, sessionId) {
-    // Create or get a unique container for the missions of this particular session
-    let sessionMissionsContainer = document.getElementById(`missions-${sessionId}`);
-    if (!sessionMissionsContainer) {
-        // If the container doesn't exist, create it and append it to the main missions container
-        sessionMissionsContainer = document.createElement('div');
-        sessionMissionsContainer.id = `missions-${sessionId}`;
-        sessionMissionsContainer.classList.add('session-missions-container');
-        document.getElementById('missions').appendChild(sessionMissionsContainer);
+    let sessionContainer = document.getElementById(`container-mission-${sessionId}`);
+    if (!sessionContainer) {
+        sessionContainer = document.createElement('div');
+        sessionContainer.id = `container-mission-${sessionId}`;
+        sessionContainer.classList.add('container-mission-class');
+        document.getElementById('missions').appendChild(sessionContainer);
     }
 
-    // Clear the container to ensure we're not duplicating missions
+    let sessionMissionsContainer = document.createElement('div');
+    sessionMissionsContainer.id = `missions-${sessionId}`;
+    sessionMissionsContainer.classList.add('session-missions-container');
+    sessionContainer.appendChild(sessionMissionsContainer);
+
     sessionMissionsContainer.innerHTML = '';
 
-    // Iterate through each mission and create its DOM elements
     missions.forEach(mission => {
-        // Create the container for the individual mission
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
+        missionDiv.style.backgroundColor = 'white';
 
-        // Create and append the mission title element
+        const missionContent = document.createElement('div');
+        missionContent.classList.add('mission-content');
+
         const missionTitle = document.createElement('div');
         missionTitle.classList.add('mission-title');
-        missionTitle.innerText = mission.Title; // Assuming 'Title' is the correct property
-        missionDiv.appendChild(missionTitle);
+        missionTitle.innerText = mission.Title;
+        missionContent.appendChild(missionTitle);
 
-        // Create and append the mission description element
         const missionDesc = document.createElement('div');
         missionDesc.classList.add('mission-description');
-        missionDesc.innerText = mission.Description; // Assuming 'Description' is the correct property
-        missionDiv.appendChild(missionDesc);
+        missionDesc.innerText = mission.Description;
+        missionContent.appendChild(missionDesc);
 
-        // Create and append the checkmark for completed missions
-        const missionCheckmark = document.createElement('div');
-        missionCheckmark.classList.add('mission-checkmark');
-        missionCheckmark.innerHTML = mission.Complete ? '✔' : ''; // Adjust if needed
-        missionDiv.appendChild(missionCheckmark);
+        missionDiv.appendChild(missionContent);
 
-        // Create and append the Complete/Not Complete button
-        const completeButton = document.createElement('button');
-        completeButton.classList.add('complete-mission');
-        completeButton.setAttribute('data-mission-id', mission.Mission_ID); // Assuming 'Mission_ID' is correct
-        completeButton.setAttribute('data-completed', mission.Complete);
-        completeButton.innerText = mission.Complete ? 'Not Complete' : 'Complete'; // Toggle button text based on status
-        missionDiv.appendChild(completeButton);
+        // Only add the button if the mission is not completed
+        if (!mission.Complete) {
+            const completeButton = document.createElement('button');
+            completeButton.classList.add('complete-mission');
+            completeButton.setAttribute('data-mission-id', mission.Misson_ID);
+            completeButton.setAttribute('data-completed', mission.Complete);
+            completeButton.innerText = 'Complete';
+            missionDiv.appendChild(completeButton);
 
-        // Add an event listener to the Complete/Not Complete button
-        completeButton.addEventListener('click', function() {
-            // Toggle the completed status
-            const completed = this.getAttribute('data-completed') === 'true';
-            updateMissionStatus(mission.Misson_ID, !completed); // Function to update the status
-            this.setAttribute('data-completed', !completed);
-            this.innerText = !completed ? 'Not Complete' : 'Complete';
-            missionDiv.style.backgroundColor = !completed ? '#FFA500' : 'white'; // Change color based on status
-            missionCheckmark.style.display = !completed ? 'block' : 'none'; // Show or hide checkmark
-        });
+            completeButton.addEventListener('click', function() {
+                // Show the confirmation dialog
+                const customConfirm = document.getElementById('customConfirm2');
+                customConfirm.style.display = 'block';
+            
+                const confirmYes = document.getElementById('confirmYesY');
+                const confirmNo = document.getElementById('confirmNoN');
 
-        // Append the mission to the session's missions container
+                function resetModal() {
+                    customConfirm.style.display = 'none';
+                    confirmYes.removeEventListener('click', confirmAction);
+                    confirmNo.removeEventListener('click', cancelAction);
+                }
+
+                function showCompletionPopup() {
+                    const completionPopup = document.getElementById('completionPopup');
+                    completionPopup.classList.remove('hidden');
+                    completionPopup.classList.add('popup-show');
+                }
+                function hideCompletionPopup() {
+                    const completionPopup = document.getElementById('completionPopup');
+                    completionPopup.classList.add('hidden'); // Add the hidden class to hide the popup
+                }
+            
+                function confirmAction() {
+                    resetModal(); // Hide modal and clean up
+                    updateMissionStatus(mission.Misson_ID, true);
+                    missionDiv.removeChild(completeButton); // Remove the complete button
+                    
+                    const completionImage = document.createElement('img');
+                    completionImage.classList.add('mission-image-complete'); // Adding class name here
+                    completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1709424741/meerkat_celebrates_uehgc9.jpg';
+                    completionImage.alt = 'Completed';
+        
+                    missionDiv.appendChild(completionImage);
+
+                    // Show the completion GIF popup
+                    showCompletionPopup();
+                    missionDiv.style.backgroundColor = '#FDD771';
+
+                }
+            
+                function cancelAction() {
+                    resetModal(); // Hide modal and clean up
+                }
+            
+                confirmYes.addEventListener('click', confirmAction);
+                confirmNo.addEventListener('click', cancelAction);
+
+                const goBackButton = document.querySelector('.go-back-button'); // Assuming there's only one, otherwise consider adding specific selectors
+                goBackButton.addEventListener('click', hideCompletionPopup);
+            });
+        } else {
+            // Mission is already completed, show the image instead of the button
+            const completionImage = document.createElement('img');
+            completionImage.classList.add('mission-image-complete'); // Adding class name here
+            completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1709424741/meerkat_celebrates_uehgc9.jpg';
+            completionImage.alt = 'Completed';
+            missionDiv.style.backgroundColor = '#FDD771';
+
+            missionDiv.appendChild(completionImage);
+        }
+
         sessionMissionsContainer.appendChild(missionDiv);
-
-        // Set the background color of the mission element based on completion status
-        missionDiv.style.backgroundColor = mission.Complete ? '#FFA500' : 'white';
     });
 
     const deleteButtonContainer = document.createElement('div');
     deleteButtonContainer.classList.add('abovedeletebtn');
 
-    // Create delete button for the session
     const deleteSessionButton = document.createElement('button');
     deleteSessionButton.innerText = 'ลบเซสชันนี้';
     deleteSessionButton.classList.add('deletebtn');
     deleteSessionButton.addEventListener('click', function() {
-        // Show the existing customConfirm dialog
         const customConfirm = document.getElementById('customConfirm');
         customConfirm.style.display = 'block';
-
-        // Temporarily store the sessionId in a place accessible by the confirmation buttons
         customConfirm.setAttribute('data-session-id', sessionId);
     });
 
-    // Append the delete button to the wrapper container
     deleteButtonContainer.appendChild(deleteSessionButton);
+    sessionContainer.appendChild(deleteButtonContainer);
+};
 
-    // Append the wrapper container to the session missions container
-    sessionMissionsContainer.appendChild(deleteButtonContainer);
-}
+
 
 document.getElementById('confirmYes').addEventListener('click', async function() {
     const customConfirm = document.getElementById('customConfirm');
@@ -141,97 +183,68 @@ async function updateMissionStatus(missionId, completed) {
         console.error('Error updating mission status:', error);
     }
 }
-
 function startCountdown(endDate, sessionId) {
-    // Create the countdown container dynamically
+    let sessionContainer = document.getElementById(`container-mission-${sessionId}`);
+    if (!sessionContainer) {
+        sessionContainer = document.createElement('div');
+        sessionContainer.id = `container-mission-${sessionId}`;
+        sessionContainer.classList.add('container-mission-class');
+        document.getElementById('missions').prepend(sessionContainer);
+    }
+
     var countdownContainer = document.createElement('div');
     countdownContainer.classList.add('countdownclass');
     countdownContainer.id = `countdown-${sessionId}`;
+    sessionContainer.prepend(countdownContainer);
 
-    // Clone the countdown structure for this container
-    var countdownBackground = document.createElement('div');
-    countdownBackground.id = 'countdown-background';
+    // Adjusting the structure to match your provided format
+    const timeSections = ['days', 'hours', 'minutes', 'seconds'];
+    const timeLabels = ['วัน', 'ชั่วโมง', 'นาที', 'วินาที'];
 
-    var daysBox = document.createElement('div');
-    daysBox.id = 'days-box';
-    var hoursBox = document.createElement('div');
-    hoursBox.id = 'hours-box';
-    var minutesBox = document.createElement('div');
-    minutesBox.id = 'minutes-box';
-    var secondsBox = document.createElement('div');
-    secondsBox.id = 'seconds-box';
+    timeSections.forEach((section, index) => {
+        const timeSection = document.createElement('div');
+        timeSection.classList.add('time-section');
 
-    var daysLabel = document.createElement('div');
-    daysLabel.id = 'days-label';
-    daysLabel.textContent = 'วัน';
-    var hoursLabel = document.createElement('div');
-    hoursLabel.id = 'hours-label';
-    hoursLabel.textContent = 'ชั่วโมง';
-    var minutesLabel = document.createElement('div');
-    minutesLabel.id = 'minutes-label';
-    minutesLabel.textContent = 'นาที';
-    var secondsLabel = document.createElement('div');
-    secondsLabel.id = 'seconds-label';
-    secondsLabel.textContent = 'วินาที';
+        const numberSpan = document.createElement('span');
+        numberSpan.id = `${section}-number-${sessionId}`;
+        numberSpan.classList.add('days-number');
+        // Make ID unique to each session
+        numberSpan.textContent = '00'; // Default text
 
-    var daysNumber = document.createElement('div');
-    daysNumber.id = 'days-number';
-    var hoursNumber = document.createElement('div');
-    hoursNumber.id = 'hours-number';
-    var minutesNumber = document.createElement('div');
-    minutesNumber.id = 'minutes-number';
-    var secondsNumber = document.createElement('div');
-    secondsNumber.id = 'seconds-number';
+        const labelSpan = document.createElement('span');
+        labelSpan.classList.add('time-label');
+        labelSpan.textContent = timeLabels[index];
 
-    // Append all elements to the countdown background
-    countdownBackground.appendChild(daysBox);
-    countdownBackground.appendChild(hoursBox);
-    countdownBackground.appendChild(minutesBox);
-    countdownBackground.appendChild(secondsBox);
+        timeSection.appendChild(numberSpan);
+        timeSection.appendChild(labelSpan);
+        countdownContainer.appendChild(timeSection);
+    });
 
-    countdownBackground.appendChild(daysLabel);
-    countdownBackground.appendChild(hoursLabel);
-    countdownBackground.appendChild(minutesLabel);
-    countdownBackground.appendChild(secondsLabel);
+    // Adding divider
+    const divider = document.createElement('hr');
+    divider.classList.add('divider-btw-clock-missions');
+    sessionContainer.insertBefore(divider, countdownContainer.nextSibling);
 
-    countdownBackground.appendChild(daysNumber);
-    countdownBackground.appendChild(hoursNumber);
-    countdownBackground.appendChild(minutesNumber);
-    countdownBackground.appendChild(secondsNumber);
-
-    // Append the countdown background to the countdown container
-    countdownContainer.appendChild(countdownBackground);
-
-    // Prepend the countdown container to the missions container
-    var missionsContainer = document.getElementById('missions');
-    var sessionMissionsContainer = document.getElementById(`missions-${sessionId}`);
-    missionsContainer.insertBefore(countdownContainer, sessionMissionsContainer);
-
-    // Start the countdown
     var countdown = setInterval(function() {
         var now = new Date().getTime();
         var distance = endDate.getTime() - now;
 
         if (distance < 0) {
             clearInterval(countdown);
-            daysNumber.textContent = '00';
-            hoursNumber.textContent = '00';
-            minutesNumber.textContent = '00';
-            secondsNumber.textContent = '00';
-            countdownContainer.innerHTML += 'EXPIRED';
+            countdownContainer.textContent = 'EXPIRED';
         } else {
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            daysNumber.textContent = days.toString().padStart(2, '0');
-            hoursNumber.textContent = hours.toString().padStart(2, '0');
-            minutesNumber.textContent = minutes.toString().padStart(2, '0');
-            secondsNumber.textContent = seconds.toString().padStart(2, '0');
+            document.getElementById(`days-number-${sessionId}`).textContent = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById(`hours-number-${sessionId}`).textContent = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById(`minutes-number-${sessionId}`).textContent = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById(`seconds-number-${sessionId}`).textContent = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }
     }, 1000);
 }
+
+
+
+
+
 
 
 window.onload = async function() {

@@ -211,6 +211,30 @@ async function findMissionsNeedingReminder() {
   const result = await pool.query(query);
   return result.rows;
 }
+async function findMissionsEndingSoon() {
+  try {
+    console.log("in try")
+    const query = `
+    SELECT * FROM "LineSchemas"."MissionSessions"
+    WHERE "EndDate" <= (NOW() AT TIME ZONE 'UTC') + INTERVAL '3 hours'
+    AND "Complete" = false
+    AND "RemindThree" = false;
+`;
+    const result = await pool.query(query);
+    console.log("a lil of result", result)
+    return result.rows;
+  } catch (error) {
+    console.error('Error fetching missions ending soon:', error);
+    return []; // Return an empty array to handle errors gracefully
+  }
+}
+async function updatePostNotificationLogic(sessionId) {
+  const query = 'UPDATE "LineSchemas"."MissionSessions" SET "RemindThree" = true WHERE "SessionID" = $1';
+  await pool.query(query, [sessionId]);
+}
+
+
+
 
 async function updateNextReminderTime(sessionId) {
   const query = `
@@ -244,7 +268,9 @@ module.exports = {
   deleteSessionById,
   updateMissionSessionRating,
   findMissionsNeedingReminder,
-  updateNextReminderTime
+  updateNextReminderTime,
+  findMissionsEndingSoon,
+  updatePostNotificationLogic
 
 
 };

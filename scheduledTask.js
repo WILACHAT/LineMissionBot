@@ -3,6 +3,8 @@ const cron = require('node-cron');
 const db = require('./db');
 const { sendLineNotification } = require('./services/lineBotService');
 const { sendLineNotificationAlert } = require('./services/lineBotService');
+const { sendLineNotificationMission } = require('./services/lineBotService');
+
 
 
 
@@ -33,7 +35,7 @@ function scheduleTask() {
 
                 if (user) {
                     console.log("inside useer if")
-                    const messageText = `สวัสดีครับลูกพี่ your mission with ID: ${mission.SessionID} has expired!`;
+                    const messageText = `สวัสดีครับลูกพี่ your session that started on: ${mission.StartDate} has expired!`;
                     console.log("user id is correct?", user)
                     await sendLineNotification(user, messageText, mission.UserID);
                     await db.markNotificationAsSent(mission.SessionID); 
@@ -45,18 +47,87 @@ function scheduleTask() {
     });
     cron.schedule('0 * * * *', async () => { 
         console.log('Checking for missions needing reminders:', new Date().toLocaleString());
-
+    
         const missionsForReminder = await db.findMissionsNeedingReminder();
-
-        for (const mission of missionsForReminder) {
-            const user = await db.getUserLineIdByUserId(mission.UserID);
+    
+        for (const session of missionsForReminder) {
+            const user = await db.getUserLineIdByUserId(session.UserID);
             if (user) {
-                const messageText = `Reminder: Your mission started at ${mission.StartDate.toLocaleString()}. Check your progress!`;
-                await sendLineNotificationAlert(user, messageText, mission.UserID);
-                await db.updateNextReminderTime(mission.SessionID);
+                // Query to get all missions for the current session
+                const missionsResult = await db.pool.query(
+                    'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 ORDER BY "Misson_ID" ASC',
+                    [session.SessionID]
+                );
+    
+                // Building the missions list string
+                const descriptions = missionsResult.rows.map(mission => {
+                    // Check if Due_Date is not null, then format it, otherwise use a placeholder
+                    const dueDateStr = session.EndDate ? session.EndDate.toLocaleString() : 'ไม่ระบุ';
+                    return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
+                });
+                
+                console.log("descriptions", descriptions);
+                
+        
+                const missionsListStr = descriptions.join('\n');
+                // Adjusting the message text to include missions list
+                const messageText = `สวัสดีครับลูกพี่: ภารกิจของคุณเริ่มต้นที่ ${session.StartDate.toLocaleString()}. ตรวจสอบความคืบหน้าของคุณ!\n\nMissions:\n${missionsListStr}`;
+                
+    
+                await sendLineNotificationAlert(user, messageText, session.UserID);
+                await db.updateNextReminderTime(session.SessionID);
             }
         }
     });
+    
+cron.schedule('* * * * *', async () => {
+    console.log('Checking for missions ending soon:', new Date().toLocaleString());
+
+    // Fetch missions that are ending soon
+    const missionsEndingSoon = await db.findMissionsEndingSoon();
+    console.log("Missions fetched:", missionsEndingSoon.length);
+
+    for (const session of missionsEndingSoon) {
+        console.log("Processing session:", session.SessionID);
+        const user = await db.getUserLineIdByUserId(session.UserID);
+
+        if (!user) {
+            console.log("User not found for UserID:", session.UserID);
+            continue; // Skip to the next session if user is not found
+        }
+        console.log("hi")
+
+        // Fetch all missions for the current session
+        const missionsResult = await db.pool.query(
+            'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 ORDER BY "Misson_ID" ASC',
+            [session.SessionID]
+        );
+        console.log("missionsResult", missionsResult)
+
+        // Process missions to generate a list of descriptions
+        const descriptions = missionsResult.rows.map(mission => {
+            // Check if Due_Date is not null, then format it, otherwise use a placeholder
+            const dueDateStr = session.EndDate ? session.EndDate.toLocaleString() : 'ไม่ระบุ';
+            return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
+        });
+        
+        console.log("descriptions", descriptions);
+        
+
+        const missionsListStr = descriptions.join('\n');
+        console.log("Missions list string prepared for SessionID:", session.SessionID);
+
+        // Construct and send the notification message
+        const messageText = `เตือนความจำ: ภารกิจต่อไปนี้กำลังจะสิ้นสุดในไม่ช้า โปรดตรวจสอบความคืบหน้าของคุณ!\n\nภารกิจที่กำลังจะสิ้นสุด:\n${missionsListStr}`;
+        await sendLineNotificationMission(user, messageText, session.UserID);
+        console.log("Notification sent for SessionID:", session.SessionID);
+
+        // Update logic after sending the notification
+        await db.updatePostNotificationLogic(session.SessionID);
+    }
+});
+    
+    
 }
 
 module.exports = {

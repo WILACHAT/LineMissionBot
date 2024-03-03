@@ -6,23 +6,69 @@
 
     <title>Meerkat</title>
     <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background: #FDD771;
-        }
-        .mission {
-    width: 500px;
-    margin: 10px auto; /* Center the mission horizontally */
-    padding: 10px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-    position: relative;
+body {
+    font-family: Arial, sans-serif;
+    background: rgb(250, 226, 160);
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    text-align: center; /* This will center the text of the H2 */
+    width: 100%;
+    font-family: Arial, sans-serif;
 
 }
-            #missions {
+
+.container-mission-class {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* This will make the child elements stretch to full width */
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px;
+    margin-bottom:37px;
+    width:80%;
+}
+
+.countdownclass {
+    display: flex;
+    justify-content: space-between; /* Evenly distribute space between sections */
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    width:100%;
+    
+}
+
+
+.time-section {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center-align the items horizontally */
+    justify-content: center; /* Center-align the items vertically */
+    width: 100px; /* Increase minimum width for each section to accommodate larger numbers */
+}
+
+.days-number, .hours-number, .minutes-number, .seconds-number {
+    font-size: 33px; /* Increase font size for larger numbers */
+    font-weight:700;
+    margin: 0; /* Adjust margin as needed */
+    line-height: 1; /* Adjust line height to control space between number and label */
+    color: #222222;
+}
+
+.time-label {
+    font-size: 16px; /* Increase font size for visibility */
+    color: #333;
+    margin-top: 5px; /* Adjust space between number and label */
+}
+
+
+
+#missions {
     display: flex;
     flex-direction: column;
     align-items: center; /* Center the missions in the div */
@@ -33,156 +79,70 @@
 }
 
 
+
+.mission {
+    display: flex; /* Use flexbox to layout title/description and button */
+    justify-content: space-between; /* Space between content and button */
+    align-items: center; /* Vertically center align items */
+    margin: 10px 0; /* Add some space between the missions */
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+    background-color: white; /* Or any other color you prefer */
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.mission-content {
+    display: flex; /* Added this to correctly position the title and description */
+    flex-direction: column; /* Stack title and description vertically */
+    flex-grow: 1; /* Let the content grow to use available space */
+    min-width: 0; /* Prevent flexbox items from growing past their container */
+}
+
 .mission-title {
-    text-align: center;
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 8px;
-    color: #333; /* A dark color for the title */
+    color: #333;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis (...) to text that overflows */
 }
 
 .mission-description {
-    font-family: 'Sarabun';
-
-    text-align: center;
-    margin-bottom: 8px; /* Space between description and button */
-    font-size: 18px; /* Adjust font size as needed */
-    color: #333; /* Match color with title */
+    font-size: 16px;
+    color: #333;
+    overflow-wrap: break-word; /* Ensures that words can be broken to prevent overflow */
+    word-break: break-word; /* Breaks the words at the end of the line */
 }
 
+
 .complete-mission {
-    width: 100%; /* Full width accounting for padding */
     padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #FDD771; /* Button background color */
-    color: black;
-    font-weight: bold;
+    border-radius: 20px;
     cursor: pointer;
-    font-size: 15px;
+    font-weight: bold;
+    background-color: #f5ce4e;
+    border: none;
+    white-space: nowrap; /* Ensure button text does not wrap */
+
+    /* Adjust the width as necessary, or remove if you prefer the button size to be content-based */
+}
+
+.complete-mission-done{
+    width: 20px; /* Button takes full width of its parent */
+    padding: 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    border: none;
+    text-align: center;
+    margin-left:14%;
 }
 
 .complete-mission:hover {
     background: #e5c065; /* Lighter shade on hover */
-}
-
-/* Responsive design for smaller screens */
-@media (max-width: 600px) {
-    .mission {
-    width: 275px;
-    margin: 10px auto; /* Center the mission horizontally */
-    padding: 10px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-    position: relative;
-    }
-}
-
-
-#countdown-background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #F7F7F7;
-    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
-    border-radius: 17px;
-}
-
-#days-box, #hours-box, #minutes-box, #seconds-box {
-    width: 47.27px;
-    height: 50.69px;
-    position: absolute;
-    background: #FFD12E;
-    border-radius: 7px;
-}
-
-#days-box { left: 16.88px; top: 15.77px; }
-#hours-box { left: 79.91px; top: 15.77px; }
-#minutes-box { left: 142.94px; top: 15.77px; }
-#seconds-box { left: 205.97px; top: 15.77px; }
-
-#days-label, #hours-label, #minutes-label, #seconds-label {
-    position: absolute;
-    color: #5A5A5A;
-    font-size: 9px;
-    font-weight: 400;
-    word-wrap: break-word;
-}
-
-#days-label { width: 21.38px; height: 13.52px; left: 29.26px; top: 66.46px; }
-#hours-label { width: 25.89px; height: 13.52px; left: 90.04px; top: 66.46px; }
-#minutes-label { width: 36.02px; height: 13.52px; left: 148.57px; top: 66.46px; }
-#seconds-label { width: 37.14px; height: 13.52px; left: 210.47px; top: 66.46px; }
-
-#days-number, #hours-number, #minutes-number, #seconds-number {
-    position: absolute;
-    color: white;
-    font-size: 29px;
-    font-weight: 800;
-    word-wrap: break-word;
-}
-
-#days-number { width: 38.27px; height: 42.80px; left: 21.38px; top: 20.28px; }
-#hours-number { width: 38.27px; height: 42.80px; left: 84.41px; top: 20.28px; }
-#minutes-number { width: 38.27px; height: 42.80px; left: 147.44px; top: 20.28px; }
-#seconds-number { width: 38.27px; height: 42.80px; left: 211px; top: 17px; }
-
-/* Additional small decorative divs styles */
-.countdownpls
-{
-    justify-content: center;
-    align-items: center;
-}
-.thai-text-label {
-    color: rgba(34.32, 33.94, 33.94, 0.89);
-    font-size: 25px;
-    font-family: 'Sarabun', sans-serif;
-    font-weight: 700;
-    text-align: center;
-    word-wrap: break-word;
-    width: 100%; /* Full width to center the text */
-    text-align: center;
-
-}
-h1{
-    text-align: center; /* This will center the text of the H2 */
-    width: 100%;
-    font-family: Arial, sans-serif;
-
-}
-#whatisgoingon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%; /* Use the full width */
-}
-.countdownclass
-{
-    display: flex;
-    flex-direction: column; /* Stack children vertically */
-    justify-content: center;
-    align-items: center;
-    width: 269px;
-    height: 98px;
-    position: relative;
-    font-family: Sarabun, Arial, sans-serif;
-    margin: 0 auto; /* Center countdownclass */
-    margin-top: 10px;
-    margin-top: 10px;
-
-
-}
-.abovedeletebtn {
-    display: flex; /* Enable flexbox */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    width: 100%; /* Full width */
-    margin-bottom: 24px; /* Space below this div */
 }
 
 .donebtn {
@@ -192,18 +152,44 @@ h1{
     width: 100%; /* Full width */
     margin-bottom: 24px; /* Space below this div */
 }
+
+.abovedeletebtn {
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Full width */
+    margin-top: 9px;
+    margin-bottom: 5px; /* Space below this div */
+}
+
 .deletebtn {
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     background-color: #f44336;
     color: white;
     cursor: pointer;
     font-size: 16px;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
+}
 
+.divider-btw-clock-missions{
+    border: 0; /* Removes the default border */
+    height: 1px; /* Sets the height of the line */
+    background-color: #ccc; /* Color of the line */
+    margin: 20px 0;
+}
 
+.deletebtn button:hover{
+    background-color: #d32f2f;
+}
+
+@media (max-width: 600px) {
+    .mission {
+        width: auto; /* Mission boxes take full width of the container */
+        margin: 10px 0; /* Adjust margin for smaller screens */
+    }
 }
 .donedonebtn {
     padding: 10px 20px;
@@ -256,6 +242,7 @@ h1{
     font-size: 24px; /* Adjust size as needed */
     color: green; /* Choose a suitable color */
 }
+
 .alert-box-cfdelete {
     text-align: center;
     padding: 20px;
@@ -269,6 +256,7 @@ h1{
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
 /* Add this to your existing CSS styles */
 .alert-box-cfdelete {
     text-align: center;
@@ -321,6 +309,117 @@ h1{
     font-weight: bold;
 }
 
+.mission-image-complete {
+    height: auto; /* Maintain aspect ratio */
+    width: 70px; /* Adjust based on your preference */
+    object-fit: contain; /* Ensure the image is scaled correctly */
+    margin-left:auto;
+}
+
+/*java*/
+.popup-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other content */
+    visibility: hidden; /* Hidden by default */
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease-in-out;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.popup-modal img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Class to show the modal */
+.popup-show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup-content p {
+    font-size: 34px; /* Adjust the font size as needed */
+    color: #333; /* Adjust the text color as needed */
+    margin-top: 10px; /* Add some space between the GIF and the text */
+    font-family: Arial, sans-serif;
+}
+
+/* Custom Modal Styles */
+.custom-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.custom-modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Center the modal */
+    position: relative; /* Needed for centering */
+    top: 50%; /* Push down from the top half of the viewport */
+    transform: translateY(-50%); /* Pull back up 50% of its own height */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px; /* Maximum width */
+    text-align: center;
+    border-radius: 10px; /* Rounded corners */
+}
+
+
+.custom-modal-content p {
+    margin-bottom: 20px;
+    font-size: 18px; /* Larger font size */
+}
+
+.custom-modal-content button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+#confirmBtn {
+    background-color: #e9ab4e;
+    color: white;
+}
+
+#cancelBtn {
+    background-color: #ca3535;
+    color: white;
+}
+.confirm-complete-btn-ava {
+    width: 100px; /* Adjust the width as desired */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Ensures the image is block level */
+    margin: 0 auto 20px; /* Centers the image and adds some space below */
+}
+.hidden {
+    display: none;
+}
+
+
 
 </style>
 </head>
@@ -335,8 +434,29 @@ h1{
             <button id="confirmYes" class="button-yes">ลบ</button>
         </div>
     </div>
+
+    <div id="customConfirm2" class="custom-modal">
+        <div class="custom-modal-content">
+            <img src="https://res.cloudinary.com/linema/image/upload/v1709424752/meerkat_confused_z4io84.jpg" class="confirm-complete-btn-ava">
+            <p>ลูกพี่ยืนยันที่จะกดปุ่มภารกิจเสร็จสิ้นนี้มั้ย?</p>
+            <button id="confirmYesY">ยืนยัน</button>
+            <button id="confirmNoN">ไม่</button>
+        </div>
+    </div>
+
+    <div id="completionPopup" class="popup-modal hidden">
+        <div class="popup-content">
+            <img src="congRATS1.gif" alt="Completed">
+            <p class = "gif-text-button">ยินดีด้วยนะค้าบลูกพี่!</p>
+            <button class="go-back-button">กลับ</button>
+
+        </div>
+    </div>
+    
+
+
    
-    <div id="whatisgoingon" style="display: none;" style="width: 100%; height: 100%; flex-direction: column; justify-content: flex-center; align-items: center; gap: 28px; display: inline-flex">
+    <div id="whatisgoingon" >
         
         <div id="missions" style="flex-direction: column; justify-content: flex-center; align-items: flex-center; display: flex">
         </div>
