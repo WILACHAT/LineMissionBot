@@ -54,7 +54,7 @@ function createMissionInputGroup(missionNumber) {
         `<button class="delete-mission-button" type="button" onclick="deleteMission(${missionNumber})">ลบเป้าหมายนี้</button>`;
 
     // Create dropdown for mission titles
-    let titleDropdownHTML = `<select id="missiontitle${missionNumber}" class="mission-title-dropdown" onchange="onTitleChange(this, ${missionNumber})" required>`;
+    let titleDropdownHTML = `<select id="missiontitle${missionNumber}" class="mission-title-dropdown" required>`;
     titleOptions.forEach(option => {
         titleDropdownHTML += `<option value="${option}">${option}</option>`;
     });
@@ -75,7 +75,6 @@ function createMissionInputGroup(missionNumber) {
         ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
         ${timesDropdownHTML}
-        ${additionalOptionsContainer}
         ${deleteButtonHTML}
     `;
 
@@ -484,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
                         }
                     });
                 }
-                alert("hii", times)
+               // alert("hii", times)
                 // Get the due date and time from the input
                 // Assuming duedateInput is in the format "YYYY-MM-DDTHH:MM" (ISO local date-time format)
              
