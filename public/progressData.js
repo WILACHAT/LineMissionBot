@@ -1,3 +1,4 @@
+
 let countdownLoaded = false;
 let missionsLoaded = false;
 
@@ -9,6 +10,25 @@ async function fetchLatestIncompleteSession(userId) {
     }
     return response.json();
 }
+async function updateFrequencyFunction(mission)
+{
+    try {
+        const response = await fetch('/progress/updateFrequency', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ Misson_ID: mission })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update mission status');
+        }
+        // Optionally handle the response
+    } catch (error) {
+        console.error('Error updating mission status:', error);
+    }
+}
+
 function populateMissions(missions, sessionId) {
     let sessionContainer = document.getElementById(`container-mission-${sessionId}`);
     if (!sessionContainer) {
@@ -26,6 +46,10 @@ function populateMissions(missions, sessionId) {
     sessionMissionsContainer.innerHTML = '';
 
     missions.forEach(mission => {
+        console.log("yoyoyoyoyoyoyoyo", mission)
+        console.log(mission.frequency)
+
+        console.log(mission.Frequency)
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
         missionDiv.style.backgroundColor = 'white';
@@ -43,24 +67,44 @@ function populateMissions(missions, sessionId) {
         missionDesc.innerText = mission.Description;
         missionContent.appendChild(missionDesc);
 
+  
+
+
         missionDiv.appendChild(missionContent);
+        const actionContainer = document.createElement('div');
+        actionContainer.classList.add('action-container');
+    
+ 
 
         // Only add the button if the mission is not completed
         if (!mission.Complete) {
-            const completeButton = document.createElement('button');
-            completeButton.classList.add('complete-mission');
-            completeButton.setAttribute('data-mission-id', mission.Misson_ID);
-            completeButton.setAttribute('data-completed', mission.Complete);
-            completeButton.innerText = 'Complete';
-            missionDiv.appendChild(completeButton);
+            const frequencyText = document.createElement('div');
+            frequencyText.classList.add('mission-frequency');
+            frequencyText.innerText = `จำนวนครั้งที่เหลือ: ${mission.Frequency}`;
+            actionContainer.appendChild(frequencyText);
+                  const completeButton = document.createElement('button');
+        completeButton.classList.add('complete-mission');
+        completeButton.setAttribute('data-mission-id', mission.Misson_ID);
+        completeButton.setAttribute('data-completed', mission.Complete);
+        completeButton.innerText = 'Complete';
+        actionContainer.appendChild(completeButton);
 
-            completeButton.addEventListener('click', function() {
+        completeButton.addEventListener('click', async function() {
+            if (mission.Frequency > 1) {
+                updateFrequencyFunction(mission.Misson_ID);
+                    // Start fetch request
+                   
+                    mission.Frequency -= 1;
+                    frequencyText.innerText = `จำนวนครั้งที่เหลือ: ${mission.Frequency}`;
+                } else {
                 // Show the confirmation dialog
                 const customConfirm = document.getElementById('customConfirm2');
                 customConfirm.style.display = 'block';
             
                 const confirmYes = document.getElementById('confirmYesY');
                 const confirmNo = document.getElementById('confirmNoN');
+                
+               
 
                 function resetModal() {
                     customConfirm.style.display = 'none';
@@ -80,8 +124,11 @@ function populateMissions(missions, sessionId) {
             
                 function confirmAction() {
                     resetModal(); // Hide modal and clean up
+                    updateFrequencyFunction(mission.Misson_ID)
                     updateMissionStatus(mission.Misson_ID, true);
-                    missionDiv.removeChild(completeButton); // Remove the complete button
+                    actionContainer.removeChild(completeButton);
+                    actionContainer.removeChild(frequencyText);
+
                     
                     const completionImage = document.createElement('img');
                     completionImage.classList.add('mission-image-complete'); // Adding class name here
@@ -105,8 +152,13 @@ function populateMissions(missions, sessionId) {
 
                 const goBackButton = document.querySelector('.go-back-button'); // Assuming there's only one, otherwise consider adding specific selectors
                 goBackButton.addEventListener('click', hideCompletionPopup);
+            }
             });
-        } else {
+        } 
+        missionDiv.appendChild(actionContainer);
+
+        if (mission.Complete) {
+            
             // Mission is already completed, show the image instead of the button
             const completionImage = document.createElement('img');
             completionImage.classList.add('mission-image-complete'); // Adding class name here
@@ -240,12 +292,6 @@ function startCountdown(endDate, sessionId) {
         }
     }, 1000);
 }
-
-
-
-
-
-
 
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);

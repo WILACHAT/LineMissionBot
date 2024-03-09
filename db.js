@@ -43,8 +43,9 @@ async function saveTokenForUser(lineId, token) {
   const result = await pool.query(query, [token, lineId]);
   return result.rows[0];
 }
+
 async function saveFormData(userId, missions, startDate, missionEndDate) {
-  console.log("in saveFormData");
+  console.log("in saveFormData", missions);
 
   // Calculate the NextReminder time (12 hours after startDate)
   let nextReminderTime = new Date(startDate);
@@ -57,11 +58,31 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
 
   // Step 2: Insert missions into Missions table
   for (let mission of missions) {
-      if (mission.title && mission.description) { // Insert only if title and description are provided
-          let missionInsertQuery = 'INSERT INTO "LineSchemas"."Missions" ("Title", "Description", "SessionID") VALUES ($1, $2, $3)';
-          await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId]);
-      }
-  }
+    if (mission.title && mission.description) { 
+        // Insert only if title and description are provided
+        // Insert into Missions table
+        let missionInsertQuery = 'INSERT INTO "LineSchemas"."Missions" ("Title", "Description", "SessionID", "Frequency") VALUES ($1, $2, $3, $4) RETURNING "Misson_ID"';
+        let missionResult = await pool.query(missionInsertQuery, [mission.title, mission.description, sessionId, mission.times]);
+
+        let missionId = missionResult.rows[0].Misson_ID;
+
+
+        // Check for additional gym data
+       // console.log("mission additional data", mission.frequency)
+        
+        /*
+        if (mission.title === "ออกกำลังกาย" && mission.additionalData) {
+            let frequency = mission.additionalData['workoutIntensity'] || null;
+
+            
+            // Insert into GymMission table
+            let gymMissionInsertQuery = 'INSERT INTO "LineSchemas"."GymMission" ("Misson_ID", "frequency") VALUES ($1, $2)';
+            await pool.query(gymMissionInsertQuery, [missionId, frequency]);
+        }
+        */
+
+    }
+}
 }
 
 async function getLatestIncompleteSessionByUserId(userId) {
@@ -87,6 +108,19 @@ async function updateMissionStatus(missionId, completed) {
   const query = 'UPDATE "LineSchemas"."Missions" SET "Complete" = $1 WHERE "Misson_ID" = $2';
   await pool.query(query, [completed, missionId]);
 }
+
+async function updateFrequency(missionId) {
+  try {
+    console.log("missionId", missionId);
+    const query = 'UPDATE "LineSchemas"."Missions" SET "Frequency" = "Frequency" - 1 WHERE "Misson_ID" = $1';
+    const result = await pool.query(query, [missionId]);
+    console.log("Update successful", result);
+  } catch (error) {
+    console.error("Error updating frequency", error);
+  }
+}
+
+
 async function completeMissionSession(sessionId) {
   const query = 'UPDATE "LineSchemas"."MissionSessions" SET "Complete" = TRUE WHERE "SessionID" = $1';
   await pool.query(query, [sessionId]);
@@ -270,7 +304,8 @@ module.exports = {
   findMissionsNeedingReminder,
   updateNextReminderTime,
   findMissionsEndingSoon,
-  updatePostNotificationLogic
+  updatePostNotificationLogic,
+  updateFrequency
 
 
 };

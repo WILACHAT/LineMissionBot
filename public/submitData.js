@@ -54,26 +54,80 @@ function createMissionInputGroup(missionNumber) {
         `<button class="delete-mission-button" type="button" onclick="deleteMission(${missionNumber})">ลบเป้าหมายนี้</button>`;
 
     // Create dropdown for mission titles
-    let titleDropdownHTML = `<select id="missiontitle${missionNumber}" class="mission-title-dropdown" required>`;
+    let titleDropdownHTML = `<select id="missiontitle${missionNumber}" class="mission-title-dropdown" onchange="onTitleChange(this, ${missionNumber})" required>`;
     titleOptions.forEach(option => {
         titleDropdownHTML += `<option value="${option}">${option}</option>`;
     });
     titleDropdownHTML += `</select>`;
 
+    // Add the new dropdown for number of times in this session
+    let timesDropdownHTML = `<label for="missiontimes${missionNumber}">จำนวนครั้งในเซสชันนี้:</label>
+                              <select id="missiontimes${missionNumber}" class="mission-times-dropdown" required>`;
+    for (let i = 1; i <= 10; i++) {
+        timesDropdownHTML += `<option value="${i}">${i}</option>`;
+    }
+    timesDropdownHTML += `</select>`;
 
+    let additionalOptionsContainer = `<div id="additionalOptionsContainer${missionNumber}" style="display:none;"></div>`;
 
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
         <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
+        ${timesDropdownHTML}
+        ${additionalOptionsContainer}
         ${deleteButtonHTML}
     `;
-    // Update the maximum deadline date when the end date changes
-   
 
     return missionInputGroup;
+};
+
+function onTitleChange(selectElement, missionNumber) {
+    console.log("missionnumber fak off", missionNumber)
+    const additionalOptionsContainer = document.getElementById(`additionalOptionsContainer${missionNumber}`);
+    let optionsHTML = '';
+
+    switch (selectElement.value) {
+        case "ออกกำลังกาย": // "Exercise"
+            optionsHTML = createExerciseOptions(missionNumber);
+            break;
+        case "การทำสมาธิ": // "Meditation"
+            optionsHTML = createMeditationOptions(missionNumber);
+            break;
+        // Add more cases for other mission types as needed
+        default:
+            additionalOptionsContainer.style.display = 'none';
+            additionalOptionsContainer.innerHTML = '';
+            return; // Exit the function if no additional options are needed
+    }
+
+    additionalOptionsContainer.innerHTML = optionsHTML;
+    additionalOptionsContainer.style.display = 'block';
 }
 
+function createExerciseOptions(missionNumber) {
+    let html = `<label for="workoutIntensity${missionNumber}">คุณต้องการออกกำลังกายกี่ครั้งในช่วงเวลานี้?:</label>
+                <select id="workoutIntensity${missionNumber}" required>`;
+    for (let i = 1; i <= 10; i++) {
+        html += `<option value="${i}">${i}</option>`;
+    }
+    html += `</select>`;
+    return html;
+}
+
+
+function createMeditationOptions(missionNumber) {
+    // Generate HTML for meditation options
+    // This is just an example, replace it with actual options needed for meditation
+    let html = `<label for="meditationDuration${missionNumber}">Meditation Duration:</label>
+                <select id="meditationDuration${missionNumber}" required>`;
+    // Assuming you want to let users select durations
+    ["5 min", "10 min", "15 min", "20 min"].forEach(duration => {
+        html += `<option value="${duration}">${duration}</option>`;
+    });
+    html += `</select>`;
+    return html;
+}
 
 function addMission() {
     missionCount++;
@@ -376,42 +430,67 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         const formattedEndDate = endDatee.toISOString().split('T')[0] + 'T' + currentTime;
         const formattedEndDatee = inputEndDatee.toISOString() + 'T' + endTime + ':00'; 
-
+        
        // const formattedEndDatee = inputEndDate.toISOString().split('T')[0] + 'T' + currentTime;
         console.log("first format enddate", formattedEndDate)
         console.log("second format enddate", formattedEndDateUTC)
        // alert("formattedEndDate" + formattedEndDate)
-
-
-     
-
         console.log("formattedStartDate", formattedStartDate)
         console.log("formattedEndDate", formattedEndDate)
         console.log("currentTime", currentTime)
 
         console.log("today", today)
-
-
-    
-        // Validate that the start date is today and the end date is no earlier than the day after
-           
         
             console.log("check startdate", formattedStartDate)
             console.log("check enddate", formattedEndDate)
 
 
             console.log("what is this what is this", userId)
+            const additionalInputsMap = {
+                "ออกกำลังกาย": ["workoutIntensity"], // For "Exercise"
+                "การทำสมาธิ": ["meditationDuration"], // For "Meditation"
+                // Add more as necessary
+            };
 
             const missionData = [];
             for (let i = 1; i <= missionCount; i++) {
                 const title = document.getElementById(`missiontitle${i}`).value;
+
                 const description = document.getElementById(`missiondes${i}`).value;
-                
+
+                const times = document.getElementById(`missiontimes${i}`).value; 
+                console.log("timeeeesssss", times)
+
+                let additionalData = {};
+                if (additionalInputsMap[title]) {
+                    console.log("additionalInputsMap[title]", additionalInputsMap[title])
+                    // Loop through each additional input ID associated with this title
+                    additionalInputsMap[title].forEach(inputId => {
+                        // Construct the full input ID with the current mission number
+                        const fullInputId = `${inputId}${i}`;
+                        console.log("inside the fullInputId", fullInputId)
+
+                        const inputElement = document.getElementById(fullInputId);
+                        const inputElementt = document.getElementById('workoutIntensity1');
+
+                        console.log("inside the inputElement", inputElement)
+                        console.log("inside the inputElement2", inputElementt)
+
+                        // If the element exists, add its value to the additionalData object
+                        if (inputElement) {
+                            additionalData[inputId] = inputElement.value;
+                            console.log("fucking alues", inputElement.value)
+
+                        }
+                    });
+                }
+                alert("hii", times)
                 // Get the due date and time from the input
                 // Assuming duedateInput is in the format "YYYY-MM-DDTHH:MM" (ISO local date-time format)
              
                 // Push the data with the UTC date and time
-                missionData.push({ title, description});
+
+                missionData.push({ title, description, additionalData, times: parseInt(times) }); 
             }
     
             const data = {
