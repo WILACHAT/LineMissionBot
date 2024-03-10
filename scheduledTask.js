@@ -107,7 +107,8 @@ cron.schedule('* * * * *', async () => {
         // Process missions to generate a list of descriptions
         const descriptions = missionsResult.rows.map(mission => {
             // Check if Due_Date is not null, then format it, otherwise use a placeholder
-            const dueDateStr = session.EndDate ? session.EndDate.toLocaleString() : 'ไม่ระบุ';
+            const dueDateStr = session.EndDate ? session.EndDate : 'ไม่ระบุ';
+            
             return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
         });
         
