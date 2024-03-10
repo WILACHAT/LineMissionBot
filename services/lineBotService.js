@@ -62,34 +62,34 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
     const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
 
 
-    messages: [
-      {
-          type: 'template',
-          altText: 'This is a carousel template',
-          template: {
-              type: 'carousel',
-              columns: [
-                  {
-                      thumbnailImageUrl: 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg',
-                      imageBackgroundColor: "#FFFFFF",
-                      title: "title",
-                      text: messageText,
-                      actions: [
-                          {
-                              type: 'uri',
-                              label: 'View Details',
-                              uri: linkUrl
-                          }
-                      ]
-                  }
-              ],
-              imageAspectRatio: 'square',
-              imageSize: 'contain'
+        const messages =[
+          {
+              type: 'template',
+              altText: 'This is a carousel template',
+              template: {
+                  type: 'carousel',
+                  columns: [
+                      {
+                          thumbnailImageUrl: 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg',
+                          imageBackgroundColor: "#FFFFFF",
+                          title: "title",
+                          text: messageText,
+                          actions: [
+                              {
+                                  type: 'uri',
+                                  label: 'View Details',
+                                  uri: linkUrl
+                              }
+                          ]
+                      }
+                  ],
+                  imageAspectRatio: 'square',
+                  imageSize: 'contain'
+              }
           }
-      }
-  ]
+      ]
     
-  
+   
       console.log("lineUserId print", lineUserId, messages)
       try {
           await client.pushMessage(lineUserId, messages);
