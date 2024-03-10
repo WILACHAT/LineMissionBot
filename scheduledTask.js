@@ -143,7 +143,9 @@ cron.schedule('* * * * *', async () => {
 
         // Construct and send the notification message
         const messageText = `เตือนความจำ: ภารกิจต่อไปนี้กำลังจะสิ้นสุดในไม่ช้า โปรดตรวจสอบความคืบหน้าของคุณ!\n\nภารกิจที่กำลังจะสิ้นสุด:\n${missionsListStr}`;
-        await sendLineNotificationMission(user, messageText, session.UserID);
+        const url = 'https://whale-app-63n8p.ondigitalocean.app/progress';
+        const title = 'Notification'
+        await sendLineNotificationMission(user, messageText, session.UserID, url, title);
         console.log("Notification sent for SessionID:", session.SessionID);
 
         // Update logic after sending the notification
