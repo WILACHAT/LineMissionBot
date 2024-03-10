@@ -24,10 +24,10 @@ function scheduleTask() {
                 console.log("this is the what", what)
                 console.log("this is the what", what.length)
 
-                const completedMissions= what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0);
+                const completedMissionRatio = (what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0) / what.length) * 10;
 
-                console.log("completedmissions", completedMissions)
-                await db.updateMissionSessionRating(mission.SessionID, completedMissions);
+                console.log("completedmissions", completedMissionRatio)
+                await db.updateMissionSessionRating(mission.SessionID, completedMissionRatio);
 
 
                 const user = await db.getUserLineIdByUserId(mission.UserID);
@@ -35,7 +35,8 @@ function scheduleTask() {
 
                 if (user) {
                     console.log("inside useer if")
-                    const messageText = `สวัสดีครับลูกพี่ your session that started on: ${mission.StartDate} has expired!`;
+                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ที่เริ่มต้นในวันที่: ${mission.StartDate} ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
+                    เลย;`;
                     console.log("user id is correct?", user)
                     await sendLineNotification(user, messageText, mission.UserID);
                     await db.markNotificationAsSent(mission.SessionID); 
@@ -62,7 +63,18 @@ function scheduleTask() {
                 // Building the missions list string
                 const descriptions = missionsResult.rows.map(mission => {
                     // Check if Due_Date is not null, then format it, otherwise use a placeholder
-                    const dueDateStr = session.EndDate ? session.EndDate.toLocaleString() : 'ไม่ระบุ';
+                    const endDate = new Date(session.EndDate);
+        
+                    // Format the date to Thai time zone
+                    dueDateStr = endDate.toLocaleString('th-TH', {
+                        timeZone: 'Asia/Bangkok',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });                    
                     return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
                 });
                 
@@ -106,11 +118,19 @@ cron.schedule('* * * * *', async () => {
 
         // Process missions to generate a list of descriptions
         const descriptions = missionsResult.rows.map(mission => {
-            console.log("what is the session endDate", session.EndDate )
             // Check if Due_Date is not null, then format it, otherwise use a placeholder
-            const dueDateStr = session.EndDate ? session.EndDate.toLocaleString() : 'ไม่ระบุ';
-            console.log("what is the dueDateStr", dueDateStr)
-
+            const endDate = new Date(session.EndDate);
+        
+            // Format the date to Thai time zone
+            dueDateStr = endDate.toLocaleString('th-TH', {
+                timeZone: 'Asia/Bangkok',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
 
             return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
         });
@@ -123,7 +143,9 @@ cron.schedule('* * * * *', async () => {
 
         // Construct and send the notification message
         const messageText = `เตือนความจำ: ภารกิจต่อไปนี้กำลังจะสิ้นสุดในไม่ช้า โปรดตรวจสอบความคืบหน้าของคุณ!\n\nภารกิจที่กำลังจะสิ้นสุด:\n${missionsListStr}`;
-        await sendLineNotificationMission(user, messageText, session.UserID);
+        const url = 'https://whale-app-63n8p.ondigitalocean.app/progress';
+        const title = 'Notification'
+        await sendLineNotificationMission(user, messageText, session.UserID, url, title);
         console.log("Notification sent for SessionID:", session.SessionID);
 
         // Update logic after sending the notification
