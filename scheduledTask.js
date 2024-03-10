@@ -24,10 +24,10 @@ function scheduleTask() {
                 console.log("this is the what", what)
                 console.log("this is the what", what.length)
 
-                const completedMissions= what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0);
+                const completedMissionRatio = (what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0) / what.length) * 10;
 
-                console.log("completedmissions", completedMissions)
-                await db.updateMissionSessionRating(mission.SessionID, completedMissions);
+                console.log("completedmissions", completedMissionRatio)
+                await db.updateMissionSessionRating(mission.SessionID, completedMissionRatio);
 
 
                 const user = await db.getUserLineIdByUserId(mission.UserID);

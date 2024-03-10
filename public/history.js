@@ -59,7 +59,7 @@ function displaySessionHistory(sessions) {
         sessionDiv.innerHTML = `
             <div onclick="toggleSessionDetails(this, ${session.SessionID})">
                 <h2>Session: ${formattedStartDate} - ${formattedEndDate}</h2>
-                <p>Rating: ${session.Rating} / 5</p>
+                <p>Rating: ${session.Rating} / 10</p>
             </div>
             <div class="session-details" style="display: none;">
                 <p>Reflection: ${session.Reflection || 'No reflection submitted'}</p>

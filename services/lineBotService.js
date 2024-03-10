@@ -57,46 +57,30 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
     }
   }
 
-  async function sendLineNotificationMission(lineUserId, messageText, UserID, imageUrl, title) {
+  async function sendLineNotificationMission(lineUserId, messageText, UserID) {
     const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/progress";
     const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
-  
+
+    
+    
     const messages = [
-      {
-        type: 'template',
-        altText: 'Notification with details',
-        template: {
-          type: 'carousel',
-          columns: [
-            {
-              thumbnailImageUrl: imageUrl,
-              imageBackgroundColor: "#FFFFFF",
-              title: title,
-              text: messageText,
-              actions: [
-                {
-                  type: 'uri',
-                  label: 'View Details',
-                  uri: linkUrl
-                }
-              ]
-            }
-          ],
-          imageAspectRatio: 'square',
-          imageSize: 'contain'
+        {
+            type: 'text',
+            text: messageText
+        },
+        {
+            type: 'text',
+            text: `${linkUrl}`
         }
+    ]
+      console.log("lineUserId print", lineUserId, messages)
+      try {
+          await client.pushMessage(lineUserId, messages);
+          console.log('Notification sent to LINE user:', lineUserId);
+      } catch (error) {
+          console.error('Failed to send LINE notification:', error);
       }
-    ];
-  
-    console.log("lineUserId print", lineUserId, messages);
-    try {
-      await client.pushMessage(lineUserId, messages);
-      console.log('Notification sent to LINE user:', lineUserId);
-    } catch (error) {
-      console.error('Failed to send LINE notification:', error);
     }
-  }
-  
   
 
 async function replyToUser(replyToken, url, userId) {

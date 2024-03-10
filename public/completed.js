@@ -1,5 +1,3 @@
-// completed.js
-
 let userId;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -9,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (userId) {
         loadCompletedMissions(userId);
     } else {
-        console.error('No user ID provided.');
+        console.error('ไม่มีรหัสผู้ใช้งาน.');
     }
 });
 
@@ -20,7 +18,7 @@ function loadCompletedMissions(userId) {
             displayMissions(data.missions);
             displayCompletionStatus(data.missions);
         })
-        .catch(error => console.error('Error loading completed missions:', error));
+        .catch(error => console.error('เกิดข้อผิดพลาดในการโหลดภารกิจที่เสร็จสิ้น:', error));
 }
 
 function displayMissions(missions) {
@@ -31,13 +29,13 @@ function displayMissions(missions) {
         const missionDiv = document.createElement('div');
         missionDiv.classList.add('mission');
 
-        const statusText = mission.Complete ? 'Completed' : 'Not Completed';
+        const statusText = mission.Complete ? 'เสร็จสิ้น' : 'ยังไม่เสร็จสิ้น';
         const statusClass = mission.Complete ? 'status-completed' : 'status-not-completed';
 
         missionDiv.innerHTML = `
             <h2 class="mission-title">${mission.Title}</h2>
             <p class="mission-description">${mission.Description}</p>
-            <div class="${statusClass}">Status: ${statusText}</div>
+            <div class="${statusClass}">สถานะ: ${statusText}</div>
         `;
         missionsContainer.appendChild(missionDiv);
     });
@@ -50,12 +48,12 @@ function displayCompletionStatus(missions) {
     const completionPercentage = (completedMissions / totalMissions) * 100;
     const completionText = document.createElement('div');
     completionText.innerHTML = `
-        <p>You have completed ${completedMissions}/${totalMissions} missions.</p>
-        <p>That's ${completionPercentage}% of your missions.</p>
+        <p>คุณได้ทำภารกิจเสร็จสิ้น ${completedMissions}/${totalMissions} ภารกิจ.</p>
+        <p>นั่นคือ ${completionPercentage}% ของภารกิจทั้งหมดของคุณ.</p>
     `;
 
     if(completionPercentage === 100) {
-        completionText.innerHTML += '<p>Congratulations, you finished all your tasks!</p>';
+        completionText.innerHTML += '<p>ขอแสดงความยินดี, คุณได้ทำภารกิจทั้งหมดเสร็จสิ้นแล้ว!</p>';
     }
 
     const missionsContainer = document.getElementById('missions-container');
@@ -76,12 +74,12 @@ function submitReflection() {
             const historyLink = `history.html?userId=${encodeURIComponent(userId)}`;
             window.location.href = historyLink;
         } else {
-            throw new Error('Reflection submission failed');
+            throw new Error('การส่งความคิดเห็นล้มเหลว');
         }
     })
-    .catch(error => console.error('Error submitting reflection:', error));
+    .catch(error => console.error('เกิดข้อผิดพลาดในการส่งความคิดเห็น:', error));
 }
 
 function goToIndex() {
-    window.location.href = '/'; // Redirects to the index page
+    window.location.href = '/'; // กลับไปยังหน้าแรก
 }
