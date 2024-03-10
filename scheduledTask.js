@@ -107,10 +107,18 @@ cron.schedule('* * * * *', async () => {
         // Process missions to generate a list of descriptions
         const descriptions = missionsResult.rows.map(mission => {
             // Check if Due_Date is not null, then format it, otherwise use a placeholder
-                 const endDate = new Date(session.EndDate);
+            const endDate = new Date(session.EndDate);
         
-        // Format the date to the user's local timezone and locale
-            dueDateStr = endDate.toLocaleString();
+            // Format the date to Thai time zone
+            dueDateStr = endDate.toLocaleString('th-TH', {
+                timeZone: 'Asia/Bangkok',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
 
             return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
         });
