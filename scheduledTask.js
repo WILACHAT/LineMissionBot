@@ -35,7 +35,8 @@ function scheduleTask() {
 
                 if (user) {
                     console.log("inside useer if")
-                    const messageText = `สวัสดีครับลูกพี่ your session that started on: ${mission.StartDate} has expired!`;
+                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ที่เริ่มต้นในวันที่: ${mission.StartDate} ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
+                    เลย;`;
                     console.log("user id is correct?", user)
                     await sendLineNotification(user, messageText, mission.UserID);
                     await db.markNotificationAsSent(mission.SessionID); 
@@ -62,7 +63,18 @@ function scheduleTask() {
                 // Building the missions list string
                 const descriptions = missionsResult.rows.map(mission => {
                     // Check if Due_Date is not null, then format it, otherwise use a placeholder
-                    const dueDateStr = session.EndDate ? session.EndDate.toLocaleString() : 'ไม่ระบุ';
+                    const endDate = new Date(session.EndDate);
+        
+                    // Format the date to Thai time zone
+                    dueDateStr = endDate.toLocaleString('th-TH', {
+                        timeZone: 'Asia/Bangkok',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });                    
                     return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
                 });
                 
