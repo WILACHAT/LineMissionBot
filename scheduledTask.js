@@ -107,7 +107,20 @@ cron.schedule('* * * * *', async () => {
         // Process missions to generate a list of descriptions
         const descriptions = missionsResult.rows.map(mission => {
             // Check if Due_Date is not null, then format it, otherwise use a placeholder
-            const dueDateStr = session.EndDate ? session.EndDate : 'ไม่ระบุ';
+            const endDate = new Date(mission.EndDate);
+
+            // Format the date to the local time zone using Intl.DateTimeFormat
+            dueDateStr = new Intl.DateTimeFormat('default', {
+              year: 'numeric',
+              month: 'short',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              timeZoneName: 'short'
+            }).format(endDate);
+          
+        
             
             return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
         });
