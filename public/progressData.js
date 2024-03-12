@@ -162,7 +162,7 @@ function populateMissions(missions, sessionId) {
             // Mission is already completed, show the image instead of the button
             const completionImage = document.createElement('img');
             completionImage.classList.add('mission-image-complete'); // Adding class name here
-            completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1709424741/meerkat_celebrates_uehgc9.jpg';
+            completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1710213702/meerkat_celebrates_exvy6g.png';
             completionImage.alt = 'Completed';
             missionDiv.style.backgroundColor = '#FDD771';
 
