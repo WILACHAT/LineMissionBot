@@ -35,7 +35,18 @@ function scheduleTask() {
 
                 if (user) {
                     console.log("inside useer if")
-                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ที่เริ่มต้นในวันที่: ${mission.StartDate} ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
+                    const startDate = new Date(mission.StartDate);
+                    dueDateStr = startDate.toLocaleString('th-TH', {
+                        timeZone: 'Asia/Bangkok',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });      
+
+                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ที่เริ่มต้นในวันที่: ${dueDateStr} ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
                     เลย;`;
                     console.log("user id is correct?", user)
                     await sendLineNotification(user, messageText, mission.UserID);
