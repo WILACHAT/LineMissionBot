@@ -143,32 +143,16 @@ const pool = new Pool({
     const query = 'UPDATE "LineSchemas"."MissionSessions" SET "Notify" = TRUE WHERE "SessionID" = $1';
     await pool.query(query, [missionId]);
   }
-  async function getCompletedMissionsForUser(userId) {
+  async function getCompletedMissionsForUser(sessionID) {
     // First, find the latest completed session for the user
-    const latestSessionQuery = `
-      SELECT "SessionID"
-      FROM "LineSchemas"."MissionSessions"
-      WHERE "UserID" = $1 AND "Complete" = true
-      ORDER BY "SessionID" DESC
-      LIMIT 1;
-    `;
-    console.log("latestSessionQuery1", latestSessionQuery)
-    const sessionResult = await pool.query(latestSessionQuery, [userId]);
-    console.log("sessionResult", sessionResult)
-    if (sessionResult.rows.length === 0) {
-      // No completed sessions found
-      return [];
-    }
-    const latestSessionId = sessionResult.rows[0].SessionID;
-    console.log("latestSessionId", latestSessionId)
-  
+    
   
     // Now, find all missions for the latest completed session
     const missionsQuery = `
       SELECT * FROM "LineSchemas"."Missions"
       WHERE "SessionID" = $1;
     `;
-    const missionsResult = await pool.query(missionsQuery, [latestSessionId]);
+    const missionsResult = await pool.query(missionsQuery, [sessionID]);
     return missionsResult.rows; // Rows containing the missions for the latest completed session
   }
   
