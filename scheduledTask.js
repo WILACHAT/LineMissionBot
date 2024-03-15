@@ -24,7 +24,7 @@ function scheduleTask() {
                 console.log("this is the what", what)
                 console.log("this is the what", what.length)
 
-                const completedMissionRatio = (what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0) / what.length) * 10;
+                const completedMissionRatio = Math.round((what.reduce((count, mission) => mission.Complete ? count + 1 : count, 0) / what.length) * 100);
 
                 console.log("completedmissions", completedMissionRatio)
                 await db.updateMissionSessionRating(mission.SessionID, completedMissionRatio);
@@ -35,18 +35,9 @@ function scheduleTask() {
 
                 if (user) {
                     console.log("inside useer if")
-                    const startDate = new Date(mission.StartDate);
-                    dueDateStr = startDate.toLocaleString('th-TH', {
-                        timeZone: 'Asia/Bangkok',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    });      
+                    
 
-                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ที่เริ่มต้นในวันที่: ${dueDateStr} ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
+                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
                     เลย;`;
                     console.log("user id is correct?", user)
                     await sendLineNotification(user, messageText, mission.UserID);
