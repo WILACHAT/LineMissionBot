@@ -9,7 +9,7 @@ const { sendLineNotificationMission } = require('./services/lineBotService');
 
 
 function scheduleTask() {
-    cron.schedule('*/5 * * * *', async () => {
+    cron.schedule('*/1 * * * *', async () => {
         console.log('Checking for expired missions at:', new Date().toLocaleString());
         const expiredMissions = await db.findExpiredMissions();
         console.log("expiredMissions", expiredMissions)
@@ -18,8 +18,9 @@ function scheduleTask() {
             console.log("inside first if")
 
             for (let mission of expiredMissions) {
+                console.log("SESSION ID QUERY", mission.SessionID)
                 await db.completeMissionSession(mission.SessionID);
-                const what = await db.getCompletedMissionsForUser(mission.UserID)
+                const what = await db.getCompletedMissionsForUser(mission.SessionID)
 
                 console.log("this is the what", what)
                 console.log("this is the what", what.length)
@@ -37,10 +38,9 @@ function scheduleTask() {
                     console.log("inside useer if")
                     
 
-                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่
-                    เลย;`;
+                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่เลย;`;
                     console.log("user id is correct?", user)
-                    await sendLineNotification(user, messageText, mission.UserID);
+                    await sendLineNotification(user, messageText, mission.UserID, mission.SessionID);
                     await db.markNotificationAsSent(mission.SessionID); 
                 }
             }
