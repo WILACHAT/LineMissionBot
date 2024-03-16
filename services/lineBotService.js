@@ -11,9 +11,9 @@ const lineConfig = {
 
 const client = new line.Client(lineConfig);
 
-async function sendLineNotification(lineUserId, messageText, UserID) {
+async function sendLineNotification(lineUserId, messageText, UserID, sessionID) {
 const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/completed";
-const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
+const linkUrl = `${baseUrl}?userId=${encodeURIComponent(sessionID)}`;
 
 const messages = [
     {

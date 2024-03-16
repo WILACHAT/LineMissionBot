@@ -40,7 +40,7 @@ function scheduleTask() {
 
                     const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่เลย;`;
                     console.log("user id is correct?", user)
-                    await sendLineNotification(user, messageText, mission.UserID);
+                    await sendLineNotification(user, messageText, mission.UserID, mission.SessionID);
                     await db.markNotificationAsSent(mission.SessionID); 
                 }
             }
