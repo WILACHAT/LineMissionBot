@@ -72,13 +72,27 @@ h1 {
     font-weight: bold;
 }
 
-.session-history-completed{
+.mission-item {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+    justify-content: space-between; /* Puts maximum space between the text and the image */
     margin-bottom: 10px;
-    padding: 16px; /* Increased padding */
-    background: #FDD771; /* Changed background color to yellow */
+    padding: 16px;
+    background: #fff0c7;
     border-radius: 9px;
     box-shadow: 0 0px 4px rgba(0, 0, 0, 0.3);
 }
+
+.session-history-completed {
+    background: #FDD771;
+}
+
+.not-completed-img {
+    width: 100px; /* Adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-left: 20px; /* Add some space between the text and the image */
+}
+
 
 .session-history-not-completed{
     margin-bottom: 10px;

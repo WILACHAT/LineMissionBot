@@ -59,7 +59,7 @@ function displaySessionHistory(sessions) {
                 <ul class="custom-ul">
                     <!-- Missions will be inserted here -->
                 </ul>
-                <p>Rating: ${session.Rating} / 5</p>
+                <p>Rating: ${session.Rating} / 100</p>
                 <p>Reflection: ${session.Reflection || 'No reflection submitted'}</p>
             </div>
             <hr>
@@ -97,14 +97,25 @@ function displaySessionMissions(missions, detailsDiv) {
     missionsList.innerHTML = ''; // Clear existing missions if any
 
     missions.forEach(mission => {
-        const missionStatusClass = mission.Complete ? 'session-history-completed' : 'session-history-not-completed';
         const missionItem = document.createElement('li');
-        missionItem.classList.add(missionStatusClass); // Add the dynamic class based on mission completion
-        missionItem.innerHTML = `
-            <strong>Mission:</strong> ${mission.Title}<br>
-            <strong>Description:</strong> ${mission.Description}<br>
-            <strong>Status:</strong> ${mission.Complete ? 'Completed' : 'Not Completed'}
+        missionItem.classList.add('mission-item'); // Add a general class for styling
+        
+        let missionContentHTML = `
+            <div class="mission-content">
+                <strong>Mission:</strong> ${mission.Title}<br>
+                <strong>Description:</strong> ${mission.Description}<br>
+                <strong>Status:</strong> ${mission.Complete ? 'Completed' : 'Not Completed'}
+            </div>
         `;
+        
+        if (!mission.Complete) {
+            missionContentHTML += `<img src="https://res.cloudinary.com/linema/image/upload/v1710803287/Meerkatsad_ctaqgf.png" class="not-completed-img" alt="Not Completed">`;
+            missionItem.classList.add('session-history-not-completed');
+        } else {
+            missionItem.classList.add('session-history-completed');
+        }
+
+        missionItem.innerHTML = missionContentHTML;
         missionsList.appendChild(missionItem);
     });
 }
