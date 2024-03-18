@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meerkat</title>
     <style>
-        body {
+              body {
     font-family: Arial, sans-serif;
     padding: 20px;
-    background: #FDD771;
+    background: #fcde8c;
 }
 
 h1 {
     text-align: center;
+    
 }
 
 #sessions-container {
@@ -21,64 +22,76 @@ h1 {
     align-items: center;
     gap: 20px;
 }
-
 .session {
     width: 94%;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
     margin: 10px 0;
     padding: 15px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure rating and reflection are at the bottom */
 }
 
 .session h2 {
     color: #333;
     font-size: 18px;
-    margin-bottom: 10px;
+    
 }
 
 .session p {
     color: #555;
-    margin-bottom: 5px;
 }
 
 .session-details {
-    margin-top: 10px;
+    background: white;
+    border-radius: 4px;
+}
+.session-details p:last-child {
+    margin-bottom: 0; /* Removes the bottom margin from the last paragraph */
+}
+
+.custom-ul {
+    list-style-type: none;
     padding: 10px;
-    background: #f7f7f7;
-    border-radius: 4px;
-}
-
-.session-details ul {
-    list-style-type: none;
-    padding: 10px; /* Add padding */
-    margin-top: 10px; /* Top margin */
-    margin-bottom: 10px; /* Bottom margin */
-    background: #fff; /* Background color, optional */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.session-details .custom-ul {
-    list-style-type: none;
-    padding: 10px; /* Add padding */
-    margin-top: 10px; /* Top margin */
-    margin-bottom: 10px; /* Bottom margin */
-    background: #fff; /* Background color, optional */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.session-details li {
+    margin-top: 10px;
     margin-bottom: 10px;
-    padding: 5px;
-    background: #eaeaea;
-    border-radius: 4px;
+    background: white;
+   
+    
+}
+.completed-history-text {
+    color: green; /* Sets the color of 'Completed' status to green */
+    font-weight: bold;
+}
+
+.not-completed-history-text {
+    color: red; /* Sets the color of 'Not Completed' status to red */
+    font-weight: bold;
+}
+
+.session-history-completed{
+    margin-bottom: 10px;
+    padding: 16px; /* Increased padding */
+    background: #FDD771; /* Changed background color to yellow */
+    border-radius: 9px;
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.3);
+}
+
+.session-history-not-completed{
+    margin-bottom: 10px;
+    padding: 16px; /* Increased padding */
+    background: #fff0c7; /* Changed background color to yellow */
+    border-radius: 9px;
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.3);
 }
 
 hr {
     margin-top: 15px;
 }
+
 .no-session {
     text-align: center;
     padding: 20px;
@@ -87,10 +100,11 @@ hr {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     margin-top: 20px;
 }
+
 .start-new-session {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #4CAF50; /* Change as needed */
+    background-color: #4CAF50;
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -99,7 +113,7 @@ hr {
 }
 
 .start-new-session:hover {
-    background-color: #45a049; /* Darker shade for hover */
+    background-color: #45a049;
 }
 
 

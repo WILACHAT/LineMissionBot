@@ -39,14 +39,9 @@ function displaySessionHistory(sessions) {
     sessionsContainer.innerHTML = '';
 
     if (sessions.length === 0) {
-        // No sessions found
-        const startNewSessionLink = `<a href="index.html?userId=${userId}" class="start-new-session">เริ่มเซสชันภารกิจใหม่</a>`;
-        sessionsContainer.innerHTML = `
-            <div class="no-session">
-                <p>คุณยังไม่ได้ทำเซสชันใดๆ เสร็จสิ้น</p> 
-                <p>โปรดทำเซสชันเพื่อดูประวัติ</p>
-                ${startNewSessionLink}
-            </div>`;
+        // Display the no-session div when there are no sessions
+        const noSessionDiv = document.querySelector('.no-session'); // Adjust selector if necessary
+        noSessionDiv.style.display = 'block'; // Make the no-session div visible
         return;
     }
 
@@ -59,11 +54,13 @@ function displaySessionHistory(sessions) {
         sessionDiv.innerHTML = `
             <div onclick="toggleSessionDetails(this, ${session.SessionID})">
                 <h2>Session: ${formattedStartDate} - ${formattedEndDate}</h2>
-                <p>Rating: ${session.Rating} / 10</p>
             </div>
             <div class="session-details" style="display: none;">
+                <ul class="custom-ul">
+                    <!-- Missions will be inserted here -->
+                </ul>
+                <p>Rating: ${session.Rating} / 5</p>
                 <p>Reflection: ${session.Reflection || 'No reflection submitted'}</p>
-                <!-- Add more session details here -->
             </div>
             <hr>
         `;
@@ -96,10 +93,13 @@ function loadSessionMissions(sessionId, detailsDiv) {
 }
 
 function displaySessionMissions(missions, detailsDiv) {
-    const missionsList = document.createElement('ul');
-    missionsList.classList.add('custom-ul');
-        missions.forEach(mission => {
+    const missionsList = detailsDiv.querySelector('.custom-ul'); // Find the ul within the detailsDiv
+    missionsList.innerHTML = ''; // Clear existing missions if any
+
+    missions.forEach(mission => {
+        const missionStatusClass = mission.Complete ? 'session-history-completed' : 'session-history-not-completed';
         const missionItem = document.createElement('li');
+        missionItem.classList.add(missionStatusClass); // Add the dynamic class based on mission completion
         missionItem.innerHTML = `
             <strong>Mission:</strong> ${mission.Title}<br>
             <strong>Description:</strong> ${mission.Description}<br>
@@ -107,5 +107,4 @@ function displaySessionMissions(missions, detailsDiv) {
         `;
         missionsList.appendChild(missionItem);
     });
-    detailsDiv.appendChild(missionsList);
 }
