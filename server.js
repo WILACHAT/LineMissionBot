@@ -10,21 +10,17 @@ const progressRoutes = require('./routes/progressRoutes');
 const completedRoutes = require('./routes/completedRoutes');
 const historyRoutes = require('./routes/historyRoutes');
 
-
-
-
 const { verifyToken } = require('./utils/tokenUtils'); // Make sure you have this function
 
 const { scheduleTask } = require('./scheduledTask');
 
 const app = express();
 
-// Configure session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Make sure SESSION_SECRET is set in your .env file
+  secret: process.env.SESSION_SECRET, 
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true } // Set to false if not using https
+  cookie: { secure: true } 
 }));
 
 app.use(express.json({
