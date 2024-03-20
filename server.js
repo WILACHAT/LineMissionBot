@@ -10,10 +10,6 @@ const progressRoutes = require('./routes/progressRoutes');
 const completedRoutes = require('./routes/completedRoutes');
 const historyRoutes = require('./routes/historyRoutes');
 
-
-
-
-
 const { verifyToken } = require('./utils/tokenUtils'); // Make sure you have this function
 
 const { scheduleTask } = require('./scheduledTask');
@@ -54,7 +50,6 @@ function checkIfRequestFromLine(req, res, next) {
 }
 app.use(checkIfRequestFromLine);
 */
-
 
 app.use('/', missionRoutes);
 app.use('/progress', progressRoutes);
@@ -106,9 +101,7 @@ app.post('/', async (req, res) => {
   try {
     const { userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate } = req.body;
 
-    
-    // Now, call a function to save this data to the database. 
-    // For example, you might have a function in db.js called 'saveFormData'
+
     const savedData = await db.saveFormData(userId, missiontitle1, missiontitle2, missiontitle3, missiontitle4, missiontitle5, missiondes1, missiondes2, missiondes3, missiondes4, missiondes5, startDate, missionEndDate);
     console.log(`in saved data`);
 
@@ -118,7 +111,6 @@ app.post('/', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 async function setupRichMenu(imagePath) {
