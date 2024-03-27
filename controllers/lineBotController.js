@@ -83,7 +83,7 @@ exports.handleWebhook = async (req, res) => {
 
             }
             const replyToken = event.replyToken;
-            await sendImageWithUrl(replyToken, imageUrl, title, text, url, user.UserID);
+            await sendImageWithUrl(replyToken, imageUrl, title, text, url, user.UserID, label);
         } else {
             logToFile(`Unhandled event type: ${event.type}`);
         }

@@ -221,7 +221,7 @@ async function setDefaultRichMenu(richMenuId) {
     }
 }
 
-async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, userId) {
+async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, userId, label) {
   const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${channelAccessToken}`
@@ -246,7 +246,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
                           actions: [
                               {
                                   type: 'uri',
-                                  label: 'View Details',
+                                  label: label,
                                   uri: fullUrl
                               }
                           ]
