@@ -236,7 +236,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
               type: 'template',
               altText: 'This is a carousel template',
               template: {
-                  type: 'carousel',
+                  type: 'button',
                   columns: [
                       {
                           thumbnailImageUrl: imageUrl,
