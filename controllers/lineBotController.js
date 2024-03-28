@@ -39,37 +39,39 @@ exports.handleWebhook = async (req, res) => {
             switch (userMessage) {
                 case 'ดูความคืบหน้า':
                     url = 'https://waan.ngrok.app/progress';
-                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg';
-                    title = 'Progress';
-                    text = 'Progress';
+                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548874/meerkat_prog_reply_pyur2e.jpg';
+                    title = 'ดูความคืบหน้า';
+                    text = 'มาดูความคืบหน้ากันคับลูกพี่';
 
                     break;
                 case 'สร้างเซสชันภารกิจ':
                     url = 'https://waan.ngrok.app';
-                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg';
-                    title = 'Misision';
-                    text = 'Misision';
+                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548878/meerkat_createMis_reply_gyjwlx.jpg';
+                    text = 'มาสร้างเป้าหมายกันคับลูกพี่';
+                    title = 'สร้างเซสชันภารกิจ';
 
                     break;
                 case 'ดูวิธีใช้':
                     url = 'https://waan.ngrok.app';
-                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg';
-                    title = 'Misision';
-                    text = 'Misision';
+                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548885/meerkat_instruct_reply_yghjen.jpg';
+                    text = 'มาดูธีใช้กันคับลูกพี่';
+                    title = 'ดูวิธีใช้';
+
 
                     break;
                 case 'ดูประวัติ':
                     url = 'https://waan.ngrok.app/history';
-                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg';
-                    title = 'History';
-                    text = 'History';
+                    imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548881/meerkat_history_reply_l8ys8z.jpg';
+                    text = 'มาดูประวัติกันคับลูกพี่';
+                    title = 'ดูประวัติ';
+
 
                     break;
                 default:
                     url = 'https://waan.ngrok.app';
                     imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg';
-                    title = 'Mission';
                     text = 'Mission';
+
 
             }
             const replyToken = event.replyToken;

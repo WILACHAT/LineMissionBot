@@ -267,34 +267,30 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
 
 
   const body = {
-      replyToken: replyToken,
-      messages: [
-          {
-              type: 'template',
-              altText: 'This is a carousel template',
-              template: {
-                  type: 'carousel',
-                  columns: [
-                      {
-                          thumbnailImageUrl: imageUrl,
-                          imageBackgroundColor: "#FFFFFF",
-                          title: title,
-                          text: text,
-                          actions: [
-                              {
-                                  type: 'uri',
-                                  label: 'View Details',
-                                  uri: fullUrl
-                              }
-                          ]
-                      }
-                  ],
-                  imageAspectRatio: 'square',
-                  imageSize: 'contain'
-              }
-          }
-      ]
-  };
+    replyToken: replyToken,
+    messages: [
+        {
+            type: 'template',
+            altText: 'This is a button template',
+            template: {
+                type: 'buttons',
+                thumbnailImageUrl: imageUrl, // Optional: URL of the image displayed in the button template
+                imageAspectRatio: 'square', // Optional: Aspect ratio of the image. Default is 'rectangle'
+                imageSize: 'cover', // Optional: Size of the image. Default is 'cover'
+                imageBackgroundColor: "#FFFFFF", // Optional: Background color of image
+                text: text, // Required: Text shown in the button template
+                actions: [
+                    {
+                        type: 'uri',
+                        label: title, // Label for the button
+                        uri: fullUrl // The URL to be opened
+                    }
+                ]
+            }
+        }
+    ]
+};
+
 
   try {
       const response = await axios.post('https://api.line.me/v2/bot/message/reply', body, { headers });
