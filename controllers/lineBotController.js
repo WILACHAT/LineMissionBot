@@ -35,41 +35,36 @@ exports.handleWebhook = async (req, res) => {
             let url;
             let title;
             let text;
-            let label;
 
             switch (userMessage) {
                 case 'ดูความคืบหน้า':
                     url = 'https://whale-app-63n8p.ondigitalocean.app/progress';
                     imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548874/meerkat_prog_reply_pyur2e.jpg';
-                    title = 'ความคืบหน้า';
-                    text = 'ความคืบหน้า';
-                    label = 'ความคืบหน้า';
+                    title = 'ดูความคืบหน้า';
+                    text = 'มาดูความคืบหน้ากันคับลูกพี่';
 
                     break;
                 case 'สร้างเซสชันภารกิจ':
                     url = 'https://whale-app-63n8p.ondigitalocean.app';
                     imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548878/meerkat_createMis_reply_gyjwlx.jpg';
+                    text = 'มาสร้างเป้าหมายกันคับลูกพี่';
                     title = 'สร้างเซสชันภารกิจ';
-                    text = 'สร้างเซสชันภารกิจ';
-                    label = 'สร้างเซสชันภารกิจ';
 
 
                     break;
                 case 'ดูวิธีใช้':
                     url = 'https://whale-app-63n8p.ondigitalocean.app';
                     imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548885/meerkat_instruct_reply_yghjen.jpg';
-                    title = 'วิธีใช้';
-                    text = 'วิธีใช้';
-                    label = 'วิธีใช้';
+                    text = 'มาดูธีใช้กันคับลูกพี่';
+                    title = 'ดูวิธีใช้';
 
 
                     break;
                 case 'ดูประวัติ':
                     url = 'https://whale-app-63n8p.ondigitalocean.app/history';
                     imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548881/meerkat_history_reply_l8ys8z.jpg';
-                    title = 'ประวัติ';
-                    text = 'ประวัติ';
-                    label = 'ประวัติ';
+                    text = 'มาดูประวัติกันคับลูกพี่';
+                    title = 'ดูประวัติ';
 
 
                     break;
@@ -83,7 +78,7 @@ exports.handleWebhook = async (req, res) => {
 
             }
             const replyToken = event.replyToken;
-            await sendImageWithUrl(replyToken, imageUrl, title, text, url, user.UserID, label);
+            await sendImageWithUrl(replyToken, imageUrl, title, text, url, user.UserID);
         } else {
             logToFile(`Unhandled event type: ${event.type}`);
         }
