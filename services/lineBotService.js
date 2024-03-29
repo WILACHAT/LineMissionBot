@@ -60,8 +60,8 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
   async function sendLineNotificationMission(lineUserId, messageText, UserID) {
     const baseUrl = "https://waan.ngrok.app/progress";
     const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
-    const imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1706023133/missionwrong_ftyr3n.jpg';
-    const title = 'WILACHAT';
+    const imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548874/meerkat_prog_reply_pyur2e.jpg';
+    const title = 'ดูความคืบหน้า';
   
     const headers = {
       'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
           template: {
             type: 'buttons',
             thumbnailImageUrl: imageUrl,
-            imageAspectRatio: 'rectangle',
+            imageAspectRatio: 'square',
             imageSize: 'cover',
             imageBackgroundColor: "#FFFFFF",
             title: title,
@@ -88,7 +88,7 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
             actions: [
               {
                 type: 'uri',
-                label: 'View Details',
+                label: 'มาดูความคืบหน้ากันคับลูกพี่',
                 uri: linkUrl
               }
               // You can add more actions/buttons here if needed
