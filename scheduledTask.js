@@ -58,7 +58,7 @@ function scheduleTask() {
             if (user) {
                 // Query to get all missions for the current session
                 const missionsResult = await db.pool.query(
-                    'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 ORDER BY "Misson_ID" ASC',
+                    'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 AND "Complete" = false ORDER BY "Misson_ID" ASC',
                     [session.SessionID]
                 );
     
@@ -77,7 +77,7 @@ function scheduleTask() {
                         minute: '2-digit',
                         second: '2-digit'
                     });                    
-                    return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
+                    return `ภารกิจ: ${mission.Description}`;
                 });
                 
                 console.log("descriptions", descriptions);
@@ -113,7 +113,7 @@ cron.schedule('* * * * *', async () => {
 
         // Fetch all missions for the current session
         const missionsResult = await db.pool.query(
-            'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 ORDER BY "Misson_ID" ASC',
+            'SELECT * FROM "LineSchemas"."Missions" WHERE "SessionID" = $1 AND "Complete" = false ORDER BY "Misson_ID" ASC',
             [session.SessionID]
         );
         console.log("missionsResult", missionsResult)
@@ -134,7 +134,7 @@ cron.schedule('* * * * *', async () => {
                 second: '2-digit'
             });
 
-            return `ภารกิจ: ${mission.Description} (สิ้นสุด: ${dueDateStr})`;
+            return `ภารกิจ: ${mission.Description} `;
         });
         
         console.log("descriptions", descriptions);
@@ -144,7 +144,7 @@ cron.schedule('* * * * *', async () => {
         console.log("Missions list string prepared for SessionID:", session.SessionID);
 
         // Construct and send the notification message
-        const messageText = `เตือนความจำ: ภารกิจต่อไปนี้กำลังจะสิ้นสุดในไม่ช้า โปรดตรวจสอบความคืบหน้าของคุณ!\n\nภารกิจที่กำลังจะสิ้นสุด:\n${missionsListStr}`;
+        const messageText = `เตือนความจำ: ภารกิจต่อไปนี้กำลังจะสิ้นสุดในไม่ช้า โปรดตรวจสอบความคืบหน้าของคุณ!\n\n${missionsListStr}`;
         const url = 'https://whale-app-63n8p.ondigitalocean.app/progress';
         const title = 'Notification'
         await sendLineNotificationMission(user, messageText, session.UserID, url, title);

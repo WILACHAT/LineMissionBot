@@ -6,33 +6,33 @@ const line = require('@line/bot-sdk');
 const { channelAccessToken } = require('../config');
 
 const lineConfig = {
-  channelAccessToken: channelAccessToken 
+  channelAccessToken: channelAccessToken // Set in your .env file
 };
 
 const client = new line.Client(lineConfig);
 
 async function sendLineNotification(lineUserId, messageText, UserID, sessionID) {
-const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/completed";
-const linkUrl = `${baseUrl}?userId=${encodeURIComponent(sessionID)}`;
-
-const messages = [
-    {
-        type: 'text',
-        text: messageText
-    },
-    {
-        type: 'text',
-        text: `${linkUrl}`
+  const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/completed";
+  const linkUrl = `${baseUrl}?userId=${encodeURIComponent(sessionID)}`;
+  
+  const messages = [
+      {
+          type: 'text',
+          text: messageText
+      },
+      {
+          type: 'text',
+          text: `${linkUrl}`
+      }
+  ]
+    console.log("lineUserId print", lineUserId, messages)
+    try {
+        await client.pushMessage(lineUserId, messages);
+        console.log('Notification sent to LINE user:', lineUserId);
+    } catch (error) {
+        console.error('Failed to send LINE notification:', error);
     }
-]
-  console.log("lineUserId print", lineUserId, messages)
-  try {
-      await client.pushMessage(lineUserId, messages);
-      console.log('Notification sent to LINE user:', lineUserId);
-  } catch (error) {
-      console.error('Failed to send LINE notification:', error);
   }
-}
 
 async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
   const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/progress";
@@ -60,27 +60,62 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
   async function sendLineNotificationMission(lineUserId, messageText, UserID) {
     const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/progress";
     const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
-
-    
-    
+    const imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548874/meerkat_prog_reply_pyur2e.jpg';
+    const title = 'ดูความคืบหน้า';
+  
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${channelAccessToken}` // Ensure channelAccessToken is defined
+    };
+  
+    // Create an array of message objects with the carousel first
     const messages = [
-        {
-            type: 'text',
-            text: messageText
-        },
-        {
-            type: 'text',
-            text: `${linkUrl}`
-        }
-    ]
-      console.log("lineUserId print", lineUserId, messages)
-      try {
-          await client.pushMessage(lineUserId, messages);
-          console.log('Notification sent to LINE user:', lineUserId);
-      } catch (error) {
-          console.error('Failed to send LINE notification:', error);
+      {
+        type: 'text',
+        text: messageText // The full message text, ensure it's within the character limit
+      },
+      {
+          type: 'template',
+          altText: 'This is a button template',
+          template: {
+            type: 'buttons',
+            thumbnailImageUrl: imageUrl,
+            imageAspectRatio: 'square',
+            imageSize: 'cover',
+            imageBackgroundColor: "#FFFFFF",
+            title: title,
+            text: title, // The full message text, ensure it's within the character limit
+            actions: [
+              {
+                type: 'uri',
+                label: 'มาดูความคืบหน้ากันคับลูกพี่',
+                uri: linkUrl
+              }
+              // You can add more actions/buttons here if needed
+            ]
+          }
+     
       }
+      
+    ];
+  
+    const body = {
+      to: lineUserId,
+      messages: messages,
+    };
+  
+    try {
+      const response = await axios.post('https://api.line.me/v2/bot/message/push', body, { headers });
+      console.log('Compound message with carousel on top sent to LINE user:', response.data);
+    } catch (error) {
+      console.error('Failed to send compound message with carousel on top:', error.response ? error.response.data : error.message);
     }
+  }
+  
+  
+  
+  
+  
   
 
 async function replyToUser(replyToken, url, userId) {
@@ -182,6 +217,7 @@ async function createRichMenu() {
     
 
     try {
+
         const response = await axios.post('https://api.line.me/v2/bot/richmenu', richMenuData, { headers });
         console.log('Rich menu created:', response.data);
 
@@ -221,6 +257,7 @@ async function setDefaultRichMenu(richMenuId) {
     }
 }
 
+
 async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, userId) {
   const headers = {
       'Content-Type': 'application/json',
@@ -254,6 +291,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
     ]
 };
 
+
   try {
       const response = await axios.post('https://api.line.me/v2/bot/message/reply', body, { headers });
       console.log('Image with URL sent:', response.data);
@@ -268,7 +306,7 @@ module.exports = {
   setDefaultRichMenu,
   sendLineNotification,
   sendLineNotificationAlert,
-  sendImageWithUrl,
-  sendLineNotificationMission
+  sendLineNotificationMission,
+  sendImageWithUrl
 
 };
