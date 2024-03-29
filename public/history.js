@@ -44,9 +44,21 @@ function displaySessionHistory(sessions) {
 
         const sessionDiv = document.createElement('div');
         sessionDiv.classList.add('session');
+        
+        let sessionHeader;
+        if (session.SessionName) {
+            // If SessionName exists, center it in an <h2> tag.
+            sessionHeader = `<h2 style="text-align: center;">${session.SessionName}</h2>
+                             <h3 style="text-align: center;">เริ่ม: ${formattedStartDate}<br>ถึง: ${formattedEndDate}</h3>`;
+        } else {
+            // If SessionName does not exist, display the date range in an <h2> tag and center it.
+            // Each date on a separate line, centered.
+            sessionHeader = `<h2 style="text-align: center;">เริ่ม: ${formattedStartDate}<br>ถึง: ${formattedEndDate}</h2>`;
+        }
+
         sessionDiv.innerHTML = `
             <div onclick="toggleSessionDetails(this, ${session.SessionID})">
-                <h2>ช่วงเวลา: ${formattedStartDate} - ${formattedEndDate}</h2>
+                ${sessionHeader}
             </div>
             <div class="session-details" style="display: none;">
                 <ul class="custom-ul">
@@ -60,6 +72,8 @@ function displaySessionHistory(sessions) {
         sessionsContainer.appendChild(sessionDiv);
     });
 }
+
+
 
 function toggleSessionDetails(element, sessionId) {
     const detailsDiv = element.nextElementSibling;

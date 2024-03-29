@@ -14,7 +14,8 @@ router.post('/submit', async (req, res) => {
           req.body.userId,
           req.body.missions, 
 
-          req.body.startDate, req.body.missionEndDate
+          req.body.startDate, req.body.missionEndDate,
+          req.body.sessionName
       );
 
       console.log(`Data saved successfully`);

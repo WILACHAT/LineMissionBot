@@ -33,13 +33,18 @@ function scheduleTask() {
 
                 const user = await db.getUserLineIdByUserId(mission.UserID);
                 console.log("user user user", user)
+                
 
                 if (user) {
                     console.log("inside useer if")
-                    
-
-                    const messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่เลย;`;
-                    console.log("user id is correct?", user)
+                    let messageText;
+                    if (mission.SessionName) {
+                        // If mission.SessionName is not blank or null, include the session name in the message.
+                        messageText = `สวัสดีครับลูกพี่ เซสชั่น "${mission.SessionName}" ของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่เลย;`;
+                    } else {
+                        // If mission.SessionName is blank or null, use the generic message without the session name.
+                        messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่เลย;`;
+                    }
                     await sendLineNotification(user, messageText, mission.UserID, mission.SessionID);
                     await db.markNotificationAsSent(mission.SessionID); 
                 }
