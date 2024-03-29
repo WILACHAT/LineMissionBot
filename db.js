@@ -44,7 +44,7 @@ async function saveTokenForUser(lineId, token) {
   return result.rows[0];
 }
 
-async function saveFormData(userId, missions, startDate, missionEndDate) {
+async function saveFormData(userId, missions, startDate, missionEndDate, sessionName) {
   console.log("in saveFormData", missions);
 
   // Calculate the NextReminder time (12 hours after startDate)
@@ -52,8 +52,8 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
   nextReminderTime.setHours(nextReminderTime.getHours() + 12);
 
   // Step 1: Insert into MissionSessions and get SessionID
-  let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID", "NextReminder") VALUES ($1, $2, $3, $4) RETURNING "SessionID"';
-  let sessionResult = await pool.query(sessionInsertQuery, [startDate, missionEndDate, userId, nextReminderTime]);
+  let sessionInsertQuery = 'INSERT INTO "LineSchemas"."MissionSessions"("StartDate", "EndDate", "UserID", "NextReminder", "SessionName") VALUES ($1, $2, $3, $4, $5) RETURNING "SessionID"';
+  let sessionResult = await pool.query(sessionInsertQuery, [startDate, missionEndDate, userId, nextReminderTime, sessionName]);
   let sessionId = sessionResult.rows[0].SessionID;
 
   // Step 2: Insert missions into Missions table
@@ -87,7 +87,7 @@ async function saveFormData(userId, missions, startDate, missionEndDate) {
 
 async function getLatestIncompleteSessionByUserId(userId) {
   const query = `
-  SELECT "SessionID", "EndDate", "Complete"
+  SELECT "SessionID", "SessionName", "EndDate", "Complete"
   FROM "LineSchemas"."MissionSessions" 
   WHERE "UserID" = $1 AND "Complete" = false
   ORDER BY "EndDate" ASC;
@@ -180,7 +180,7 @@ async function saveUserReflection(userId, reflection) {
   async function getCompletedSessionsForUser(userId) {
     console.log("checking for userId", userId)
     const query = `
-        SELECT "SessionID", "StartDate", "EndDate", "Rating", "Complete", "Reflection"
+        SELECT "SessionID", "SessionName", "StartDate", "EndDate", "Rating", "Complete", "Reflection"
         FROM "LineSchemas"."MissionSessions"
         WHERE "UserID" = $1 AND "Complete" = TRUE
         ORDER BY "SessionID" DESC;
@@ -199,7 +199,7 @@ async function saveUserReflection(userId, reflection) {
 }
 async function getLatestSessionByUserId(userId) {
   const query = `
-      SELECT "SessionID", "EndDate", "Complete"
+      SELECT "SessionID", "EndDate", "SessionName", Complete"
       FROM "LineSchemas"."MissionSessions"
       WHERE "UserID" = $1
       ORDER BY "SessionID" DESC

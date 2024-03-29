@@ -491,12 +491,16 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
                 missionData.push({ title, description, additionalData, times: parseInt(times) }); 
             }
+            const sessionName = document.getElementById('sessionNameId').value;
+
+
     
             const data = {
                 userId: userId,
                 missions: missionData,
                 startDate: formattedStartDate,
-                missionEndDate: formattedEndDateUTC
+                missionEndDate: formattedEndDateUTC,
+                sessionName:sessionName
             };
 
     

@@ -306,7 +306,7 @@ window.onload = async function() {
                 console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
-                    startCountdown(new Date(data.endDate), data.session.SessionID);
+                    startCountdown(new Date(data.endDate), data.session.SessionID, data.session.SessionName);
                    // setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {

@@ -43,11 +43,7 @@ router.get('/getLatestIncompleteSession', async (req, res) => {
                       const gymMissionResult = await db.pool.query(
                           'SELECT * FROM "LineSchemas"."GymMission" WHERE "Misson_ID" = $1',
                           [mission.Misson_ID]
-                      );
-
-
-                      
-
+                      ); 
                       mission.gymDetails = gymMissionResult.rows[0];
                   }
             
