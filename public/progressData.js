@@ -128,6 +128,8 @@ function populateMissions(missions, sessionId) {
                     updateMissionStatus(mission.Misson_ID, true);
                     actionContainer.removeChild(completeButton);
                     actionContainer.removeChild(frequencyText);
+                    const video = document.querySelector('#completionPopup video');
+                    video.play();
 
                     
                     const completionImage = document.createElement('img');
