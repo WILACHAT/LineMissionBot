@@ -92,6 +92,7 @@ function populateMissions(missions, sessionId) {
         completeButton.addEventListener('click', async function() {
             if (mission.Frequency > 1) {
                 updateFrequencyFunction(mission.Misson_ID);
+
                     // Start fetch request
                    
                     mission.Frequency -= 1;
@@ -123,16 +124,20 @@ function populateMissions(missions, sessionId) {
                 }
             
                 function confirmAction() {
+
                     resetModal(); // Hide modal and clean up
                     updateFrequencyFunction(mission.Misson_ID)
                     updateMissionStatus(mission.Misson_ID, true);
                     actionContainer.removeChild(completeButton);
                     actionContainer.removeChild(frequencyText);
-
+                    const video = document.querySelector('#completionPopup video');
+                    video.play();
                     
+
+
                     const completionImage = document.createElement('img');
                     completionImage.classList.add('mission-image-complete'); // Adding class name here
-                    completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1709424741/meerkat_celebrates_uehgc9.jpg';
+                    completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1710213702/meerkat_celebrates_exvy6g.png';
                     completionImage.alt = 'Completed';
         
                     missionDiv.appendChild(completionImage);
