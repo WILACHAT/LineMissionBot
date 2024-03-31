@@ -33,6 +33,7 @@ function initializeFlatpickr() {
         maxDate: new Date().fp_incr(30), // Maximum date one month from today
         locale: ThaiLocale, // Set the locale to Thai
         time_24hr: true, // Use 24-hour format for time picker
+
         disable: [
             function(date) {
                 // Disable dates outside of the initial valid range
@@ -230,6 +231,7 @@ function setInitialDates() {
     //updateEndDateInput();
 }
 
+
 /*
 function updateEndDateInput() {
     const startDateInput = document.getElementById('startDateInput');
@@ -258,6 +260,7 @@ function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
 }
 
+
 window.onload = async function(req) {
     const params = new URLSearchParams(window.location.search);
     userId = params.get('userId');  // Obtain userId from query parameter
@@ -270,6 +273,7 @@ window.onload = async function(req) {
     startDateInput.readOnly = true;
     
     initializeFlatpickr();
+
 
     console.log("startdateinput",document.getElementById('startDateInput').value )
 

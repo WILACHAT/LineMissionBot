@@ -428,6 +428,28 @@ button[type="submit"]:hover {
 .mission-deadline-input {
     width: 100%; /* Adjust the width as needed, or use a specific value like 150px */
 }
+/* Increase size of the time input controls for mobile devices */
+@media (max-width: 768px) {
+  .flatpickr-time {
+    height: 50px; /* Increase time input height */
+  }
+
+  .flatpickr-time input {
+    height: 50px; /* Increase height of hour and minute inputs */
+    font-size: 20px; /* Increase font size for better visibility */
+  }
+
+  .flatpickr-time .numInputWrapper {
+    height: 50px; /* Ensure the wrapper matches */
+  }
+
+  .flatpickr-time .numInputWrapper span {
+    height: 25px; /* Larger touch targets for increment/decrement */
+    width: 25px; /* Larger touch targets for increment/decrement */
+  }
+}
+
+
 
 </style>
 
@@ -455,6 +477,7 @@ button[type="submit"]:hover {
     <div id="block-btw-mission">
     <h2>สร้างเป้าหมายของฉัน</h2>
     <form id="dataForm">
+      
         <div class="date-input-container">
            
             <div class="date-input-group">
