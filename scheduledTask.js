@@ -93,7 +93,7 @@ function scheduleTask() {
                 const messageText = `สวัสดีครับลูกพี่: ภารกิจของคุณเริ่มต้นที่ ${session.StartDate.toLocaleString()}. ตรวจสอบความคืบหน้าของคุณ!\n\nMissions:\n${missionsListStr}`;
                 
     
-                await sendLineNotificationAlert(user, messageText, session.UserID);
+                await sendLineNotificationMission(user, messageText, session.UserID);
                 await db.updateNextReminderTime(session.SessionID);
             }
         }
