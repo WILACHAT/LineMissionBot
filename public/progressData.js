@@ -297,6 +297,14 @@ function startCountdown(endDate, sessionId) {
         }
     }, 1000);
 }
+async function fetchStreakSeshPost(userId) {
+    const response = await fetch(`/progress/getStreakSeshPost?userId=${userId}`); // Adjust the URL as necessary
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.text(); // Use .text() instead of .json() for plain text response
+}
+
 
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
@@ -324,6 +332,22 @@ window.onload = async function() {
         
     } catch (error) {
         displayNoSessionMessage(userId);
+    }
+    try {
+        const streakData = await fetchStreakSeshPost(userId);
+        console.log("STREAKK", streakData)
+        console.log("StreakSeshPost data", streakData);
+        try {
+           
+
+            document.getElementById('streakSeshPost').textContent = `สตรีกสูงสุด: ${streakData}`;
+        } catch (error) {
+            console.error('Failed to fetch StreakSeshPost:', error);
+            // Optionally update the HTML to indicate an error or that data could not be loaded
+            document.getElementById('streakSeshPost').textContent = 'ไม่สามารถโหลดสตรีก';
+        }
+    } catch (error) {
+        console.log("Error fetching StreakSeshPost data", error);
     }
 };
 

@@ -10,27 +10,60 @@ const lineConfig = {
 };
 
 const client = new line.Client(lineConfig);
-
 async function sendLineNotification(lineUserId, messageText, UserID, sessionID) {
   const baseUrl = "https://whale-app-63n8p.ondigitalocean.app/completed";
   const linkUrl = `${baseUrl}?userId=${encodeURIComponent(sessionID)}`;
   
-  const messages = [
+
+    const imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1712008608/meerkat_completed_gtr6c8.jpg';
+    const title = 'เซสชั่นเสร็จสิ้น';
+  
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${channelAccessToken}` // Ensure channelAccessToken is defined
+    };
+  
+    // Create an array of message objects with the carousel first
+    const messages = [
       {
-          type: 'text',
-          text: messageText
+        type: 'text',
+        text: messageText // The full message text, ensure it's within the character limit
       },
       {
-          type: 'text',
-          text: `${linkUrl}`
+          type: 'template',
+          altText: 'มาดูเซสชั่นเสร็จสิ้นกันคับลูกพี่',
+          template: {
+            type: 'buttons',
+            thumbnailImageUrl: imageUrl,
+            imageAspectRatio: 'square',
+            imageSize: 'cover',
+            imageBackgroundColor: "#FFFFFF",
+            title: title,
+            text: title, // The full message text, ensure it's within the character limit
+            actions: [
+              {
+                type: 'uri',
+                label: 'มาดูเซสชั่นเสร็จสิ้นกันคับลูกพี่',
+                uri: linkUrl
+              }
+              // You can add more actions/buttons here if needed
+            ]
+          }
+     
       }
-  ]
-    console.log("lineUserId print", lineUserId, messages)
+      
+    ];
+  
+    const body = {
+      to: lineUserId,
+      messages: messages,
+    };
+  
     try {
-        await client.pushMessage(lineUserId, messages);
-        console.log('Notification sent to LINE user:', lineUserId);
+      const response = await axios.post('https://api.line.me/v2/bot/message/push', body, { headers });
+      console.log('Compound message with carousel on top sent to LINE user:', response.data);
     } catch (error) {
-        console.error('Failed to send LINE notification:', error);
+      console.error('Failed to send compound message with carousel on top:', error.response ? error.response.data : error.message);
     }
   }
 
@@ -57,6 +90,62 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
     }
   }
 
+  async function sendLineNotificationStreak(lineUserId, messageText, UserID) {
+    const baseUrl = "https://waan.ngrok.app";
+    const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
+    const imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548878/meerkat_createMis_reply_gyjwlx.jpg';
+    const title = 'สร้างเป้าหมาย';
+  
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${channelAccessToken}` // Ensure channelAccessToken is defined
+    };
+  
+    // Create an array of message objects with the carousel first
+    const messages = [
+      {
+        type: 'text',
+        text: messageText // The full message text, ensure it's within the character limit
+      },
+      {
+          type: 'template',
+          altText: 'มาสร้างเป้าหมายกันครับลูกพี่',
+          template: {
+            type: 'buttons',
+            thumbnailImageUrl: imageUrl,
+            imageAspectRatio: 'square',
+            imageSize: 'cover',
+            imageBackgroundColor: "#FFFFFF",
+            title: title,
+            text: title, // The full message text, ensure it's within the character limit
+            actions: [
+              {
+                type: 'uri',
+                label: 'มาสร้างเป้าหมายกันครับลูกพี่',
+                uri: linkUrl
+              }
+              // You can add more actions/buttons here if needed
+            ]
+          }
+     
+      }
+      
+    ];
+  
+    const body = {
+      to: lineUserId,
+      messages: messages,
+    };
+  
+    try {
+      const response = await axios.post('https://api.line.me/v2/bot/message/push', body, { headers });
+      console.log('Compound message with carousel on top sent to LINE user:', response.data);
+    } catch (error) {
+      console.error('Failed to send compound message with carousel on top:', error.response ? error.response.data : error.message);
+    }
+
+  }
+
   async function sendLineNotificationMission(lineUserId, messageText, UserID) {
     const baseUrl = "https://waan.ngrok.app/progress";
     const linkUrl = `${baseUrl}?userId=${encodeURIComponent(UserID)}`;
@@ -76,7 +165,7 @@ async function sendLineNotificationAlert(lineUserId, messageText, UserID) {
       },
       {
           type: 'template',
-          altText: 'This is a button template',
+          altText: 'มาดูความคืบหน้ากันคับลูกพี่',
           template: {
             type: 'buttons',
             thumbnailImageUrl: imageUrl,
@@ -271,7 +360,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
     messages: [
         {
             type: 'template',
-            altText: 'This is a button template',
+            altText: title,
             template: {
                 type: 'buttons',
                 thumbnailImageUrl: imageUrl, // Optional: URL of the image displayed in the button template
@@ -307,6 +396,7 @@ module.exports = {
   sendLineNotification,
   sendLineNotificationAlert,
   sendLineNotificationMission,
-  sendImageWithUrl
+  sendImageWithUrl,
+  sendLineNotificationStreak
 
 };

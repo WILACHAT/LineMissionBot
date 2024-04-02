@@ -96,12 +96,11 @@ h1{
 }
 
 .mission-content {
-    display: flex; /* Added this to correctly position the title and description */
-    flex-direction: column; /* Stack title and description vertically */
-    flex-grow: 1; /* Let the content grow to use available space */
-    min-width: 0; /* Prevent flexbox items from growing past their container */
+    display: flex; 
+    flex-direction: column; 
+    flex-grow: 1;
+    min-width: 0;
 }
-
 .mission-title {
     font-size: 18px;
     font-weight: bold;
@@ -114,8 +113,9 @@ h1{
 .mission-description {
     font-size: 16px;
     color: #333;
-    overflow-wrap: break-word; /* Ensures that words can be broken to prevent overflow */
-    word-break: break-word; /* Breaks the words at the end of the line */
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Breaks the words at the end of the line */
 }
 
 
@@ -452,9 +452,13 @@ h1{
 }
 .action-container {
     display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center-align children horizontally */
-    margin-top: 10px; /* Optional: add some space above the container */
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: 10px;
+    flex-shrink: 0;
+}
+.streak{
+    text-align: center;
 }
 
 
@@ -465,6 +469,9 @@ h1{
 <body>
     
     <h1>ความคืบหน้า</h1>
+    <h3 class="streak"id="streakSeshPost"></h3>
+
+
 
     <div id="customConfirm" class="alert-box-cfdelete" style="display: none;">
         <p>คุณมั่นใจแล้วใช่มั้ยว่าจะลบเซสชั่นปัจจุบัน เซสชั่นปัจจุบันจะถูกลบออกไปจากประวัติการใช้งาน</p>
@@ -497,11 +504,6 @@ h1{
         <button class="go-back-button">กลับ</button>
 
     </div>
-    
-    
-
-
-   
     <div id="whatisgoingon" >
         
         <div id="missions" style="flex-direction: column; justify-content: flex-center; align-items: flex-center; display: flex">
