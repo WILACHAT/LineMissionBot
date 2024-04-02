@@ -2,6 +2,24 @@
 const express = require('express');
 const db = require('../db'); // Adjust the path to where your db.js is located
 const router = express.Router();
+router.get('/getStreakSeshPost', async (req, res) => {
+  const userId = req.query.userId;
+
+  try {
+    const streakSeshPost = await db.getStreakSeshPostByUserId(userId);
+
+    if (streakSeshPost !== null) {
+      res.json(streakSeshPost); // Directly sending the value might not be correctly interpreted by all clients
+    } else {
+      res.status(404).json({message: 'User not found or no streak data available.'});
+    }
+  } catch (error) {
+    console.error('Error fetching StreakSeshPost:', error);
+    res.status(500).json({error: 'Internal Server Error'});
+  }
+});
+
+
 
 router.get('/getLatestIncompleteSession', async (req, res) => {
   const userId = req.query.userId;
@@ -43,11 +61,7 @@ router.get('/getLatestIncompleteSession', async (req, res) => {
                       const gymMissionResult = await db.pool.query(
                           'SELECT * FROM "LineSchemas"."GymMission" WHERE "Misson_ID" = $1',
                           [mission.Misson_ID]
-                      );
-
-
-                      
-
+                      ); 
                       mission.gymDetails = gymMissionResult.rows[0];
                   }
             

@@ -251,9 +251,48 @@ const pool = new Pool({
       return []; // Return an empty array to handle errors gracefully
     }
   }
+  async function getStreakSeshPostByUserId(userId) {
+    const query = 'SELECT "StreakSeshPost" FROM "LineSchemas"."Users" WHERE "UserID" = $1';
+    try {
+      const result = await pool.query(query, [userId]);
+      if (result.rows.length > 0) {
+        return result.rows[0].StreakSeshPost; // Assuming "StreakSeshPost" is the column name
+      } else {
+        return null; // User not found or no streak
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
   async function updatePostNotificationLogic(sessionId) {
     const query = 'UPDATE "LineSchemas"."MissionSessions" SET "RemindThree" = true WHERE "SessionID" = $1';
     await pool.query(query, [sessionId]);
+  }
+  
+  async function updateCurrentStreak(userId) {
+    const query = 'UPDATE "LineSchemas"."Users" SET "CurrentStreak" = "CurrentStreak" + 1 WHERE "UserID" = $1';
+    await pool.query(query, [userId]);
+  }
+  
+  async function updateHighestStreak(userId) {
+    const query = 'UPDATE "LineSchemas"."Users" SET "StreakSeshPost" = "CurrentStreak" WHERE "UserID" = $1';
+    await pool.query(query, [userId]);
+  }
+  
+  
+  async function lastPosted(startDate, userId) {
+    const query = 'UPDATE "LineSchemas"."Users" SET "LastPosted" = $1 WHERE "UserID" = $2';
+    await pool.query(query, [startDate, userId]);
+  }
+  async function findUsersNeedingStreakReminder() {
+    const query = `
+        SELECT "UserID", "LastPosted"
+        FROM "LineSchemas"."Users"
+        WHERE "LastPosted" <= NOW() - INTERVAL '22 hours'
+          AND "LastPosted" >= NOW() - INTERVAL '23 hours';
+    `;
+    const result = await pool.query(query);
+    return result.rows;
   }
   
   
@@ -294,7 +333,12 @@ const pool = new Pool({
     updateNextReminderTime,
     findMissionsEndingSoon,
     updatePostNotificationLogic,
-    updateFrequency
+    updateFrequency,
+    updateCurrentStreak,
+    updateHighestStreak,
+    lastPosted,
+    findUsersNeedingStreakReminder,
+    getStreakSeshPostByUserId
   
   
-  };
+  }

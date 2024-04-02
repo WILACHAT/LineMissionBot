@@ -33,12 +33,21 @@ function initializeFlatpickr() {
         maxDate: new Date().fp_incr(30), // Maximum date one month from today
         locale: ThaiLocale, // Set the locale to Thai
         time_24hr: true, // Use 24-hour format for time picker
+
         disable: [
             function(date) {
                 // Disable dates outside of the initial valid range
                 return date > new Date().fp_incr(30);
             }
-        ]
+        ],
+        onOpen: function(selectedDates, dateStr, instance) {
+            document.getElementById("timeFormatMessage").style.display = 'block';
+        },
+        onClose: function(selectedDates, dateStr, instance) {
+            document.getElementById("timeFormatMessage").style.display = 'none';
+        },
+       
+        
     });
 };
 
@@ -73,7 +82,7 @@ function createMissionInputGroup(missionNumber) {
     missionInputGroup.innerHTML = `
         <label class="input-group-title">เป้าหมายที่ ${missionNumber}</label>
         ${titleDropdownHTML}
-        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" required></textarea>
+        <textarea id="missiondes${missionNumber}" placeholder="คำอธิบายเป้าหมาย" maxlength="256" required></textarea>
         ${timesDropdownHTML}
         ${deleteButtonHTML}
     `;
@@ -164,11 +173,17 @@ function switchToPreviousMission(deletedMissionNumber) {
 
 function updateMissionNumbers() {
     const missionsContainer = document.getElementById('missionsContainer');
+    console.log("missionsContainer mee rai", missionsContainer)
     let missionIndex = 1;
     Array.from(missionsContainer.children).forEach(missionGroup => {
+        console.log("each missionGroup", missionGroup)
+        console.log("each missionGroup ID", missionGroup.id)
+        console.log("what it the missionIndex", missionIndex)
+
         missionGroup.id = `missionGroup${missionIndex}`;
+        
         missionGroup.querySelector('.input-group-title').innerText = `เป้าหมายที่ ${missionIndex}`;
-        missionGroup.querySelector('input').id = `missiontitle${missionIndex}`;
+        missionGroup.querySelector('select').id = `missiontitle${missionIndex}`;
         missionGroup.querySelector('textarea').id = `missiondes${missionIndex}`;
 
         const deleteButton = missionGroup.querySelector('button');
@@ -230,6 +245,7 @@ function setInitialDates() {
     //updateEndDateInput();
 }
 
+
 /*
 function updateEndDateInput() {
     const startDateInput = document.getElementById('startDateInput');
@@ -258,6 +274,7 @@ function formatDate(date) {
     return date.toISOString().split('T')[0]; // Format date as 'yyyy-mm-dd'
 }
 
+
 window.onload = async function(req) {
     const params = new URLSearchParams(window.location.search);
     userId = params.get('userId');  // Obtain userId from query parameter
@@ -270,6 +287,7 @@ window.onload = async function(req) {
     startDateInput.readOnly = true;
     
     initializeFlatpickr();
+
 
     console.log("startdateinput",document.getElementById('startDateInput').value )
 
@@ -342,6 +360,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
     updateNavigationButtons();
 
     form.onsubmit = async function(e) {
+
         e.preventDefault();
 
         let allMissionsFilled = true;
@@ -357,10 +376,18 @@ document.addEventListener('DOMContentLoaded', function(req) {
         }
             
         if (!allMissionsFilled) {
-            alert("Please fill in both the title and description for each mission.");
-            return;
+            // Prevent form submission
+            
+            // Show the modal
+            document.getElementById("customConfirm2").style.display = "block";
+            document.getElementById("fuck").addEventListener("click", function() {
+                // Hide the modal and allow the user to adjust the form as needed
+                document.getElementById("customConfirm2").style.display = "none";
+            });
+    
+            return
         }
-        
+ 
         console.log("check for req", req)
         const startDateInput = document.getElementById('startDateInput').value;
         const endDateInput = document.getElementById('endDateInput').value;

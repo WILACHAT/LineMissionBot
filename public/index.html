@@ -209,7 +209,6 @@ button[type="submit"]:hover {
     display: flex;
     flex-direction: column;
     text-align: center; /* Center align all text within the mission group */
-
     /* Adjust this to control spacing between missions */
     padding: 20px;
     background: #FFFFFF;
@@ -227,17 +226,45 @@ button[type="submit"]:hover {
     
 
 }
+.twobuttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    justify-content: center; /* Center buttons vertically */
+    align-items: center; /* Center buttons horizontally */
+    height: 100%; 
+}
+
 #addMissionButton {
-    display: block; /* Make button a block element to fill width */
-    margin: 20px auto; /* Center button with automatic margins */
-    padding: 15px 30px; /* Increase padding for a larger button */
-    font-size: 1rem; /* Increase font size */
-    background-color: #FFA500; /* Use your theme color */
+    display: block; /* Make buttons block elements to manage width */
+    width: 40%; /* Adjust width as needed */
+    margin: 10px auto; /* Center buttons with automatic margins and add some space between them */
+    padding: 10px 10px; /* Increase padding for larger buttons */
+    font-size: 0.9rem; /* Standard font size for better readability */
+    background-color: #FFA500; /* Example: Orange for Add Mission button, adjust as needed */
     color: #333; /* Dark text for contrast */
     border: none;
-    border-radius: 25px;
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-align: center; /* Ensure text is centered within the button */
 }
+
+#submitbuttonclass {
+    background-color: #77DD77; /* Differentiate Submit button, e.g., green */
+    font-size: 0.8rem; /* Adjust font size for Submit button if different from Add Mission */
+    display: block; /* Make buttons block elements to manage width */
+    width: 80%; /* Adjust width as needed */
+    margin: 10px auto; /* Center buttons with automatic margins and add some space between them */
+    padding: 11px 11px; /* Increase padding for larger buttons */
+    color: #333; /* Dark text for contrast */
+    border: none;
+    border-radius: 80px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    text-align: center; 
+    
+}
+
 #addMissionButton:hover {
     background-color: #FFA500; /* Slightly darker on hover */
 }
@@ -297,16 +324,15 @@ button[type="submit"]:hover {
 
 #missionNavigation button {
     padding: 10px 20px;
-    background-color: #f44336;
-    color: white;
+    background-color: white;
+    color: #333;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 0.8rem;
 }
 
-#missionNavigation button:hover {
-    background-color: #d32f2f;
-}
+
 /* Delete Mission Button */
 .delete-mission-button {
     display: block; /* Changes the display to block for centering */
@@ -413,6 +439,16 @@ button[type="submit"]:hover {
 .button-no {
     background-color: #e9ab4e;
 }
+.navigateLeft
+{
+    background-color:white;
+    text:#333;
+}
+.navigateRight
+{
+    background-color:white;
+    text:#333;
+}
 .mission-deadline-input {
     height: 40px !important; /* Reduced height for the datetime-local input */
     padding: 6px 12px !important; /* Adjusted padding for better text alignment */
@@ -428,6 +464,40 @@ button[type="submit"]:hover {
 .mission-deadline-input {
     width: 100%; /* Adjust the width as needed, or use a specific value like 150px */
 }
+.custom-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.custom-modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Center the modal */
+    position: relative; /* Needed for centering */
+    top: 50%; /* Push down from the top half of the viewport */
+    transform: translateY(-50%); /* Pull back up 50% of its own height */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 500px; /* Maximum width */
+    text-align: center;
+    border-radius: 10px; /* Rounded corners */
+}
+.confirm-complete-btn-ava {
+    width: 100px; /* Adjust the width as desired */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Ensures the image is block level */
+    margin: 0 auto 20px; /* Centers the image and adds some space below */
+}
+
+/* Increase size of the time input controls for mobile devices */
+
+
 
 </style>
 
@@ -448,18 +518,30 @@ button[type="submit"]:hover {
         <button type="button" id="confirmNo" class="button-no">ไม่</button>
         <button type="button" id="confirmYes" class="button-yes">ลบ</button>
     </div>
+
 </div>
 
+<div id="customConfirm2" class="custom-modal" style="display:none;">
+    <div class="custom-modal-content">
+        <img src="https://res.cloudinary.com/linema/image/upload/v1709424752/meerkat_confused_z4io84.jpg" class="confirm-complete-btn-ava">
 
+        <p>ลูกพี่กรุณากรอกคำอธิบายสำหรับแต่ละภารกิจ</p>
+        <button class="button-no" id="fuck">เข้าใจ</button>
+    </div>
+</div>
 <div id="missionForm">
     <div id="block-btw-mission">
     <h2>สร้างเป้าหมายของฉัน</h2>
     <form id="dataForm">
+      
         <div class="date-input-container">
+           
             <div class="date-input-group">
                 <label for="startDateInput">วันที่เริ่มต้น</label>
                 <input id="startDateInput" type="text" readonly>
             </div>
+            <h6 id="timeFormatMessage"  style="display:none; color:red;">กรุณาใส่เวลาในรูปแบบ 24 ชั่วโมง เช่น: 17:00 สำหรับ 5 โมงเย็น, 5:00 สำหรับ ตี 5</h6>
+
                 <div class="date-input-group">
                     <label for="endDateInput">วันที่สิ้นสุด</label>
                     <input id="endDateInput" type="date">
@@ -476,15 +558,14 @@ button[type="submit"]:hover {
             <!-- Missions will be added here dynamically -->
         </div>
         <div id="missionNavigation">
-            <button id="navigateLeft" type="button" onclick="navigateMission('left')">&lt; Prev</button>
-            <button id="navigateRight" type="button" onclick="navigateMission('right')">Next &gt;</button>
+            <button id="navigateLeft" class="navigateLeft"type="button" onclick="navigateMission('left')">&lt; ก่อนหน้า</button>
+            <button id="navigateRight" class="navigateRight"type="button" onclick="navigateMission('right')">ถัดไป &gt;</button>
         </div>
        
-        <button type="button" id="addMissionButton">เพิ่มเป้าหมาย</button>
-    
-      
-        
-        <button type="submit">เสร็จสิ้น</button>
+        <div class="twobuttons">
+            <button type="button" id="addMissionButton">เพิ่มเป้าหมาย</button>
+            <button id="submitbuttonclass" type="submit">เสร็จสิ้น</button>
+        </div>
     </form>
 </div>
 <script src="submitData.js"></script>

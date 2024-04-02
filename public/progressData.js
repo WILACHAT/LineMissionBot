@@ -92,6 +92,7 @@ function populateMissions(missions, sessionId) {
         completeButton.addEventListener('click', async function() {
             if (mission.Frequency > 1) {
                 updateFrequencyFunction(mission.Misson_ID);
+
                     // Start fetch request
                    
                     mission.Frequency -= 1;
@@ -123,6 +124,7 @@ function populateMissions(missions, sessionId) {
                 }
             
                 function confirmAction() {
+
                     resetModal(); // Hide modal and clean up
                     updateFrequencyFunction(mission.Misson_ID)
                     updateMissionStatus(mission.Misson_ID, true);
@@ -130,8 +132,9 @@ function populateMissions(missions, sessionId) {
                     actionContainer.removeChild(frequencyText);
                     const video = document.querySelector('#completionPopup video');
                     video.play();
-
                     
+
+
                     const completionImage = document.createElement('img');
                     completionImage.classList.add('mission-image-complete'); // Adding class name here
                     completionImage.src = 'https://res.cloudinary.com/linema/image/upload/v1710213702/meerkat_celebrates_exvy6g.png';
@@ -294,6 +297,14 @@ function startCountdown(endDate, sessionId) {
         }
     }, 1000);
 }
+async function fetchStreakSeshPost(userId) {
+    const response = await fetch(`/progress/getStreakSeshPost?userId=${userId}`); // Adjust the URL as necessary
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return await response.text(); // Use .text() instead of .json() for plain text response
+}
+
 
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
@@ -308,7 +319,7 @@ window.onload = async function() {
                 console.log("missions for session", data.session.SessionID, data.missions);
                 if (data.session && !data.session.Complete) {
                     populateMissions(data.missions, data.session.SessionID); // Pass SessionID here
-                    startCountdown(new Date(data.endDate), data.session.SessionID);
+                    startCountdown(new Date(data.endDate), data.session.SessionID, data.session.SessionName);
                    // setupDeleteSessionButton(data.session.SessionID);
                     document.getElementById('whatisgoingon').style.display = 'block';
                 } else {
@@ -321,6 +332,22 @@ window.onload = async function() {
         
     } catch (error) {
         displayNoSessionMessage(userId);
+    }
+    try {
+        const streakData = await fetchStreakSeshPost(userId);
+        console.log("STREAKK", streakData)
+        console.log("StreakSeshPost data", streakData);
+        try {
+           
+
+            document.getElementById('streakSeshPost').textContent = `สตรีกสูงสุด: ${streakData}`;
+        } catch (error) {
+            console.error('Failed to fetch StreakSeshPost:', error);
+            // Optionally update the HTML to indicate an error or that data could not be loaded
+            document.getElementById('streakSeshPost').textContent = 'ไม่สามารถโหลดสตรีก';
+        }
+    } catch (error) {
+        console.log("Error fetching StreakSeshPost data", error);
     }
 };
 
