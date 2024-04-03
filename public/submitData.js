@@ -485,8 +485,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 
                 const title = missionElements[i].children[3].value;
                 const description = missionElements[i].children[4].value;
-                const times = missionElements[i].children[6].value;
-
+                const timesElement = missionElements[i].children[6]; 
+                if (timesElement.value === null || timesElement.value === "") {
+                    timesElement.value = 1; 
+                }
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
                     console.log("additionalInputsMap[title]", additionalInputsMap[title])
@@ -520,7 +522,6 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 
             }
              console.log("missionData", missionData)
-             alert("stop")
             const sessionName = document.getElementById('sessionNameId').value;
 
 

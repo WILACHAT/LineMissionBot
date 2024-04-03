@@ -43,7 +43,7 @@ async function sendLineNotification(lineUserId, messageText, UserID, sessionID) 
             actions: [
               {
                 type: 'uri',
-                label: 'เซสชั่นเสร็จสิ้น',
+                label: 'ดูเซสชั่น',
                 uri: linkUrl
               }
               // You can add more actions/buttons here if needed
