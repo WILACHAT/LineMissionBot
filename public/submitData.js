@@ -481,14 +481,25 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const missionData = [];
             const missionsContainer = document.getElementById('missionsContainer');
             const missionElements = missionsContainer.children;
-            console.log("what is missionELements", missionElements)
             let index = 1;
             for (let i = 0; i < missionElements.length; i++) {
+                console.log("hi", missionElements.length)
+                console.log("fuck1", document.getElementById(`missiontitle${i + 1}`))
+                console.log("fuck2", document.getElementById(`missiondes${i + 1}`))
+                console.log("fuck3", document.getElementById(`missiontimes${i + 1}`))
+               // alert("hehe")
+
+
+                const title = document.getElementById(`missiontitle${i + 1}`).value;
+
+                const description = document.getElementById(`missiondes${i + 1}`).value;
+
+                const times = document.getElementById(`missiontimes${i + 1}`).value; 
                 
-                const title = missionElements[i].children[3].value;
-                const description = missionElements[i].children[4].value;
-                const times = missionElements[i].children[6].value;
-                console.log("timeeeesssss", times)
+               
+                if (times.value === null || times.value === "") {
+                    times.value = 1; 
+                }
 
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
