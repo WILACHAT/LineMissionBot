@@ -483,9 +483,12 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const missionElements = missionsContainer.children;
             for (let i = 0; i < missionElements.length; i++) {
                 
-                const title = missionElements[i].children[3].value;
-                const description = missionElements[i].children[4].value;
-                const times = missionElements[i].children[6]; 
+                const title = document.getElementById(`missiontitle${i + 1}`).value;
+
+                const description = document.getElementById(`missiondes${i + 1}`).value;
+
+                const times = document.getElementById(`missiontimes${i + 1}`).value; 
+                
                 if (times.value === null || times.value === "") {
                     times.value = 1; 
                 }
