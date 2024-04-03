@@ -478,14 +478,16 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 // Add more as necessary
             };
 
+            const missionData = [];
             const missionsContainer = document.getElementById('missionsContainer');
             const missionElements = missionsContainer.children;
             console.log("what is missionELements", missionElements)
+            let index = 1;
             for (let i = 0; i < missionElements.length; i++) {
                 
                 const title = missionElements[i].children[3].value;
                 const description = missionElements[i].children[4].value;
-                const times = missionElements[i].children[6].value; 
+                const times = missionElements[i].children[6].value;
                 console.log("timeeeesssss", times)
 
                 let additionalData = {};
