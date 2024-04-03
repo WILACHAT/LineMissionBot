@@ -4,7 +4,9 @@ const db = require('./db');
 const { sendLineNotification } = require('./services/lineBotService');
 const { sendLineNotificationAlert } = require('./services/lineBotService');
 const { sendLineNotificationMission } = require('./services/lineBotService');
-const { sendLineNotificationStreak } = require('./services/lineBotService');
+
+
+
 
 function scheduleTask() {
     cron.schedule('*/1 * * * *', async () => {
@@ -44,7 +46,7 @@ function scheduleTask() {
                         messageText = `สวัสดีครับลูกพี่ เซสชั่นของลูกพี่ได้หมดอายุแล้ว! คลิกที่ลิงค์ด้านล่างเพื่อดูผลงานของลูกพี่เลย;`;
                     }
                     await sendLineNotification(user, messageText, mission.UserID, mission.SessionID);
-                    await db.markNotificationAsSent(mission.essionID); 
+                    await db.markNotificationAsSent(mission.SessionID); 
                 }
             }
         } else {
@@ -91,7 +93,7 @@ function scheduleTask() {
                 const messageText = `สวัสดีครับลูกพี่: ภารกิจของคุณเริ่มต้นที่ ${session.StartDate.toLocaleString()}. ตรวจสอบความคืบหน้าของคุณ!\n\nMissions:\n${missionsListStr}`;
                 
     
-                await sendLineNotificationAlert(user, messageText, session.UserID);
+                await sendLineNotificationMission(user, messageText, session.UserID);
                 await db.updateNextReminderTime(session.SessionID);
             }
         }
@@ -157,15 +159,8 @@ cron.schedule('* * * * *', async () => {
         await db.updatePostNotificationLogic(session.SessionID);
     }
 });
-cron.schedule('0 20 * * *', async () => { // Runs daily at 8 PM server time
-    console.log('Checking for users to remind about their streaks:', new Date().toLocaleString());
-    const usersToRemind = await db.findUsersNeedingStreakReminder();
-
-    for (const user of usersToRemind) {
-        const messageText = "Your daily streak is about to expire. Post a mission now to keep it going!";
-        await sendLineNotificationStreak(user.LineID, messageText, user.UserID); // Adjust the function call as necessary
-    }
-});
+    
+    
 }
 
 module.exports = {

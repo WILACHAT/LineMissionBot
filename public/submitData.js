@@ -481,17 +481,22 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const missionData = [];
             const missionsContainer = document.getElementById('missionsContainer');
             const missionElements = missionsContainer.children;
+            const times = 1;
             for (let i = 0; i < missionElements.length; i++) {
                 
                 const title = document.getElementById(`missiontitle${i + 1}`).value;
 
                 const description = document.getElementById(`missiondes${i + 1}`).value;
 
-                const times = document.getElementById(`missiontimes${i + 1}`).value; 
+                const timesElement = document.getElementById(`missiontimes${i + 1}`);
+
+                // Declare 'times' variable; default it to 1 (or any default value you see fit)
+                let times = 1;
                 
-                if (times.value === null || times.value === "") {
-                    times.value = 1; 
-                }
+                // Check if the element exists and its value is not empty
+                if (timesElement && timesElement.value !== "") {
+                    times = timesElement.value; // Use the element's value if it's available
+                } 
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
                     console.log("additionalInputsMap[title]", additionalInputsMap[title])
