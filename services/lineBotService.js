@@ -43,7 +43,7 @@ async function sendLineNotification(lineUserId, messageText, UserID, sessionID) 
             actions: [
               {
                 type: 'uri',
-                label: 'มาดูเซสชั่นเสร็จสิ้นกันคับลูกพี่',
+                label: 'เซสชั่นเสร็จสิ้น',
                 uri: linkUrl
               }
               // You can add more actions/buttons here if needed
@@ -371,7 +371,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
                 actions: [
                     {
                         type: 'uri',
-                        label: 'ok', // Label for the button
+                        label: title, // Label for the button
                         uri: fullUrl // The URL to be opened
                     }
                 ]

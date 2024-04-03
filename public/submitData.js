@@ -481,20 +481,11 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const missionData = [];
             const missionsContainer = document.getElementById('missionsContainer');
             const missionElements = missionsContainer.children;
-            console.log("what is missionELements", missionElements)
-            let index = 1;
             for (let i = 0; i < missionElements.length; i++) {
                 
                 const title = missionElements[i].children[3].value;
                 const description = missionElements[i].children[4].value;
                 const times = missionElements[i].children[6].value;
-                console.log("title", title)
-
-
-                console.log("description", description)
-
-                console.log("times", times)
-                alert("stop")
 
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
@@ -526,7 +517,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 // Push the data with the UTC date and time
 
                 missionData.push({ title, description, additionalData, times: parseInt(times) }); 
+                
             }
+             console.log("missionData", missionData)
+             alert("stop")
             const sessionName = document.getElementById('sessionNameId').value;
 
 
