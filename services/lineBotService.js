@@ -371,7 +371,7 @@ async function sendImageWithUrl(replyToken, imageUrl, title, text, baseUrl, user
                 actions: [
                     {
                         type: 'uri',
-                        label: title, // Label for the button
+                        label: 'ok', // Label for the button
                         uri: fullUrl // The URL to be opened
                     }
                 ]
