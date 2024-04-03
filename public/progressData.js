@@ -303,6 +303,14 @@ async function fetchStreakSeshPost(userId) {
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
     const userId = params.get('userId');
+    document.getElementById('streakInfo').addEventListener('click', function() {
+        const explanation = document.getElementById('streakExplanation');
+        if (explanation.style.display === 'none') {
+            explanation.style.display = 'block';
+        } else {
+            explanation.style.display = 'none';
+        }
+    });
 
     try {
         const sessionsData = await fetchLatestIncompleteSession(userId);
@@ -333,7 +341,7 @@ window.onload = async function() {
         console.log('CurrentStreak:', streakData.CurrentStreak);    
         try {
             document.getElementById('streakSeshPost').textContent = `สตรีกสูงสุด: ${streakData.StreakSeshPost}`;
-            document.getElementById('strekCurrent').textContent = `สตรีกปัจจุบัน: ${streakData.CurrentStreak}`;
+            document.getElementById('streakCurrent').textContent = `สตรีกปัจจุบัน: ${streakData.CurrentStreak}`;
 
         } catch (error) {
             console.error('Failed to fetch StreakSeshPost:', error);
