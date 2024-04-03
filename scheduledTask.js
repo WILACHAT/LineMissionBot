@@ -4,6 +4,7 @@ const db = require('./db');
 const { sendLineNotification } = require('./services/lineBotService');
 const { sendLineNotificationAlert } = require('./services/lineBotService');
 const { sendLineNotificationMission } = require('./services/lineBotService');
+const {sendLineNotificationStreak} = require('./services/lineBotService');
 
 
 
@@ -157,6 +158,16 @@ cron.schedule('* * * * *', async () => {
 
         // Update logic after sending the notification
         await db.updatePostNotificationLogic(session.SessionID);
+    }
+});
+cron.schedule('0 20 * * *', async () => { // Runs daily at 8 PM server time
+    console.log('Checking for users to remind about their streaks:', new Date().toLocaleString());
+    const usersToRemind = await db.findUsersNeedingStreakReminder();
+
+    for (const user of usersToRemind) {
+        // Message text in Thai
+        const messageText = "สตรีกของคุณกำลังจะหมด! โพสต์ภารกิจตอนนี้เพื่อรักษามันไว้!";
+        await sendLineNotificationStreak(user.LineID, messageText, user.UserID); // Adjust the function call as necessary
     }
 });
     
