@@ -433,21 +433,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
 
-        //alert("timeDiff" + timeDiff)
-        //alert("daysDiff" + daysDiff)
-
-
-
-        
-        // Create UTC start date
         let startDatee = new Date(currentDateUTC + 'T' + currentTime);
 
         // Create UTC end date by adding the difference in days
         let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
-
-        //alert("startDatee" + startDatee)
-        //alert("endDatee" + endDatee)
-
 
         const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
         console.log("formatted starttime", formattedStartDate)

@@ -6,17 +6,18 @@ router.get('/getStreakSeshPost', async (req, res) => {
   const userId = req.query.userId;
 
   try {
-    const streakSeshPost = await db.getStreakSeshPostByUserId(userId);
+    const streakData = await db.getStreakSeshPostByUserId(userId);
 
-    if (streakSeshPost !== null) {
-      res.json(streakSeshPost); // Directly sending the value might not be correctly interpreted by all clients
+    if (streakData !== null) {
+      res.json(streakData); // This will now be an object containing both StreakSeshPost and CurrentStreak
     } else {
       res.status(404).json({message: 'User not found or no streak data available.'});
     }
-  } catch (error) {
-    console.error('Error fetching StreakSeshPost:', error);
+} catch (error) {
+    console.error('Error fetching streak data:', error);
     res.status(500).json({error: 'Internal Server Error'});
-  }
+}
+
 });
 
 

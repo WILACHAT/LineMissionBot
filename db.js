@@ -251,19 +251,26 @@ const pool = new Pool({
       return []; // Return an empty array to handle errors gracefully
     }
   }
+
   async function getStreakSeshPostByUserId(userId) {
-    const query = 'SELECT "StreakSeshPost" FROM "LineSchemas"."Users" WHERE "UserID" = $1';
+    const query = 'SELECT "StreakSeshPost", "CurrentStreak" FROM "LineSchemas"."Users" WHERE "UserID" = $1';
     try {
-      const result = await pool.query(query, [userId]);
-      if (result.rows.length > 0) {
-        return result.rows[0].StreakSeshPost; // Assuming "StreakSeshPost" is the column name
-      } else {
-        return null; // User not found or no streak
-      }
+        const result = await pool.query(query, [userId]);
+        if (result.rows.length > 0) {
+            // Return both StreakSeshPost and CurrentStreak
+            return {
+                StreakSeshPost: result.rows[0].StreakSeshPost,
+                CurrentStreak: result.rows[0].CurrentStreak
+            };
+        } else {
+            return null; // User not found or no data
+        }
     } catch (error) {
-      throw error;
+        throw error;
     }
-  }
+}
+
+
   async function updatePostNotificationLogic(sessionId) {
     const query = 'UPDATE "LineSchemas"."MissionSessions" SET "RemindThree" = true WHERE "SessionID" = $1';
     await pool.query(query, [sessionId]);
@@ -278,6 +285,12 @@ const pool = new Pool({
     const query = 'UPDATE "LineSchemas"."Users" SET "StreakSeshPost" = "CurrentStreak" WHERE "UserID" = $1';
     await pool.query(query, [userId]);
   }
+
+  async function resetCurrentStreak(userId) {
+    const query = 'UPDATE "LineSchemas"."Users" SET "CurrentStreak" = 1 WHERE "UserID" = $1';
+    await pool.query(query, [userId]);
+  }
+  
   
   
   async function lastPosted(startDate, userId) {
@@ -338,7 +351,8 @@ const pool = new Pool({
     updateHighestStreak,
     lastPosted,
     findUsersNeedingStreakReminder,
-    getStreakSeshPostByUserId
+    getStreakSeshPostByUserId,
+    resetCurrentStreak
   
   
   }

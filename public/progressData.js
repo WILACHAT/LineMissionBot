@@ -67,15 +67,10 @@ function populateMissions(missions, sessionId) {
         missionDesc.innerText = mission.Description;
         missionContent.appendChild(missionDesc);
 
-  
-
-
         missionDiv.appendChild(missionContent);
         const actionContainer = document.createElement('div');
         actionContainer.classList.add('action-container');
     
- 
-
         // Only add the button if the mission is not completed
         if (!mission.Complete) {
             const frequencyText = document.createElement('div');
@@ -298,13 +293,12 @@ function startCountdown(endDate, sessionId) {
     }, 1000);
 }
 async function fetchStreakSeshPost(userId) {
-    const response = await fetch(`/progress/getStreakSeshPost?userId=${userId}`); // Adjust the URL as necessary
+    const response = await fetch(`/progress/getStreakSeshPost?userId=${userId}`);
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }
-    return await response.text(); // Use .text() instead of .json() for plain text response
+    return await response.json(); // Correctly parse the response as JSON
 }
-
 
 window.onload = async function() {
     const params = new URLSearchParams(window.location.search);
@@ -335,12 +329,12 @@ window.onload = async function() {
     }
     try {
         const streakData = await fetchStreakSeshPost(userId);
-        console.log("STREAKK", streakData)
-        console.log("StreakSeshPost data", streakData);
+        console.log('StreakSeshPost:', streakData.StreakSeshPost);
+        console.log('CurrentStreak:', streakData.CurrentStreak);    
         try {
-           
+            document.getElementById('streakSeshPost').textContent = `สตรีกสูงสุด: ${streakData.StreakSeshPost}`;
+            document.getElementById('strekCurrent').textContent = `สตรีกปัจจุบัน: ${streakData.CurrentStreak}`;
 
-            document.getElementById('streakSeshPost').textContent = `สตรีกสูงสุด: ${streakData}`;
         } catch (error) {
             console.error('Failed to fetch StreakSeshPost:', error);
             // Optionally update the HTML to indicate an error or that data could not be loaded
