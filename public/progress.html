@@ -457,19 +457,13 @@ h1{
     text-align: center;
 }
 .streakClass {
-    display: flex;
-    justify-content: space-between; /* Distributes space between the items */
-    align-items: center; /* Aligns items vertically in the center */
-}
-
-#streakExplanation {
-    color: red;
-    display: none;
     text-align: center;
-    width: 100%; /* Ensure the explanation spans the full width */
-    margin-top: 10px; /* Optional: Adds some space between the h4s and the h6 */
 }
 
+.streaks-container {
+    display: inline-block;
+    margin-bottom: 10px; /* Adjust spacing between streak indicators and the explanation */
+}
 
 
 
@@ -479,14 +473,18 @@ h1{
 <body>
     
     <h1>ความคืบหน้า</h1>
+
     <div class="streakClass" id="streakInfo">
-        <h4 class="streak" id="streakCurrent">Current Streak</h4>
-        <h4 class="streak" id="streakSeshPost">Streak Session Post</h4>
+        <div class="streaks-container">
+            <h4 class="streak" id="streakCurrent"></h4>
+            <h4 class="streak" id="streakSeshPost"></h4>
+        </div>
         <h6 id="streakExplanation" style="color: red; display: none; text-align: center;">
             สตรีกไม่ได้วัดจากจำนวนภารกิจที่คุณทำสำเร็จ แต่วัดจากความสม่ำเสมอในการสร้างเซสชันภารกิจ สตรีคจะเพิ่มขึ้นหนึ่งรายการหากคุณสร้างเซสชันภายใน 24 ชั่วโมง
         </h6>
     </div>
     
+
     
     
 

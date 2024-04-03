@@ -311,6 +311,7 @@ window.onload = async function() {
             explanation.style.display = 'none';
         }
     });
+    
 
     try {
         const sessionsData = await fetchLatestIncompleteSession(userId);
