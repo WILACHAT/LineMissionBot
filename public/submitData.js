@@ -489,6 +489,7 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 const description = missionElements[i].children[4].value;
                 const times = missionElements[i].children[6].value;
                 console.log("timeeeesssss", times)
+                alert("stop")
 
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
