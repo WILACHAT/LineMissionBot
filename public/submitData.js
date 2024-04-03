@@ -485,9 +485,9 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 
                 const title = missionElements[i].children[3].value;
                 const description = missionElements[i].children[4].value;
-                const timesElement = missionElements[i].children[6]; 
-                if (timesElement.value === null || timesElement.value === "") {
-                    timesElement.value = 1; 
+                const times = missionElements[i].children[6]; 
+                if (times.value === null || times.value === "") {
+                    times.value = 1; 
                 }
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
