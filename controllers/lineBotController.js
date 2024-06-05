@@ -53,7 +53,7 @@ exports.handleWebhook = async (req, res) => {
 
                     break;
                 case 'ดูวิธีใช้':
-                    url = 'https://whale-app-63n8p.ondigitalocean.app';
+                    url = 'https://whale-app-63n8p.ondigitalocean.app/introduction';
                     imageUrl = 'https://res.cloudinary.com/linema/image/upload/v1711548885/meerkat_instruct_reply_yghjen.jpg';
                     text = 'มาดูธีใช้กันคับลูกพี่';
                     title = 'ดูวิธีใช้';

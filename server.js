@@ -77,6 +77,9 @@ app.get('/completed', (req, res) => {
 app.get('/history', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'history.html'));
 });
+app.get('/introduction', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'introduction.html'));
+});
 
 console.log("server console.log")
 app.get('/session-data', (req, res) => {
