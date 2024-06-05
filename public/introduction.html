@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+
+</head>
+
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sarabun, sans-serif;
+}
+
+section {
+    text-align: left;
+    padding: 20px;
+}
+
+.resize-image {
+        width: 50%; /* Adjust the size as needed */
+    }
+    
+#section1, #section3, #section5, #section2-2 {
+    background-color: #F7D780;
+     /* Change font color to white */
+}
+
+#section2, #section4, #section6, #section2-1 {
+    background-color:white;
+}
+
+#section1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 25vh; /* Decreased height */
+}
+
+#section2, #section3, #section4, #section5, #section2-1, #section2-2 {
+    min-height: 30vh; /* Decreased height */
+    padding-top: 20px; /* Adjusted padding */
+}
+
+#section6 {
+    display: flex;
+    align-items: center; /* Vertically center the content */
+    justify-content: start; /* Align content to the start */
+    min-height: 12vh; /* Adjust height as needed */
+    padding-top: 20px;
+    /* Other styles as needed */
+}
+
+#section2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to the left */
+    justify-content: space-between; /* Space between text and image */
+    
+    padding: 20px;
+    padding-bottom: 0; /* No padding at the bottom */
+    text-align: left; /* Text aligned to the left */
+}
+
+#section2 img {
+    margin-top: auto; /* Pushes the image to the bottom */
+    margin-bottom: 0; /* No margin at the bottom */
+    width: auto; /* Adjust width as necessary */
+    max-width: 100%;
+    height: auto;
+    align-self: center; /* Center the image horizontally */
+}
+
+#section3 {
+    padding: 20px;
+}
+
+
+
+#section4 ul {
+    list-style-type: circle; /* Bullet style: disc, circle, square, etc. */
+    padding-left: 40px; /* Adjusts the indentation of the list */
+    color: #333; /* Bullet point text color */
+    font-size: 16px; /* Adjusts the font size of the list items */
+}
+
+#section4 li {
+    margin-bottom: 10px; /* Adds space between list items */
+}
+
+/* Optional: Style for better list appearance on smaller screens */
+@media screen and (max-width: 480px) {
+    #section4 ul {
+        padding-left: 20px;
+    }
+}
+
+.contact-image {
+    max-width: 40%; /* Adjust width as needed */
+    height: auto;
+    margin-right: 20px; /* Add some space between image and text */
+}
+
+.contact-text {
+    /* Additional styling for the text wrapper if needed */
+}
+h1, h2 {
+    margin: 10px 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+  
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    section {
+        min-height: 30vh; /* Further decreased for smaller screens */
+    }
+}
+
+
+</style>
+
+<body>
+    <section id="section1">
+        <h1>วิธีการใช้งาน</h1>
+    </section>
+
+    <section id="section2">
+        <h2> 1) Add น้องเมียร์เป็นเพื่อน</h2>
+        <p>โดยพี่ๆแค่ๆกด Add LINE ID: @meerkat พี่ก็สามารถเรียกใช้น้องเมียร์ได้ทันที </p>
+        <img src="C:\Users\User\Desktop\waearth\addline f.png" alt="Add Line Chatbot" style="width: 58%;">
+
+    </section>
+
+    <section id="section3">
+        <h2>2) หน้าเมนู</h2>
+        
+                <p>พี่ๆอยากเรียกใช้น้องทำอะไร ก็คลิ๊กเลือกจากหน้าเมนูเลย!!!</p>
+    
+    </section>
+    
+    <section id="section2-1">
+        <h2>3) ตั้งเป้าหมาย</h2>
+        
+                <p>ในหน้านี้ เพียงแค่ พี่ๆ สามารถตั้งเวลาวันที่สิ้นสุด ใส่หมวดหมู่เป้าหมายพร้อมกับคำอธิบาย และ เพิ่มลดจำนวนเป้าหมาย ได้ที่หน้านี้เลย!!!</p>   
+    </section>
+
+    <section id="section2-2">
+        
+        <h2>4) ดูความคืบหน้า</h2>
+        <p>โดยคลิ๊กที่ "ดูความคืบหน้า" จากหน้าเมนู พี่ๆก็สามารถมาดูได้ว่า</p>
+        <ul>
+            <li>พี่มีเป้าหมายอะไรที่ต้องทำบ้าง</li>
+            <li>เป้าหมายไหนที่พี่ทำเสร็จแล้ว พี่ก็แค่เข้ามาติ๊กในหน้านี้</li>
+            <li>เหลือเวลาอีกเท่าไหร่ ก่อนที่เซสชั่นของพี่จะสิ้นสุดลง</li>
+        </ul>
+    </section>
+
+    <section id="section4">
+    
+        <p>"ดูความคืบหน้า"</p>
+    
+    </section>
+
+    <section id="section5">
+        <h2>5) ดูประวัติ</h2>
+        
+            <p class="history-text">พี่ๆสามารถ คลิ๊ก ที่ “ดูความคืบหน้า” เพื่อที่จะดูความคืบหน้าของ เป้าหมายพี่ได้ เป้าหมายไหนที่พี่ทำสำเร็จแล้ว พี่ก็เข้ามาติ๊กตรงนี้เลย!!</p>
+            <img src="C:\Users\User\Desktop\waearth\Group 17.png" alt="View History" class="history-image">
+    
+    </section>
+    
+
+    <section id="section6">
+        <img src="C:\Users\User\Desktop\waearth\happy mk.png" alt="Contact Information" class="contact-image">
+        <div class="contact-text">
+            <h2>ช่องทางการติดต่อ:</h2>
+            <p>092-415-9115</p>
+            <p>Line ID: @meerkat</p>
+        </div>
+    </section>
+    
+</body>
+
+</html>
