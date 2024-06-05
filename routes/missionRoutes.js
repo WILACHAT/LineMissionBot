@@ -45,13 +45,6 @@ router.post('/submit', async (req, res) => {
         } else if (updateStreakNeeded) {
             // Increment the current streak
             await db.updateCurrentStreak(userId);
-        }
-
-
-        if (updateStreakNeeded) {
-            await db.updateCurrentStreak(req.body.userId); // Increment the current streak
-
-            // After incrementing, fetch current streak and compare with StreakSeshPost
             const currentStreakResult = await db.pool.query('SELECT "CurrentStreak" FROM "LineSchemas"."Users" WHERE "UserID" = $1', [req.body.userId]);
             const currentStreak = currentStreakResult.rows[0].CurrentStreak;
 
@@ -62,6 +55,7 @@ router.post('/submit', async (req, res) => {
                 await db.updateHighestStreak(req.body.userId); // Update StreakSeshPost if current streak is higher
             }
         }
+
 
         // Update lastPosted to the start date of the submission
         await db.lastPosted(req.body.startDate, req.body.userId);

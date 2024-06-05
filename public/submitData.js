@@ -433,21 +433,10 @@ document.addEventListener('DOMContentLoaded', function(req) {
 
         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
 
-        //alert("timeDiff" + timeDiff)
-        //alert("daysDiff" + daysDiff)
-
-
-
-        
-        // Create UTC start date
         let startDatee = new Date(currentDateUTC + 'T' + currentTime);
 
         // Create UTC end date by adding the difference in days
         let endDatee = new Date(startDatee.getTime() + daysDiff * (1000 * 60 * 60 * 24));
-
-        //alert("startDatee" + startDatee)
-        //alert("endDatee" + endDatee)
-
 
         const formattedStartDate = startDatee.toISOString().split('T')[0] + 'T' + currentTime;
         console.log("formatted starttime", formattedStartDate)
@@ -481,26 +470,22 @@ document.addEventListener('DOMContentLoaded', function(req) {
             const missionData = [];
             const missionsContainer = document.getElementById('missionsContainer');
             const missionElements = missionsContainer.children;
-            let index = 1;
+            const times = 1;
             for (let i = 0; i < missionElements.length; i++) {
-                console.log("hi", missionElements.length)
-                console.log("fuck1", document.getElementById(`missiontitle${i + 1}`))
-                console.log("fuck2", document.getElementById(`missiondes${i + 1}`))
-                console.log("fuck3", document.getElementById(`missiontimes${i + 1}`))
-               // alert("hehe")
-
-
+                
                 const title = document.getElementById(`missiontitle${i + 1}`).value;
 
                 const description = document.getElementById(`missiondes${i + 1}`).value;
 
-                const times = document.getElementById(`missiontimes${i + 1}`).value; 
-                
-               
-                if (times.value === null || times.value === "") {
-                    times.value = 1; 
-                }
+                const timesElement = document.getElementById(`missiontimes${i + 1}`);
 
+                // Declare 'times' variable; default it to 1 (or any default value you see fit)
+                let times = 1;
+                
+                // Check if the element exists and its value is not empty
+                if (timesElement && timesElement.value !== "") {
+                    times = timesElement.value; // Use the element's value if it's available
+                } 
                 let additionalData = {};
                 if (additionalInputsMap[title]) {
                     console.log("additionalInputsMap[title]", additionalInputsMap[title])
@@ -531,7 +516,9 @@ document.addEventListener('DOMContentLoaded', function(req) {
                 // Push the data with the UTC date and time
 
                 missionData.push({ title, description, additionalData, times: parseInt(times) }); 
+                
             }
+             console.log("missionData", missionData)
             const sessionName = document.getElementById('sessionNameId').value;
 
 
